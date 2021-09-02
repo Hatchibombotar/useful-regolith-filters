@@ -1,0 +1,9 @@
+{
+    "filters": [
+        {
+            "runWith": "nodejs",
+            "location": "./index.js",
+            "name": "Templater"
+        }
+    ]
+}
