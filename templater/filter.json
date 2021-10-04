@@ -2,7 +2,7 @@
     "filters": [
         {
             "runWith": "nodejs",
-            "location": "./index.js",
+            "script": "./index.js",
             "name": "Templater"
         }
     ]
