@@ -1,8 +1,11 @@
 const fs = require("fs")
 const glob = require("glob");
 
-if (!fs.existsSync("./ext/")) {
-    fs.mkdirSync("./ext/");
+if (!fs.existsSync("BP/functions/functioner/")) {
+    fs.mkdirSync("BP/functions/functioner/");
+}
+if (!fs.existsSync("BP/functions/functioner/extracted/")) {
+    fs.mkdirSync("BP/functions/functioner/extracted/");
 }
 
 let funcCount = 0
