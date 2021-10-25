@@ -8,7 +8,7 @@ glob("?(BP|RP)/**/*.json", null, function (err, files) {
             if (!fs.existsSync(`data/molang_insert/molang/${y}.molang`)) {
                 console.error(`File data/molang_insert/molang/${y}.molang does not exist`)
             } else {
-                return fs.readFileSync(`data/molang_insert/molang/${y}.molang`).toString().replace(/[\n\r]+/g, " ").replace(/ /, "")
+                return fs.readFileSync(`data/molang_insert/molang/${y}.molang`).toString().replace(/[\n\r]+/g, " ").replaceAll("	", "")
             }
         });
         fs.writeFileSync(file, newFileContent)
