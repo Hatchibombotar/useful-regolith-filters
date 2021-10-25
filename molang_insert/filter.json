@@ -3,7 +3,7 @@
         {
             "runWith": "nodejs",
             "script": "./index.js",
-            "name": "Functioner"
+            "name": "Molang Insert"
         }
     ]
 }
