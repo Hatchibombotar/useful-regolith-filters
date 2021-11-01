@@ -1,0 +1,11 @@
+{
+  "name": "auto_dependencies",
+  "version": "1.0.0",
+  "description": "Links uuid's from the resource and behaviour pack manifests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hatchibombotar",
+  "license": "MIT"
+}
