@@ -1,0 +1,11 @@
+{
+  "name": "pack_commons",
+  "version": "1.0.0",
+  "description": "Copies files to both the resource and behaviour packs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hatchibombotar",
+  "license": "MIT"
+}
