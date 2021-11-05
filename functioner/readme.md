@@ -16,28 +16,28 @@ execute @s[tag=target] ~ ~ ~ {
 ```
 
 ---
-## if/unless command
-Inspired by java's execute subfunction. Can be used anywhere.
+## if command
+Inspired by java's if/unless execute subfunction. Can be used anywhere.
 
 ### Format
 
 There are three different types of conditions:
 
-- [if|unless block](#block) – Tests if a block exists
-- [if|unless entity](#entity) – Tests whether any entity exists
-- [if|unless score](#score) - Tests an target's score
+- [if block](#block) – Tests if a block exists
+- [if entity](#entity) – Tests whether any entity exists
+- [if score](#score) - Tests an target's score
 
 #### Block
-`if|unless block <pos> <block> [...]`
+`if block <pos> <block> [...]`
 
 _Please note this uses the block data format talked about [here](#block-data-format)_
 
 #### Entity
-`if|unless entity <targets>  [...]`
+`if entity <targets>  [...]`
 
 #### Score
 ##### comparing against number/range
-`if|unless score <target> <scoreboard> <condition> [...]`
+`if score <target> <scoreboard> <condition> [...]`
 
 _Uses [range conditions](#range-conditions)_
 
