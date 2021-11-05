@@ -50,8 +50,10 @@ In certain areas an alternate block data format will be used.
 ### Examples
 _both examples are of a red wool block._
 #### block_states
+
 `minecraft:wool["color":"red"]`
 #### data_value
+
 `minecraft:wool[14]`
 ---
 ## Range conditions
