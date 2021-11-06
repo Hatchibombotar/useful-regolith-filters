@@ -2,6 +2,12 @@ const fs = require("fs")
 const glob = require("glob");
 
 let scoreboardCount = 0
+let tagCount = 0
+
+function newScoreboard() {
+    scoreboardCount += 1
+    return (`f_${scoreboardCount}`)
+}
 
 function blockFormat(input) {
     if (input.match(/\[(.*)\]/g)) {
@@ -56,42 +62,64 @@ glob("BP/functions/**/*.mcfunction", null, function (err, files) {
             if (lineContent[0] == "#") continue
             fileContentArray[line] = lineContent.replace(/\b((if|unless) (block|entity|score)).*\b/g, function (x, y) {
                 const args = x.split(" ")
+                const resultScoreboardName = newScoreboard()
+                const scoreboardResult = `scoreboard players set result ${resultScoreboardName} 1`
+                let unusedArgs = ""
+                let wantedResult = ""
+                if (args[0] == "if") wantedResult = 1
+                if (args[0] == "unless") wantedResult = 0
+
+                modifications.push({
+                    "line": line,
+                    "modifications": [
+                        `scoreboard objectives add ${resultScoreboardName} dummy`
+                    ]
+                })
+
                 if (args[1] == "block") {
-                    return `execute @s ~ ~ ~ detect ${blockFormat(args[5])[0]} ${blockFormat(args[5])[1]} ${combineUnusedArgs(6, args)}`
+                    unusedArgs = combineUnusedArgs(6, args)
+                    modifications.push({
+                        "line": line,
+                        "modifications": [
+                            `execute @s ~ ~ ~ detect ${blockFormat(args[5])[0]} ${blockFormat(args[5])[1]} ${scoreboardResult}`
+                        ]
+                    })
                 } else if (args[1] == "score") {
-                    const scoreboardName = `f_${scoreboardCount}`
+                    unusedArgs = combineUnusedArgs(5, args)
+                    const scoreboardName = newScoreboard()
                     modifications.push({
                         "line": line,
                         "modifications": [
                             `scoreboard objectives add ${scoreboardName} dummy`,
                             `scoreboard objectives add ${args[3]} dummy`,
-                            `scoreboard players operation @s ${scoreboardName} = ${args[2]} ${args[3]}`
+                            `scoreboard players operation @s ${scoreboardName} = ${args[2]} ${args[3]}`,
+                            `execute @s[scores={${scoreboardName}=${args[4]}}] ~ ~ ~ ${scoreboardResult}`
                         ]
                     })
-                    scoreboardCount += 1
-                    return `execute @s[scores={${scoreboardName}=${args[4]}}] ~ ~ ~ ${combineUnusedArgs(5, args)}`
                 } else if (args[1] == "entity") {
-                    const scoreboardName = `f_${scoreboardCount}`
+                    unusedArgs = combineUnusedArgs(3, args)
+                    const scoreboardName = newScoreboard()
                     modifications.push({
                         "line": line,
                         "modifications": [
                             `scoreboard objectives add ${scoreboardName} dummy`,
                             `scoreboard players set count ${scoreboardName} 0`,
                             `execute ${args[2]} ~ ~ ~ scoreboard players add count ${scoreboardName} 1`,
-                            `scoreboard players operation @s ${scoreboardName} = count ${scoreboardName}`
+                            `scoreboard players operation @s ${scoreboardName} = count ${scoreboardName}`,
+                            `execute @s[scores={${scoreboardName}=1..}}] ~ ~ ~ ${scoreboardResult}`
                         ]
                     })
-                    scoreboardCount += 1
-                    return `execute @s[scores={${scoreboardName}=1..}}] ~ ~ ~ ${combineUnusedArgs(3, args)}`
                 }
-                return ""
+                return `execute @s[scores={${resultScoreboardName}=${wantedResult}}] ~ ~ ~ ${unusedArgs}`
             })
         }
         for (mods of modifications.reverse()) {
+            console.log(fileContentArray)
             for (mod of mods.modifications.reverse()) {
                 fileContentArray.splice(mods.line, 0, mod)
             }
         }
+        console.log(fileContentArray)
         fs.writeFileSync(file, fileContentArray.join("\n"))
     }
 })

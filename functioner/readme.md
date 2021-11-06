@@ -16,28 +16,28 @@ execute @s[tag=target] ~ ~ ~ {
 ```
 
 ---
-## if command
+## if|unless command
 Inspired by java's if/unless execute subfunction. Can be used anywhere.
 
 ### Format
 
 There are three different types of conditions:
 
-- [if block](#block) – Tests if a block exists
-- [if entity](#entity) – Tests whether any entity exists
-- [if score](#score) - Tests an target's score
+- [if|unless block](#block) – Tests if a block exists
+- [if|unless entity](#entity) – Tests whether any entity exists
+- [if|unless score](#score) - Tests an target's score
 
 #### Block
-`if block <pos> <block> [...]`
+`if|unless block <pos> <block> [...]`
 
 _Please note this uses the block data format talked about [here](#block-data-format)_
 
 #### Entity
-`if entity <targets>  [...]`
+`if|unless entity <targets>  [...]`
 
 #### Score
 ##### comparing against number/range
-`if score <target> <scoreboard> <condition> [...]`
+`if|unless score <target> <scoreboard> <condition> [...]`
 
 _Uses [range conditions](#range-conditions)_
 
@@ -52,9 +52,11 @@ _both examples are of a red wool block._
 #### block_states
 
 `minecraft:wool["color":"red"]`
+
 #### data_value
 
 `minecraft:wool[14]`
+
 ---
 ## Range conditions
 Built into bedrock by default. There are four different conditions that can be represented in this system.
