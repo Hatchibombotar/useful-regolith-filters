@@ -51,6 +51,7 @@ Allows you to use itteration within your functions
 
 
 There is no break command, the only way to break a loop is by completing the condition in the loop
+
 ---
 ## Wait Command
 
