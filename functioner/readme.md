@@ -42,6 +42,69 @@ _Please note this uses the block data format talked about [here](#block-data-for
 _Uses [range conditions](#range-conditions)_
 
 ---
+## While command
+
+Allows you to use itteration within your functions
+### Format
+
+`while <var> <condition> [...]`
+
+
+There is no break command, the only way to break a loop is by completing the condition in the loop
+---
+## Wait Command
+
+Akin to the java edition's `/schedule` command. This runs a command after the time has finished.
+
+`wait start <time> <userprovidedid> [...]`
+
+`wait end <userprovidedid>`
+
+_The user provided ID must be smaller than 14 characters._
+
+You can access the current time (in ticks) in a scoreboard with the name `W_<userprovidedid>`
+
+
+### Units of Time
+
+- d - an in-game day, 24000 ticks
+- s - a second, 20 ticks
+- t - the default unit, a single tick. This is default and omitable.
+
+_The time is set to the closest integer tick after unit conversion. For example. `0.5d` is same as 12000 ticks._
+
+The timer only works for entities, execution from other sources are not guarenteed to work.
+
+---
+
+## Variables
+
+Unlike other languages variables are global, similar to scoreboards. Additionally, when re-assigning variables you still have to use the variable key word. E.G:
+```
+var myVariable = 0
+if entity @e[type=chicken] var myVariable = 2
+```
+
+Max 16 characters. Can be accessed on a scoreboard with the same name and the player "value"
+
+### Format
+`var <var> <operator> <value>`
+
+#### Operators
+
+|Operator| Description | Example |
+|--|--|--|
+| = | Assign |  |
+| ++ | Increment |  |
+| -- | Decrement |  |
+| += | Add |  |
+| -= | Subtract |  |
+| *= | Multiply |  |
+| /= | Divide (floored) |  |
+| %= | Modulus (Remainer) |  |
+| DEL | Delete |  |
+
+---
 ## Block data format
 In certain areas an alternate block data format will be used.
 
@@ -65,6 +128,7 @@ Built into bedrock by default. There are four different conditions that can be r
 - is greater than - writing `..` after the number e.g. `2..`
 - is less than - writing `..` before the number e.g. `..5`
 - is between - writing `..` between the numbers e.g. `2..6`
+
 ---
 ## Optimal formatting
 Although functioner tries it's hardest to read your commands it may not always be perfect.
@@ -74,4 +138,6 @@ If you have any issues with functioner make sure:
 ---
 ## Reserved names
 
-Although functioner will not prevent you from doing so, you should not use any scoreboards or tags with the prefix `f_`.
+Although functioner will not prevent you from doing so, you should not use any scoreboards or tags with the following prefixes:
+- `F_`
+- `W_`
