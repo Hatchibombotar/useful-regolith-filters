@@ -1,0 +1,11 @@
+{
+  "name": "simple_blocks",
+  "version": "1.0.0",
+  "description": "A filter that creates blocks from one file.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hatchibombotar",
+  "license": "MIT"
+}
