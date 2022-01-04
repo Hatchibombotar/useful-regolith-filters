@@ -25,14 +25,16 @@ for (const block of file) {
                 "identifier": `${namespace}:${block.name}`
             },
             "components": {
-                "minecraft:friction": block.friction ? block.friction : 0.6
+                "minecraft:friction": block.friction ? block.friction : 0.6,
+                "minecraft:block_light_absorption": 0,
+                "minecraft:block_light_emission": 0,
             }
         }
     }
     console.log(JSON.stringify(newBlock))
     
     terrain_texture.texture_data[block.name] = {}
-    terrain_texture.texture_data[block.name].textures = `textures/blocks/auto/${block.name}`
+    terrain_texture.texture_data[block.name].textures = block.texture
     console.log(JSON.stringify(terrain_texture))
 
     blocks[`${namespace}:${block.name}`] = {}
