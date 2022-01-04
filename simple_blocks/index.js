@@ -1,10 +1,11 @@
 const fs = require("fs")
 
-const file = fs.existsSync("BP/blocks/blocks.json") ? JSON.parse(fs.readFileSync("BP/blocks/blocks.json")) : []
+const file = fs.existsSync("BP/blocks/block.json") ? JSON.parse(fs.readFileSync("BP/blocks/block.json")) : []
 
-const namespace = fs.existsSync("data/simple_blocks/config.json").namespace ? JSON.parse(fs.existsSync("data/simple_blocks/config.json").namespace) : undefined
-if (namespace == undefined) {
-    console.error("A namespace has not been defined in BP/blocks/blocks.json")
+const config = fs.existsSync("data/simple_blocks/config.json") ? JSON.parse(fs.readFileSync("data/simple_blocks/config.json")) : undefined
+const namespace = config.namespace
+if (namespace == "" || config == undefined) {
+    console.error("A namespace has not been defined in BP/blocks/blocks.json or the file has not been provided")
     process.exit()
 }
 const terrain_texture = fs.existsSync("RP/textures/terrain_texture.json") ? JSON.parse(fs.readFileSync("RP/textures/terrain_texture.json")) : {
@@ -42,4 +43,4 @@ for (const block of file) {
 fs.writeFileSync("RP/textures/terrain_texture.json", JSON.stringify(terrain_texture))
 fs.writeFileSync("RP/blocks.json", JSON.stringify(terrain_texture))
 
-fs.rmSync("BP/blocks/blocks.json")
+fs.rmSync("BP/blocks/block.json")
