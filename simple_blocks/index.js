@@ -15,7 +15,7 @@ const terrain_texture = fs.existsSync("RP/textures/terrain_texture.json") ? JSON
     "num_mip_levels": 4,
     "texture_data": {}
 }
-const blocks = fs.existsSync("RP/blocks.json") ? JSON.parse(fs.readFileSync("RP/blocks.json")) : { "format_version": [ 1, 1, 0 ] }
+const blocks = fs.existsSync("RP/blocks.json") ? JSON.parse(fs.readFileSync("RP/blocks.json")) : { "format_version": [1, 1, 0] }
 
 for (const block of file) {
     const newBlock = {
@@ -32,7 +32,7 @@ for (const block of file) {
         }
     }
     console.log(JSON.stringify(newBlock))
-    
+
     terrain_texture.texture_data[block.name] = {}
     terrain_texture.texture_data[block.name].textures = block.texture
     console.log(JSON.stringify(terrain_texture))
@@ -40,6 +40,8 @@ for (const block of file) {
     blocks[`${namespace}:${block.name}`] = {}
     blocks[`${namespace}:${block.name}`].textures = block.name
     console.log(JSON.stringify(blocks))
+
+    fs.writeFileSync(`BP/blocks/${block.name}.json`, JSON.stringify(newBlock))
 }
 
 fs.writeFileSync("RP/textures/terrain_texture.json", JSON.stringify(terrain_texture))
