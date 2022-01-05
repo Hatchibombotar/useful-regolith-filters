@@ -28,23 +28,40 @@ for (const block of file) {
                 "minecraft:friction": block.friction ? block.friction : 0.6,
                 "minecraft:block_light_absorption": 0,
                 "minecraft:block_light_emission": 0,
+                "minecraft:destroy_time": block.break_time ? block.break_time : 1,
             }
         }
     }
-    console.log(JSON.stringify(newBlock))
 
-    terrain_texture.texture_data[block.name] = {}
-    terrain_texture.texture_data[block.name].textures = block.texture
-    console.log(JSON.stringify(terrain_texture))
+    if (block.texture_type == "default" || block.texture_type === undefined) {
+        terrain_texture.texture_data[block.name] = {}
+        terrain_texture.texture_data[block.name].textures = block.texture
 
-    blocks[`${namespace}:${block.name}`] = {}
-    blocks[`${namespace}:${block.name}`].textures = block.name
-    console.log(JSON.stringify(blocks))
+        blocks[`${namespace}:${block.name}`] = {}
+        blocks[`${namespace}:${block.name}`].textures = block.name
+    } else if (block.texture_type == "seperate") {
+        terrain_texture.texture_data[`${block.name}_up`] = { "textures": block.textures.up }
+        terrain_texture.texture_data[`${block.name}_down`] = { "textures": block.textures.down }
+        terrain_texture.texture_data[`${block.name}_north`] = { "textures": block.textures.north }
+        terrain_texture.texture_data[`${block.name}_south`] = { "textures": block.textures.south }
+        terrain_texture.texture_data[`${block.name}_east`] = { "textures": block.textures.east }
+        terrain_texture.texture_data[`${block.name}_west`] = { "textures": block.textures.west }
+
+        blocks[`${namespace}:${block.name}`] = {}
+        blocks[`${namespace}:${block.name}`].textures = {
+            "up": `${block.name}_up`,
+            "down": `${block.name}_down`,
+            "north": `${block.name}_north`,
+            "south": `${block.name}_south`,
+            "east": `${block.name}_east`,
+            "west": `${block.name}_west`
+        }
+    }
 
     fs.writeFileSync(`BP/blocks/${block.name}.json`, JSON.stringify(newBlock))
 }
 
 fs.writeFileSync("RP/textures/terrain_texture.json", JSON.stringify(terrain_texture))
-fs.writeFileSync("RP/blocks.json", JSON.stringify(terrain_texture))
+fs.writeFileSync("RP/blocks.json", JSON.stringify(blocks))
 
 fs.rmSync("BP/blocks/block.json")
