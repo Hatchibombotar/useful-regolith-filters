@@ -33,11 +33,11 @@ A level of 1 will only write components if the components object does not exist
 A level of 2 will only write a component if the component does not exist on the target file
 
 ## Using a template
-To use a template add the `use_template` property to your file.
+To use a template add the `use_templates` property to your file.
 ```jsonc
 {
   "format_version": "1.17.0",
-  "use_template": "example:scale",
+  "use_templates": ["example:scale"],
   "minecraft:entity": {
     "description": {
       "identifier": "example:entity",
@@ -51,3 +51,13 @@ To use a template add the `use_template` property to your file.
   }
 }
 ```
+
+If you installed a previous version, you may need to change `use_template`, string to `use_templates`, array
+
+BEFORE: `"use_template": "example:scale",`
+
+AFTER: `"use_templates": ["example:scale"],`
+
+This change allows for multiple templates to be used:
+
+`"use_templates": ["example:scale", "example:template"],`
