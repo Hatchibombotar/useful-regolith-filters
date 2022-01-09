@@ -27,7 +27,10 @@ Example Template
 
 `use_on` is the directory that the filter can apply to.
 
-`write_level` is how deep the templater enforces. Does not currently do anything, by default is set to `2`, should not be an issue in most cases.
+`write_level` is how deep the templater enforces. Set to 2 by default.
+
+A level of 1 will only write components if the components object does not exist
+A level of 2 will only write a component if the component does not exist on the target file
 
 ## Using a template
 To use a template add the `use_template` property to your file.

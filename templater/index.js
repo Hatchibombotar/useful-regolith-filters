@@ -1,8 +1,7 @@
 const glob = require("glob");
 const fs = require("fs");
 
-const maxLevel = 2
-function merge(arguments, level) {
+function merge(arguments, level, maxLevel) {
 
     let target = {};
 
@@ -12,7 +11,7 @@ function merge(arguments, level) {
             if (obj.hasOwnProperty(prop)) {
                 if ((Object.prototype.toString.call(obj[prop]) === "[object Object]") && (level != maxLevel)) {
                     // if the property is a nested object
-                    target[prop] = merge([target[prop], obj[prop]], level + 1)
+                    target[prop] = merge([target[prop], obj[prop]], level + 1, maxLevel)
                 } else {
                     // for regular property or when the max level has been reached
                     target[prop] = obj[prop]
@@ -42,9 +41,9 @@ glob("BP/templates/**/*.json", null, function (err, files) {
                 const templateIndex = currentTemplates.findIndex(x => x.description.identifier == templateUsed)
                 if (templateUsed == undefined) continue
                 if (templateIndex == -1) { console.log(`Template ${templateUsed} could not be found.`); continue; }
-                const newFile = merge([currentTemplates[templateIndex].template, fileContent], 0)
+                const newFile = merge([currentTemplates[templateIndex].template, fileContent], 0, currentTemplates[templateIndex].description.write_level)
                 delete newFile.use_template
-                fs.writeFileSync(file, JSON.stringify(newFile))
+                fs.writeFileSync(file, JSON.stringify(newFile, null, "  "))
             }
         })
     }
