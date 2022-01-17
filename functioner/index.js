@@ -53,23 +53,75 @@ function refresh() { files = glob.sync("BP/functions/**/*.mcfunction") }
 // extracted functions
 fs.mkdirSync("BP/functions/functioner/extracted/");
 
-let extFuncCount = 0
+let currentFileNum = 0
 
 for (file of files) {
     const fileContent = fs.readFileSync(file).toString()
-    const newFileContent = fileContent.replace(/\{\r[^\}[]*}/gm, function (x) {
-        extFuncCount += 1
-        const newFuncContent = x.slice(1, -1).replace(/^ +/gm, "")
-        fs.writeFileSync(`BP/functions/functioner/extracted/output${extFuncCount}.mcfunction`, newFuncContent)
-        return `function functioner/extracted/output${extFuncCount}`;
-    });
-    fs.writeFileSync(file, newFileContent)
+    const fileContentArray = fileContent.replace(/\r/g, "").replace(/^(\t| )*/gm, "").split("\n")
+    const newFile = []
+    const currentFunctionLoc = []
+
+    function push(item) {
+        eval(`newFile${currentFunctionLoc.join("")}.push(item)`)
+    }
+
+    for (const linenum in fileContentArray) {
+        const path = eval(`newFile${currentFunctionLoc.join("")}`)
+        const line = fileContentArray[linenum]
+        if (line.substr(line.length - 1, 1) == "{") {
+            push(line)
+            push([])
+            currentFunctionLoc.push(`[${path.length - 1}]`)
+        } else if (line.substr(0, 1) == "}") {
+            currentFunctionLoc.pop()
+            push(line)
+        } else if (typeof path[path.length - 1] == "object") {
+            push(line)
+        } else {
+            push(line)
+        }
+    }
+
+    const splitFileArray = [newFile]
+
+    let editsMade = true
+    while (editsMade) {
+        editsMade = false
+        for (const fileNum in splitFileArray) {
+            const currentFile = splitFileArray[fileNum]
+            for (const lineNum in currentFile) {
+                line = currentFile[lineNum]
+                if (typeof line == "object") {
+                    currentFile[lineNum - 1] = currentFile[lineNum - 1].substring(currentFile[lineNum - 1].length - 1, 0) + `function functioner/extracted/${currentFileNum}-${fileNum}`
+                    currentFile.splice(lineNum, 1)
+                    splitFileArray.push(line)
+                    editsMade = true
+                    break
+                }
+                if (line == "}") {
+                    currentFile.splice(lineNum, 1)
+                }
+            }
+        }
+    }
+
+    fs.writeFileSync(file, splitFileArray[0].join("\n"))
+    splitFileArray.splice(0, 1)
+
+    for (const f in splitFileArray) {
+        const fcontent = splitFileArray[f]
+        fs.writeFileSync(`BP/functions/functioner/extracted/${currentFileNum}-${f}.mcfunction`, fcontent.join("\n"))
+    }
+
+    currentFileNum += 1
+    
 }
 
 refresh()
 
 // wait command
 const timers = []
+let timersUsed = false
 for (file of files) {
     const fileContent = fs.readFileSync(file).toString().replace(/ +/gm, " ")
     const fileContentArray = fileContent.replace(/\r/g, "").split("\n")
@@ -78,6 +130,7 @@ for (file of files) {
         const lineContent = fileContentArray[line]
         if (lineContent[0] == "#") continue
         fileContentArray[line] = lineContent.replace(/\b((wait) (start|end)).*\b/g, function (x, y) {
+            timersUsed = true
             const args = fileContentArray[line].split(" ")
             if (args[1] == "start") {
                 const snippedTime = args[2].substring(0, args[2].length - 1)
@@ -110,14 +163,16 @@ for (file of files) {
     makeModifications(modifications, fileContentArray)
     fs.writeFileSync(file, fileContentArray.join("\n"))
 }
-const timerFunctionArray = []
-for (timer of timers) {
-    timerFunctionArray.push(`scoreboard players remove time_left ${timer[0]} 1`)
-    timerFunctionArray.push(`scoreboard players operation @e[tag=${timer[1]}] ${timer[0]} = time_left ${timer[0]}`)
-    timerFunctionArray.push(`execute @e[tag=${timer[1]}, scores={${timer[0]}=0}] ~ ~ ~ ${timer[2]}`)
+if (timersUsed) {
+    const timerFunctionArray = []
+    for (timer of timers) {
+        timerFunctionArray.push(`scoreboard players remove time_left ${timer[0]} 1`)
+        timerFunctionArray.push(`scoreboard players operation @e[tag=${timer[1]}] ${timer[0]} = time_left ${timer[0]}`)
+        timerFunctionArray.push(`execute @e[tag=${timer[1]}, scores={${timer[0]}=0}] ~ ~ ~ ${timer[2]}`)
+    }
+    fs.writeFileSync("BP/functions/functioner/timers.mcfunction", timerFunctionArray.join("\n"))
+    tickJson.values.push("functioner/timers")
 }
-fs.writeFileSync("BP/functions/functioner/timers.mcfunction", timerFunctionArray.join("\n"))
-tickJson.values.push("functioner/timers")
 
 fs.writeFileSync("BP/functions/tick.json", JSON.stringify(tickJson))
 
@@ -244,6 +299,7 @@ for (file of files) {
                 modifications.push({
                     "line": line - 1,
                     "modifications": [
+                        `scoreboard objectives add F_number dummy F_number`,
                         `scoreboard players set value F_number ${args[3]}`
                     ]
                 })
@@ -252,6 +308,7 @@ for (file of files) {
                 modifications.push({
                     "line": line - 1,
                     "modifications": [
+                        `scoreboard objectives add F_number dummy F_number`,
                         `scoreboard players set value F_number ${args[3]}`
                     ]
                 })
@@ -260,6 +317,7 @@ for (file of files) {
                 modifications.push({
                     "line": line - 1,
                     "modifications": [
+                        `scoreboard objectives add F_number dummy F_number`,
                         `scoreboard players set value F_number ${args[3]}`
                     ]
                 })
