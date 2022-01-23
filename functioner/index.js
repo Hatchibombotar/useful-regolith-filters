@@ -74,7 +74,6 @@ for (file of files) {
             currentFunctionLoc.push(`[${path.length - 1}]`)
         } else if (line.substr(0, 1) == "}") {
             currentFunctionLoc.pop()
-            push(line)
         } else if (typeof path[path.length - 1] == "object") {
             push(line)
         } else {
@@ -97,9 +96,6 @@ for (file of files) {
                     splitFileArray.push(line)
                     editsMade = true
                     break
-                }
-                if (line == "}") {
-                    currentFile.splice(lineNum, 1)
                 }
             }
         }
@@ -233,7 +229,7 @@ for (file of files) {
                 modifications.push({
                     "line": line,
                     "modifications": [
-                        `execute @s ~ ~ ~ detect ${blockFormat(args[5])[0]} ${blockFormat(args[5])[1]} ${scoreboardResult}`
+                        `execute @s ~ ~ ~ detect ${args[2]} ${args[3]} ${args[4]} ${blockFormat(args[5])[0]} ${blockFormat(args[5])[1]} ${scoreboardResult}`
                     ]
                 })
             } else if (args[1] == "score") {
@@ -258,7 +254,7 @@ for (file of files) {
                         `scoreboard players set count ${scoreboardName} 0`,
                         `execute ${args[2]} ~ ~ ~ scoreboard players add count ${scoreboardName} 1`,
                         `scoreboard players operation @s ${scoreboardName} = count ${scoreboardName}`,
-                        `execute @s[scores={${scoreboardName}=1..}}] ~ ~ ~ ${scoreboardResult}`
+                        `execute @s[scores={${scoreboardName}=1..}] ~ ~ ~ ${scoreboardResult}`
                     ]
                 })
             }
