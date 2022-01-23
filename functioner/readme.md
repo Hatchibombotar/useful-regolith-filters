@@ -142,3 +142,10 @@ If you have any issues with functioner make sure:
 Although functioner will not prevent you from doing so, you should not use any scoreboards or tags with the following prefixes:
 - `F_`
 - `W_`
+
+## Using the Blockception Development Plugin in VSCode
+
+It is reccomended to create an .mcattributes file in the root of your project containing the following lines:
+```
+diagnose.behaviorpack.mcfunction.missing=false
+```
