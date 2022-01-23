@@ -91,7 +91,7 @@ for (file of files) {
             for (const lineNum in currentFile) {
                 line = currentFile[lineNum]
                 if (typeof line == "object") {
-                    currentFile[lineNum - 1] = currentFile[lineNum - 1].substring(currentFile[lineNum - 1].length - 1, 0) + `function functioner/extracted/${currentFileNum}-${fileNum}`
+                    currentFile[lineNum - 1] = currentFile[lineNum - 1].substring(currentFile[lineNum - 1].length - 1, 0) + `function functioner/extracted/${currentFileNum}-${splitFileArray.length - 1}`
                     currentFile.splice(lineNum, 1)
                     splitFileArray.push(line)
                     editsMade = true
