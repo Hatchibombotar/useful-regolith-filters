@@ -3,7 +3,7 @@ Links uuid's from the resource and behaviour pack manifests in the dependencies 
 
 ### Install Latest
 ```
-regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
+regolith install github.com/Hatchibombotar/useful-regolith-filters/link_manifests==latest
 ```
 
 ## Usage

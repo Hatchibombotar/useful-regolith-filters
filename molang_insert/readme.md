@@ -3,7 +3,7 @@ A filter for regolith that allows you to insert molang.
 
 ### Install Latest
 ```
-regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
+regolith install github.com/Hatchibombotar/useful-regolith-filters/molang_insert==latest
 ```
 
 ## Usage

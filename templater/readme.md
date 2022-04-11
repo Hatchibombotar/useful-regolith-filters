@@ -3,7 +3,7 @@ A templater filter for regolith.
 
 ### Install Latest
 ```
-regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
+regolith install github.com/Hatchibombotar/useful-regolith-filters/templater==latest
 ```
 
 ## Template format

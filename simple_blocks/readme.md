@@ -3,7 +3,7 @@ A filter that creates blocks from one file.
 
 ### Install Latest
 ```
-regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
+regolith install github.com/Hatchibombotar/useful-regolith-filters/simple_blocks==latest
 ```
 
 ## Examples

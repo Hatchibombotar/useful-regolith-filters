@@ -3,7 +3,7 @@ Intended to allow copying of files into both the resource and behaviour packs
 
 ### Install Latest
 ```
-regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
+regolith install github.com/Hatchibombotar/useful-regolith-filters/pack_commons==latest
 ```
 
 You can get the files to be copied in two ways:
