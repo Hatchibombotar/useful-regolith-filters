@@ -1,6 +1,11 @@
 # Functioner
 A filter for regolith that adds more syntax to function files.
 
+### Install Latest
+```
+regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
+```
+
 ---
 ## "Sub-functions"
 These are functions inside of functions. These allow for multiple commands to be ran at once.
