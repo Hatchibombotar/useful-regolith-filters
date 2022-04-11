@@ -1,6 +1,11 @@
 # Regolith Templater
 A templater filter for regolith.
 
+### Install Latest
+```
+regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
+```
+
 ## Template format
 Templates are stored in `BP/templates/`
 
