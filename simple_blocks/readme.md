@@ -1,5 +1,11 @@
 # Simple blocks
 A filter that creates blocks from one file.
+
+### Install Latest
+```
+regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
+```
+
 ## Examples
 
 `BP/blocks/block.json`
