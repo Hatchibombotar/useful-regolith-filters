@@ -59,7 +59,7 @@ function timeFormat(input) {
     }
 }
 
-// based off code by Waveplayz
+// based off of code by Waveplayz
 // https://gist.github.com/WavePlayz/3ede5f50658b0e30a762d59564eadf75
 function getCommandArgs(content) {
 	const spliters = /[\s\b]/
@@ -143,5 +143,6 @@ module.exports = {
     blockFormat, 
     combineUnusedArgs, 
     makeModifications,
-    getCommandArgs
+    getCommandArgs,
+	timeFormat
 }
