@@ -1,49 +1,9 @@
 const fs = require("fs")
 const glob = require("glob");
 
-let scoreboardCount = 0
-let tagCount = 0
+const utils = require("./utils.js");
 
 const tickJson = fs.existsSync("BP/functions/tick.json") ? JSON.parse(fs.readFileSync("BP/functions/tick.json")) : { "values": [] }
-
-function newScoreboard() {
-    scoreboardCount += 1
-    return (`F_${scoreboardCount}`)
-}
-
-function newTag() {
-    tagCount += 1
-    return (`F_${tagCount}`)
-}
-
-function blockFormat(input) {
-    if (input.match(/\[(.*)\]/g)) {
-        const plainBlock = input.replace(/\[(.*)\]/g, "")
-        if (input.match(/\[[0-9]+\]/g)) {
-            return [plainBlock, input.match(/\[[0-9]+\]/g)[0].replace(/\[|\]/g, "")]
-        } else {
-            return [input.match(/\[(.*)\]/g)[0]]
-        }
-    } else {
-        return [input, -1]
-    }
-}
-
-function combineUnusedArgs(topArgNum, input) {
-    const newArgs = []
-    for (let step = topArgNum; step < input.length; step++) {
-        newArgs.push(input[step])
-    }
-    return newArgs.join(" ")
-}
-
-function makeModifications(modifications, fileContentArray) {
-    for (mods of modifications.reverse()) {
-        for (mod of mods.modifications.reverse()) {
-            fileContentArray.splice(mods.line, 0, mod)
-        }
-    }
-}
 
 fs.mkdirSync("BP/functions/functioner/");
 
@@ -127,21 +87,10 @@ for (file of files) {
         if (lineContent[0] == "#") continue
         fileContentArray[line] = lineContent.replace(/\b((wait) (start|end)).*\b/g, function (x, y) {
             timersUsed = true
-            const args = fileContentArray[line].split(" ")
+            const args = utils.getCommandArgs(x)
             if (args[1] == "start") {
-                const snippedTime = args[2].substring(0, args[2].length - 1)
-                const givenTime = args[2][args[2].length - 1]
-                const executorTag = newTag()
-                time = 0
-                if (givenTime == "d") {
-                    time = 24000 * snippedTime
-                } else if (givenTime == "s") {
-                    time = 20 * snippedTime
-                } else if (givenTime == "t") {
-                    time = snippedTime
-                } else if (givenTime.match(/[0-9]/)) {
-                    time = args[2]
-                }
+                const executorTag = utils.newTag()
+                const time = utils.timeFormat(args[2])
                 modifications.push({
                     "line": line,
                     "modifications": [
@@ -149,14 +98,14 @@ for (file of files) {
                         `scoreboard players set time_left W_${args[3]} ${time}`
                     ]
                 })
-                timers.push([`W_${args[3]}`, executorTag, combineUnusedArgs(4, args)])
+                timers.push([`W_${args[3]}`, executorTag, utils.combineUnusedArgs(4, args)])
                 return `tag @s add ${executorTag}`
             } else if (args[1] == "end") {
                 return `scoreboard objectives remove W_${args[2]}`
             }
         })
     }
-    makeModifications(modifications, fileContentArray)
+    utils.makeModifications(modifications, fileContentArray)
     fs.writeFileSync(file, fileContentArray.join("\n"))
 }
 if (timersUsed) {
@@ -183,11 +132,11 @@ for (file of files) {
     const fileContentArray = fileContent.replace(/\r/g, "").split("\n")
     for (line in fileContentArray) {
         const lineContent = fileContentArray[line]
-        const args = fileContentArray[line].split(" ")
+        const args = utils.getCommandArgs(x)
         if (lineContent[0] == "#") continue
         fileContentArray[line] = lineContent.replace(/while (.*) (.*) .*/g, function (x, y) {
             const newFuncContent = [
-                combineUnusedArgs(3, args),
+                utils.combineUnusedArgs(3, args),
                 `if score value ${args[1]} ${args[2]} function functioner/while/output${whileFuncCount}`
             ]
             fs.writeFileSync(`BP/functions/functioner/while/output${whileFuncCount}.mcfunction`, newFuncContent.join("\n"))
@@ -208,8 +157,8 @@ for (file of files) {
         const lineContent = fileContentArray[line]
         if (lineContent[0] == "#") continue
         fileContentArray[line] = lineContent.replace(/\b((if|unless) (block|entity|score)).*\b/g, function (x, y) {
-            const args = x.split(" ")
-            const resultScoreboardName = newScoreboard()
+            const args = utils.getCommandArgs(x)
+            const resultScoreboardName = utils.newScoreboard()
             const scoreboardResult = `scoreboard players set @s ${resultScoreboardName} 1`
             let unusedArgs = ""
             let wantedResult = ""
@@ -225,16 +174,16 @@ for (file of files) {
             })
 
             if (args[1] == "block") {
-                unusedArgs = combineUnusedArgs(6, args)
+                unusedArgs = utils.combineUnusedArgs(6, args)
                 modifications.push({
                     "line": line,
                     "modifications": [
-                        `execute @s ~ ~ ~ detect ${args[2]} ${args[3]} ${args[4]} ${blockFormat(args[5])[0]} ${blockFormat(args[5])[1]} ${scoreboardResult}`
+                        `execute @s ~ ~ ~ detect ${args[2]} ${args[3]} ${args[4]} ${utils.blockFormat(args[5])[0]} ${utils.blockFormat(args[5])[1]} ${scoreboardResult}`
                     ]
                 })
             } else if (args[1] == "score") {
-                unusedArgs = combineUnusedArgs(5, args)
-                const scoreboardName = newScoreboard()
+                unusedArgs = utils.combineUnusedArgs(5, args)
+                const scoreboardName = utils.newScoreboard()
                 modifications.push({
                     "line": line,
                     "modifications": [
@@ -245,8 +194,8 @@ for (file of files) {
                     ]
                 })
             } else if (args[1] == "entity") {
-                unusedArgs = combineUnusedArgs(3, args)
-                const scoreboardName = newScoreboard()
+                unusedArgs = utils.combineUnusedArgs(3, args)
+                const scoreboardName = utils.newScoreboard()
                 modifications.push({
                     "line": line,
                     "modifications": [
@@ -261,7 +210,7 @@ for (file of files) {
             return `execute @s[scores={${resultScoreboardName}=${wantedResult}}] ~ ~ ~ ${unusedArgs}`
         })
     }
-    makeModifications(modifications, fileContentArray)
+    utils.makeModifications(modifications, fileContentArray)
     fs.writeFileSync(file, fileContentArray.join("\n"))
 }
 
@@ -274,7 +223,7 @@ for (file of files) {
         const lineContent = fileContentArray[line]
         if (lineContent[0] == "#") continue
         fileContentArray[line] = lineContent.replace(/(var (.*) (.*) (.*))|var (.*) (.*)/g, function (x, y) {
-            const args = x.split(" ")
+            const args = utils.getCommandArgs(x)
             modifications.push({
                 "line": line,
                 "modifications": [
@@ -324,6 +273,6 @@ for (file of files) {
             return `say [Functioner] an error has occured (#1)`
         })
     }
-    makeModifications(modifications, fileContentArray)
+    utils.makeModifications(modifications, fileContentArray)
     fs.writeFileSync(file, fileContentArray.join("\n"))
 }
