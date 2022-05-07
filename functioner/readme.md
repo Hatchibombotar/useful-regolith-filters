@@ -131,7 +131,7 @@ ucall say Unsafe Execution Sucessful!
 Please note that the `ucall` command will require two extra lines, along with it's own, as well as other custom commands that may take up more space after compilation,
 
 ---
-## tick.json intervals TODO
+## tick.json intervals
 You can use the intervals key inside of the `intervals.json` file to activate functions at intervals.
 ```json
 {
