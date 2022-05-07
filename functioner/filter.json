@@ -3,7 +3,8 @@
         {
             "runWith": "nodejs",
             "script": "./index.js",
-            "name": "Functioner"
+            "name": "Functioner",
+            "description": "A filter that adds extra syntax to minecraft functions."
         }
     ]
 }

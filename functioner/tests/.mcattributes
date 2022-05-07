@@ -1,0 +1,2 @@
+diagnose.behaviorpack.mcfunction.missing=false
+diagnostic.disable.behaviorpack.mcfunction.syntax.unknown=true

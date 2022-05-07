@@ -1,0 +1,42 @@
+{
+  "name": "Functioner Test",
+  "author": "Hatchibombotar",
+  "packs": {
+    "behaviorPack": "./packs/BP",
+    "resourcePack": "./packs/RP"
+  },
+  "regolith": {
+    "profiles": {
+      "test": {
+        "filters": [
+          { "filter": "functioner" },
+          { "filter": "filter_tester" }
+        ],
+        "export": {
+          "target": "local",
+          "readOnly": false
+        }
+      },
+      "dev": {
+        "filters": [
+          { "filter": "functioner" }
+        ],
+        "export": {
+          "target": "development",
+          "readOnly": false
+        }
+      }
+    },
+    "filterDefinitions": {
+      "functioner": {
+        "runWith": "nodejs",
+        "script": "../index.js"
+      },
+      "filter_tester": {
+        "version": "1.0.0"
+      }
+
+    },
+    "dataPath": "./packs/data"
+  }
+}

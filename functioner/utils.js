@@ -1,3 +1,6 @@
+const fs = require("fs")
+const glob = require("glob");
+
 let scoreboardCount = 0
 function newScoreboard() {
     scoreboardCount += 1
@@ -48,6 +51,8 @@ function timeFormat(input) {
     const unit = input[input.length - 1] // the unit of time, or a number if none is given.
     if (unit == "d") {
         return 24000 * snippedTime
+    } else if (unit == "m") {
+        return 20 * 60 * snippedTime
     } else if (unit == "s") {
         return 20 * snippedTime
     } else if (unit == "t") {
@@ -137,6 +142,41 @@ function getCommandArgs(content) {
 	return arguments
 }
 
+function findDuplicates(input) {
+	const duplicates = []
+	const unique = []
+	for (let i = 0; i < input.length; i++) {
+		if (unique.includes(input[i])) {
+			duplicates.push(input[i])
+		} else {
+			unique.push(input[i])
+		}
+	}
+	return duplicates
+}
+
+function createFunction(name, commands) {
+	this.name = name
+	fs.writeFileSync(`BP/functions/${name}.mcfunction`, commands.join("\n"))
+	return(name)
+}
+
+createFunction.prototype.push = function(commands) {
+	const contents = fs.readFileSync(`BP/functions/${this.name}.mcfunction`).toString().split("\n")
+	if (typeof commands == "string") {
+		commands.push(contents)
+	} else {
+		for (i of commands) {
+			commands.push(i)
+		}
+	}
+	fs.writeFileSync(`BP/functions/${this.name}.mcfunction`, contents.join("\n"))
+}
+
+function getAllFunctions() {
+	return glob.sync("BP/functions/**/*.mcfunction")
+}
+
 module.exports = { 
     newScoreboard, 
     newTag, 
@@ -144,5 +184,8 @@ module.exports = {
     combineUnusedArgs, 
     makeModifications,
     getCommandArgs,
-	timeFormat
+	timeFormat,
+	findDuplicates,
+	createFunction,
+	getAllFunctions,
 }
