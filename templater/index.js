@@ -217,10 +217,6 @@ glob("data/templater/**/*.json", null, function (err, files) {
                     "name": identifier.split(":")[1]
                 }
 
-                console.log(
-                    JSON.stringify(deepMerge([template.template, fileContent], 0, templateDescription.write_level)),
-                    JSON.stringify(variableValues)
-                )
                 // merge the files with the referenced template, insert variables and save the file
                 const newFile = insertVariablesInJSON(
                     deepMerge([template.template, fileContent], 0, templateDescription.write_level),
