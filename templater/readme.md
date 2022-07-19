@@ -66,3 +66,17 @@ AFTER: `"use_templates": ["example:scale"],`
 This change allows for multiple templates to be used:
 
 `"use_templates": ["example:scale", "example:template"],`
+
+### list
+
+projectile
+swim
+fly
+melee_attack
+range_attack
+neutral_anger
+shared_anger
+tameable
+basic walk
+paddle
+minecart

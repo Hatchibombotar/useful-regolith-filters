@@ -1,0 +1,41 @@
+{
+  "name": "Templater Test",
+  "author": "Hatchibombotar",
+  "packs": {
+    "behaviorPack": "./packs/BP",
+    "resourcePack": "./packs/RP"
+  },
+  "regolith": {
+    "profiles": {
+      "test": {
+        "filters": [
+          { "filter": "templater" }
+        ],
+        "export": {
+          "target": "local",
+          "readOnly": false
+        }
+      },
+      "default": {
+        "filters": [
+          { "filter": "templater" }
+        ],
+        "export": {
+          "target": "development",
+          "readOnly": false
+        }
+      }
+    },
+    "filterDefinitions": {
+      "templater": {
+        "runWith": "nodejs",
+        "script": "../index.js"
+      },
+      "filter_tester": {
+        "version": "1.0.0"
+      }
+
+    },
+    "dataPath": "./packs/data"
+  }
+}

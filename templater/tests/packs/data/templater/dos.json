@@ -1,0 +1,16 @@
+{
+    "description": {
+        "identifier": "example:height",
+        "use_on": "BP/entities/",
+        "write_level": 2
+    },
+    "template": {
+        "minecraft:entity": {
+            "components": {
+                "minecraft:${identifier}": {
+                    "value": 5
+                }
+            }
+        }
+    }
+}

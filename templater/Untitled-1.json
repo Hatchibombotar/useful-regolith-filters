@@ -1,0 +1,19 @@
+{
+    "description": {
+        "identifier": "example:scale",
+        "use_on": "BP/entities/",
+        "write_level": 2,
+        "parameters": {
+            "scale": 2
+        }
+    },
+    "template": {
+        "minecraft:entity": {
+            "components": {
+                "minecraft:scale": {
+                    "value": "${scale}"
+                }
+            }
+        }
+    }
+}
