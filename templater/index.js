@@ -172,29 +172,30 @@ glob("data/templater/**/*.json", null, function (err, files) {
             for (const file of files) {
                 const fileContent = JSON.parse(fs.readFileSync(file))
                 const templatesUsed = fileContent.use_templates ?? undefined
-                if (typeof templatesUsed != "object") {
-                    console.error(`[${fileContent["minecraft:entity"].description.identifier}] use_templates must be an object.`)
-                }
-                
-                const fileParameters = fileContent["use_templates"][templateDescription.identifier] ?? {}
 
                 // if file does not ask for any template, skip. 
                 if (templatesUsed == undefined) continue
                 else filesUseTemplates.push(file)
 
+                // attempt to find the identifier variable in the target file
+                let correctParentName;
+                for (parent of MAIN_FILE_OBJECT_NAMES) {
+                    if (parent in fileContent) {
+                        correctParentName = parent
+                        break
+                    }
+                }
+                const identifier = fileContent[correctParentName].description.identifier
+                if (typeof templatesUsed != "object") {
+                    console.error(`[${fileContent[correctParentName].description.identifier}] use_templates must be an object.`)
+                }
+                
+                const fileParameters = fileContent["use_templates"][templateDescription.identifier] ?? {}
+
                 // if file does not ask for this template, skip.
                 const templateIndex = Object.keys(templatesUsed).findIndex(x => x == templateDescription.identifier)
                 if (templateIndex == -1) continue
                 else filesModfied.push(file)
-
-                // attempt to find the identifier variable in the target file
-                let identifier;
-                for (parent of MAIN_FILE_OBJECT_NAMES) {
-                    if (parent in fileContent) {
-                        identifier = fileContent[parent].description.identifier
-                        break
-                    }
-                }
 
                 // make sure that all parameters defined in the template are defined in the file.
                 for (const parameter of Object.keys(templateParameters)) {
