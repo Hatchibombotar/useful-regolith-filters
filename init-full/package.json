@@ -1,0 +1,15 @@
+{
+  "name": "init-full",
+  "version": "1.0.0",
+  "description": "Creates manifest.json files for bedrock addons",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node index.js && echo GENCOMPLETE"
+  },
+  "author": "Hatchibombotar",
+  "license": "MIT",
+  "dependencies": {
+    "readline-sync": "^1.4.10",
+    "uuid": "^8.3.2"
+  }
+}
