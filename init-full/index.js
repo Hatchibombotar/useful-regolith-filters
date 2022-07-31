@@ -1,22 +1,21 @@
 const fs = require("fs")
-const prompt = require('readline-sync');
-const { v4: uuidv4 } = require('uuid');
+const prompt = require("prompt-sync")({sigint: true});
+const { v4: uuidv4 } = require("uuid");
 
-
-const { latestVersion, gametestModules } = require('./version_data.js');
+const { latestVersion, gametestModules } = require("./version_data.js");
 
 console.log("")
 console.log("Create Manifest File")
 console.log("--------------------")
 console.log("")
 
-const projectName = prompt.question("Project Name: ")
-const author = prompt.question("Author: ")
-const description = prompt.question(`Description: (By ${author}) `, {defaultInput: `By ${author}`})
+const projectName = prompt("Project Name: ")
+const author = prompt("Author: ")
+const description = prompt(`Description: (By ${author}) `, {defaultInput: `By ${author}`})
 
 let useGametestInput = "";
 while (!(useGametestInput.match(/y|n/) && useGametestInput.length == 1)) {
-    useGametestInput = prompt.question(`Use gametest scripts? (y/n): `, {defaultInput: "n"})
+    useGametestInput = prompt(`Use gametest scripts? (y/n): `, {defaultInput: "n"})
 }
 const useGametest = useGametestInput == "y"
 
@@ -32,7 +31,7 @@ if (useGametest) {
 	for (const currentModule in enabledGametestModules) {
 		let useModule = "";
 		while (!(useModule.match(/y|n/) && useModule.length == 1)) {
-			useModule = prompt.question(`use ${currentModule} module? (y/n): `, {defaultInput: "n"})
+			useModule = prompt(`use ${currentModule} module? (y/n): `, {defaultInput: "n"})
 		}
 		enabledGametestModules[currentModule] = useModule == "y"
 	}
