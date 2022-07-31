@@ -4,7 +4,7 @@
   "description": "Creates manifest.json files for bedrock addons",
   "main": "index.js",
   "scripts": {
-    "postinstall": "node index.js && echo GENCOMPLETE"
+    "postinstall": "start cmd /C node index.js"
   },
   "author": "Hatchibombotar",
   "license": "MIT",

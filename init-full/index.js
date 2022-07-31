@@ -92,5 +92,13 @@ if (useGametest) {
 		version: manifestRP.header.version
 	})
 }
-fs.writeFileSync("../../packs/RP/manifest.json", JSON.stringify(manifestRP, null, "	"))
-fs.writeFileSync("../../packs/BP/manifest.json", JSON.stringify(manifestBP, null, "	"))
+fs.writeFileSync("../../../../packs/RP/manifest.json", JSON.stringify(manifestRP, null, "	"))
+fs.writeFileSync("../../../../packs/BP/manifest.json", JSON.stringify(manifestBP, null, "	"))
+
+const configJSON = JSON.parse(fs.readFileSync("../../../../config.json"))
+
+configJSON.author = author
+configJSON.name = projectName
+delete configJSON.regolith.filterDefinitions["init-full"]
+
+fs.writeFileSync("../../../../config.json", JSON.stringify(configJSON, null, "  "))
