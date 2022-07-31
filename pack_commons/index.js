@@ -1,7 +1,7 @@
 const fs = require("fs")
 const glob = require("glob")
 
-const config = JSON.parse(fs.readFileSync(`data/pack_commons/commons.json`))
+const config = fs.existsSync(`data/pack_commons/commons.json`) ? JSON.parse(fs.readFileSync(`data/pack_commons/commons.json`)) : {"common_files": []}
 
 glob("data/pack_commons/**/!(commons.json)", null, function (err, files) {
     for (path of files) {
