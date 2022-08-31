@@ -1,0 +1,10 @@
+{
+    "filters": [
+        {
+            "runWith": "nodejs",
+            "script": "./index.js",
+            "name": "File Freedom",
+            "description": "Free files!"
+        }
+    ]
+}
