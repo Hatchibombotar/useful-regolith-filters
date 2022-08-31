@@ -1,4 +1,4 @@
-const settings = JSON.parse(process.argv[2])
+const settings = JSON.parse(process.argv[2] ?? "{}")
 
 const JSON_FEATURES_BP = {
     "minecraft:entity": "BP/entities",
@@ -16,8 +16,6 @@ const JSON_FEATURES_BP = {
     "animations": "BP/animations",
     ...settings.JSON_FEATURES_BP ?? []
 }
-
-console.log(JSON_FEATURES_BP)
 
 const JSON_FEATURES_RP = {
     "minecraft:attachable": "RP/attachables",
