@@ -3,6 +3,10 @@ A filter that creates blocks from one file.
 
 ### Install Latest
 ```
+regolith install simple_blocks
+```
+Or
+```
 regolith install github.com/Hatchibombotar/useful-regolith-filters/simple_blocks==latest
 ```
 

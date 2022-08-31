@@ -3,6 +3,10 @@ Intended to allow copying of files into both the resource and behaviour packs
 
 ### Install Latest
 ```
+regolith install pack_commons
+```
+Or
+```
 regolith install github.com/Hatchibombotar/useful-regolith-filters/pack_commons==latest
 ```
 

@@ -3,6 +3,10 @@ A templater filter for regolith.
 
 ### Install Latest
 ```
+regolith install templater
+```
+Or
+```
 regolith install github.com/Hatchibombotar/useful-regolith-filters/templater==latest
 ```
 

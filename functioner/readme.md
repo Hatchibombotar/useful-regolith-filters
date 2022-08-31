@@ -3,6 +3,10 @@ A filter for regolith that adds more syntax to function files.
 
 ### Install Latest
 ```
+regolith install functioner
+```
+Or
+```
 regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
 ```
 
