@@ -1,5 +1,5 @@
 {
-  "name": "auto_dependencies",
+  "name": "link_manifests",
   "version": "1.0.0",
   "description": "Links uuid's from the resource and behaviour pack manifests.",
   "main": "index.js",

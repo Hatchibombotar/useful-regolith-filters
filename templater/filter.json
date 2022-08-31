@@ -3,7 +3,8 @@
         {
             "runWith": "nodejs",
             "script": "./index.js",
-            "name": "Templater"
+            "name": "Templater",
+            "description": "Adds templates to regolith"
         }
     ]
 }

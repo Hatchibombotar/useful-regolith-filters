@@ -3,7 +3,8 @@
         {
             "runWith": "nodejs",
             "script": "./index.js",
-            "name": "Pack Commons"
+            "name": "Pack Commons",
+            "description": "Allows copying of files into both the resource and behaviour packs"
         }
     ]
 }

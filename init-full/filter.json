@@ -3,7 +3,8 @@
         {
             "runWith": "nodejs",
             "script": "./index.js",
-            "name": "init-full"
+            "name": "Init Full",
+            "description": "Filter that creates bedrock manifest files on install."
         }
     ]
 }

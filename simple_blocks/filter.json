@@ -3,7 +3,8 @@
         {
             "runWith": "nodejs",
             "script": "./index.js",
-            "name": "Simple Blocks"
+            "name": "Simple Blocks",
+            "description": "A filter that creates blocks from one file."
         }
     ]
 }

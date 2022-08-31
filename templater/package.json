@@ -1,5 +1,5 @@
 {
-  "name": "regolith-templater",
+  "name": "templater",
   "version": "1.0.0",
   "description": "templater filter for regolith",
   "main": "index.js",

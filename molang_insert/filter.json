@@ -3,7 +3,8 @@
         {
             "runWith": "nodejs",
             "script": "./index.js",
-            "name": "Molang Insert"
+            "name": "Molang Insert",
+            "description": "A filter for regolith that allows you to insert molang."
         }
     ]
 }
