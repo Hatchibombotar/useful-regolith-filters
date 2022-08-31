@@ -2,7 +2,9 @@
 This filter allows you to place bedrock addon file *anywhere* within the addon directories. 
 
 ## Installation
-` regolith install github.com/Hatchibombotar/useful-regolith-filters/file_freedom==latest`
+```
+regolith install github.com/Hatchibombotar/useful-regolith-filters/file_freedom==latest
+```
 
 ## Cumulative JSON files
 These files can be repeated multiple times inside your addon packs, and file freedom will combine them.
