@@ -201,3 +201,30 @@ It is reccomended to create an .mcattributes file in the root of your project co
 diagnose.behaviorpack.mcfunction.missing=false
 diagnostic.disable.behaviorpack.mcfunction.syntax.unknown=true
 ```
+
+## Configuring Functioner
+With this filter, you can configure how it works using the settings object:
+
+```json
+"profiles": {
+    "default": {
+        "export": {
+            "readOnly": false,
+            "target": "local"
+        },
+        "filters": [
+            {
+                "filter": "functioner",
+                "settings": { }
+            }
+        ]
+    }
+}
+```
+
+These are the settings that can be modified:
+```jsonc
+"settings": {
+  "searchPattern": "BP/**/*.mcfunction" // a glob pattern for the files to be scanned. by default looks at all .mcfunction files in the BP.
+}
+```

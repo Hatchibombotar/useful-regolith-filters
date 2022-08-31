@@ -174,7 +174,11 @@ createFunction.prototype.push = function(commands) {
 }
 
 function getAllFunctions() {
-	return glob.sync("BP/functions/**/*.mcfunction")
+	const settings = JSON.parse(process.argv[2] ?? "{}")
+	const searchPattern = settings.searchPattern ?? "BP/**/*.mcfunction"
+	// if (process.argv[2])  return glob.sync(JSON.parse(process.argv[2]).searchPattern) ?? glob.sync("BP/**/*.mcfunction")
+	// else return glob.sync("BP/**/*.mcfunction")
+	return glob.sync(searchPattern)
 }
 
 module.exports = { 

@@ -7,22 +7,12 @@
   },
   "regolith": {
     "profiles": {
-      "test": {
-        "filters": [
-          { "filter": "functioner" },
-          { "filter": "filter_tester" }
-        ],
-        "export": {
-          "target": "local",
-          "readOnly": false
-        }
-      },
-      "dev": {
+      "default": {
         "filters": [
           { "filter": "functioner" }
         ],
         "export": {
-          "target": "development",
+          "target": "local",
           "readOnly": false
         }
       }
