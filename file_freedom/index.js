@@ -121,6 +121,8 @@ for (const filePath of glob.sync("BP/**/*")) {
         utils.safeMove(filePath, `BP/texts/`)
     } else if (parsedPath.ext == ".mcstructure") {
         utils.safeMove(filePath, `BP/structures/`)
+    } else if (parsedPath.ext == ".material") {
+        utils.safeMove(filePath, `BP/materials/`)
     }
 }
 
