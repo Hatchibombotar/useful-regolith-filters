@@ -27,6 +27,7 @@ const JSON_FEATURES_RP = {
     "namespace": "RP/ui",
     "animation_controllers": "RP/animation_controllers",
     "animations": "RP/animations",
+    "materials" : "RP/materials",
     ...settings.JSON_FEATURES_RP ?? []
 }
 
