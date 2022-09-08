@@ -81,7 +81,7 @@ for (const filePath of glob.sync("BP/**/*")) {
                 for (const eventResult in eventContent) {
                     if (eventResult == "run_command") {
                         for (const commandIndex in eventContent[eventResult].command) {
-                            fileContent[correctParentName].events[event][eventResult].command[commandIndex] = processCommand(eventContent[eventResult].command[commandIndex], filePath)
+                            fileContent[correctParentName].events[event][eventResult].command[commandIndex] = "textures/" + processCommand(eventContent[eventResult].command[commandIndex], filePath)
                         }
                     }
                 }
