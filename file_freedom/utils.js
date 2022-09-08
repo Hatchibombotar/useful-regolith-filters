@@ -62,18 +62,26 @@ function resolvePath(...paths) {
 	const currentPath = []
 	let splitPaths = []
 	for (const path of paths) {
-		splitPaths = [...splitPaths, ...path.split("/")]
-	}
+		let currentSplitPath = path.split("/")
+		
+		// if path contains file, remove file from the path
+		if (currentSplitPath[currentSplitPath.length-1].includes(".")) currentSplitPath.pop()
 
-	for (const path of splitPaths) {
-		if (path == "") continue
-		if (path == ".") {
-			currentPath.pop()
-		} else if (path == "..") {
-			currentPath.pop()
-			currentPath.pop()
+		// if file path is not relative, override it.
+		if (currentSplitPath[0] != ".." && currentSplitPath[0] != ".") {
+			splitPaths = currentSplitPath
+		} else {
+			splitPaths = [...splitPaths, ...currentSplitPath]
 		}
-		else {
+	}
+		
+	for (const path of splitPaths) {
+		if (path == "" || path == ".") continue
+		
+		if (path == "..") {
+			// get out of current directory
+			currentPath.pop()
+		} else {
 			currentPath.push(path)
 		}
 	}
