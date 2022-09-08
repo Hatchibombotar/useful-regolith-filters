@@ -190,7 +190,8 @@ for (const filePath of glob.sync("RP/**/*")) {
             const textures = fileContent["minecraft:client_entity"].description.textures
             
             for (const texture in textures) {
-                textures[texture] = utils.resolvePath("textures", filePath, textures[texture]) 
+                if (textures[texture].split("/")[0] == "textures") continue
+                textures[texture] = "textures/" + utils.resolvePath(filePath, textures[texture]) 
                 
             }
             fileContent["minecraft:client_entity"].description.textures = textures
