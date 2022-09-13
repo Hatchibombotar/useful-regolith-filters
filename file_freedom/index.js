@@ -75,7 +75,7 @@ for (const filePath of glob.sync("BP/**/*")) {
         }
 
         // resolve function calls to relative paths in an entities run_command event
-        if (correctParentName == "minecraft:entity") {
+        if (["minecraft:entity", "minecraft:item", "minecraft:block"].includes(correctParentName)) {
             for (const event in fileContent[correctParentName].events) {
                 const eventContent = fileContent[correctParentName].events[event]
                 for (const eventResult in eventContent) {
