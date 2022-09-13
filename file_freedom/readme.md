@@ -15,18 +15,27 @@ These files can be repeated multiple times inside your addon packs, and file fre
 ## Relative paths
 This allows you to reference other files using relative paths. This allows you to do things like
 
-` function ./otherFunction`
+`function ./otherFunction` - otherFunction in the same folder
+`function ../otherFunction` - otherFunction outside current folder
+
 #### Supported in:
 - _BP_
 - Functions
 - BP Animation Controllers
-- Entity Run Command Event
+- Entity, Item, and Block Run Command Events
 - tick.json
 - _RP_
 - terrain_texture.json
 - item_texture.json
 - flipbook_textures.json
 - sound_definitions.json
+
+
+#### Aliases
+Aliases are strings you can use to direct to places without lots of relative paths. Configure them in the [settings object](#alias).
+Example:
+
+`function @/otherFunction`
 
 
 ## Configuring the filter
@@ -52,7 +61,7 @@ With this filter, you can configure how it works using the settings object:
 ```
 
 These are the settings that can be modified:
-```json
+```jsonc
 "settings": {
     "IGNORE_FILES": [], // a list of file *names* to ignore e.g. pack_icon.png
     "SOUND_EXTENTIONS": [], // sound file extentions e.g. .ogg, .fsb
@@ -60,7 +69,9 @@ These are the settings that can be modified:
 
     "CUMULATIVE_JSON_FILES": {}, // json files distinguished by their name and their correct path. e.g. "tick.json": "BP/functions"
     "JSON_FEATURES_BP": {}, // main objects of BP json files. e.g. "minecraft:entity": "BP/entities"
-    "JSON_FEATURES_RP": {} // main objects of RP json files. e.g. "minecraft:client_entity": "RP/entity"
+    "JSON_FEATURES_RP": {}, // main objects of RP json files. e.g. "minecraft:client_entity": "RP/entity"
+
+    "alias": {} // file path aliases
 }
 ```
 ### Defaults
@@ -112,3 +123,14 @@ _BP_
 - `minecraft:geometry` -> `RP/models`
 - `particle_effect` -> `RP/particles`
 - `render_controllers` -> `RP/render_controllers`
+
+### alias
+Find out what they are [here](#Aliases).
+
+Example:
+```json
+"alias": {
+    "@": "BP/game/"
+}
+```
+_This would replace the first @ symbol with BP/game inside paths_

@@ -1,6 +1,9 @@
 const fs = require("fs")
 const path = require("path")
 
+const settings = JSON.parse(process.argv[2] ?? "{}")
+const alias = settings.alias ?? {}
+
 function safeMove(oldPath, newDirectory) {
     const {name, ext, base} = path.parse(oldPath)
 
@@ -65,13 +68,20 @@ function resolvePath(...paths) {
 		let currentSplitPath = path.split("/")
 		
 		// if path contains file, remove file from the path
-		if (currentSplitPath[currentSplitPath.length-1].includes(".")) currentSplitPath.pop()
+		if (currentSplitPath[currentSplitPath.length-1].includes(".")) {
+			currentSplitPath.pop()
+		}
 
-		// if file path is not relative, override it.
-		if (currentSplitPath[0] != ".." && currentSplitPath[0] != ".") {
-			splitPaths = currentSplitPath
-		} else {
+		if (currentSplitPath[0] == ".." || currentSplitPath[0] == ".") {
+			// if file path is relative
 			splitPaths = [...splitPaths, ...currentSplitPath]
+		} else if (currentSplitPath[0] in alias) {
+			// if file path starts with an alias
+			const aliasReplacement = alias[currentSplitPath[0]].split("/")
+			currentSplitPath.splice(0, 1)
+			splitPaths = [ ...aliasReplacement, ...currentSplitPath]
+		} else {
+			splitPaths = currentSplitPath
 		}
 	}
 		
@@ -85,6 +95,7 @@ function resolvePath(...paths) {
 			currentPath.push(path)
 		}
 	}
+
 	return currentPath.join("/")
 }
 
