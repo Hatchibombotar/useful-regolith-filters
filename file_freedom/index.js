@@ -26,8 +26,11 @@ const languages = {
 // resolve relative paths in commands
 function processCommand(command, filePath) {
     const args = utils.getCommandArgs(command)
-    if (args[0] == "function") {
-        args[1] = utils.resolvePath(filePath, args[1])
+
+    for (const i in args) {
+        if (args[i-1] == "function") {
+            args[i] = utils.resolvePath(filePath, args[i])
+        }
     }
 
     return args.join(" ")
