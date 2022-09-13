@@ -14,20 +14,22 @@ for (const filePath of glob.sync("BP/**/*.mcfunction")) {
 
     // For each line in the function
     for (const line of fileContentArray) {
-
+        // skip if function includes a comment
+        if (line.trim()[0] == "#") continue
+        
         let currentLoc = newFile
         for (let i of currentLocPath) {
             currentLoc = currentLoc[i];
         }
         
-        if (line[line.length - 1] == "{") {
+        if (line.trim()[line.length - 1] == "{") {
             // if line ends with a bracket, push the current line,
             // and a new array for items inside this bracket
             currentLoc.push(line)
             currentLoc.push([])
 
             currentLocPath.push(currentLoc.length - 1)
-        } else if (line[0] == "}") {
+        } else if (line.trim()[0] == "}") {
             // if line closes the bracket, remove move the current location back 1 level.
             currentLocPath.pop()
         } else {
