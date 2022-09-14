@@ -64,11 +64,13 @@ function orderBySpecificity(filePaths) {
 function resolvePath(...paths) {
 	const currentPath = []
 	let splitPaths = []
-	for (const path of paths) {
+	for (const pathIndex in paths) {
+		const path = paths[pathIndex]
+		
 		let currentSplitPath = path.split("/")
 		
 		// if path contains file, remove file from the path
-		if (currentSplitPath[currentSplitPath.length-1].includes(".")) {
+		if (currentSplitPath[currentSplitPath.length-1].includes(".") && pathIndex != paths.length-1) {
 			currentSplitPath.pop()
 		}
 
