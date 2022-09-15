@@ -10,10 +10,7 @@ Or
 regolith install github.com/Hatchibombotar/useful-regolith-filters/functioner==latest
 ```
 
-_1.2.0 removed a lot of unstable features. To use these, [view the removed features page](./removed.md)_
-
-## Features
-### "Sub-functions"
+## How to use "Sub-functions"
 These are functions inside of functions. These allow for multiple commands to be ran at once.
 
 Enter your commands between two curly brackets.
@@ -35,7 +32,7 @@ diagnose.behaviorpack.mcfunction.missing=false
 diagnostic.disable.behaviorpack.mcfunction.syntax.unknown=true
 ```
 
-<!-- ### Configuring Functioner
+### Configuring Functioner
 With this filter, you can configure how it works using the settings object:
 
 ```json
@@ -60,4 +57,4 @@ These are the settings that can be modified:
 "settings": {
   "searchPattern": "BP/**/*.mcfunction" // a glob pattern for the files to be scanned. by default looks at all .mcfunction files in the BP.
 }
-``` -->
+```
