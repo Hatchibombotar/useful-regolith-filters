@@ -251,9 +251,16 @@ for (const fileType in toBeMerged) {
     }
 
     fs.writeFileSync(`${CUMULATIVE_JSON_FILES[fileType]}/${fileType}`, JSON.stringify(utils.deepMerge(
-        utils.orderBySpecificity(toBeMerged[fileType]).map((path) => JSONC.parse(String(fs.readFileSync(path)))[1])
+        utils.orderBySpecificity(toBeMerged[fileType]).map((path) => {
+            const [parseError, fileContent] = JSONC.parse(String(fs.readFileSync(path)))
+            if (parseError) {
+                console.error(`Failed to parse JSON in ${filePath}`)
+                return
+            }
+            fs.rmSync(path)
+            return fileContent
+        })
     ), null, 4))
-    toBeMerged[fileType].forEach((path) => fs.rmSync(path))
 }
 
 
