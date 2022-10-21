@@ -165,8 +165,13 @@ for (const filePath of glob.sync("RP/**/*")) {
         // resolve relative paths in "sound_definitions.json"
         if (parsedPath.base == "sound_definitions.json") {
             for (const soundSet in fileContent.sound_definitions) {
-                for (const sound in fileContent.sound_definitions[soundSet].sounds)
-                fileContent.sound_definitions[soundSet].sounds[sound].name = "sounds/" + utils.resolvePath(filePath, fileContent.sound_definitions[soundSet].sounds[sound].name)
+                for (const sound in fileContent.sound_definitions[soundSet].sounds) {
+                    if (typeof fileContent.sound_definitions[soundSet].sounds[sound] == "object") {
+                        fileContent.sound_definitions[soundSet].sounds[sound].name = "sounds/" + utils.resolvePath(filePath, fileContent.sound_definitions[soundSet].sounds[sound].name)
+                    } else {
+                        fileContent.sound_definitions[soundSet].sounds[sound] = "sounds/" + utils.resolvePath(filePath, fileContent.sound_definitions[soundSet].sounds[sound])
+                    }
+                }
             }
             fs.writeFileSync(filePath, JSON.stringify(fileContent))
         }
