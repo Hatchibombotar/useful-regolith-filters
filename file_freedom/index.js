@@ -152,10 +152,10 @@ for (const filePath of glob.sync("RP/**/*")) {
             for (const block in fileContent.texture_data) {
                 if (typeof fileContent.texture_data[block].textures == "object") {
                     for (const texture in (fileContent.texture_data[block].textures)) {
-                        fileContent.texture_data[block].textures[texture] = "textures/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures[texture])
+                        fileContent.texture_data[block].textures[texture] = "textures/RP/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures[texture])
                     }
                 } else {
-                    fileContent.texture_data[block].textures = "textures/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures)
+                    fileContent.texture_data[block].textures = "textures/RP/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures)
                 }
                 
             }
