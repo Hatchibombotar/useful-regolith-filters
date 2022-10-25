@@ -55,6 +55,15 @@ for (const filePath of glob.sync("BP/**/*")) {
             fs.writeFileSync(filePath, JSON.stringify(fileContent))
         }
 
+        if (parsedPath.base == "manifest.json") {
+            for (const i in fileContent.modules) {
+                if (!fileContent.modules[i].entry) continue
+
+                fileContent.modules[i].entry = utils.resolvePath(filePath, fileContent.modules[i].entry)
+            }
+            fs.writeFileSync(filePath, JSON.stringify(fileContent))
+        }
+
         // get the type of file if this is a unique json file type.
         let correctParentName;
         for (const parent in JSON_FEATURES_BP) {
@@ -154,10 +163,10 @@ for (const filePath of glob.sync("RP/**/*")) {
             for (const block in fileContent.texture_data) {
                 if (typeof fileContent.texture_data[block].textures == "object") {
                     for (const texture in (fileContent.texture_data[block].textures)) {
-                        fileContent.texture_data[block].textures[texture] = "textures/RP/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures[texture])
+                        fileContent.texture_data[block].textures[texture] = "textures/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures[texture])
                     }
                 } else {
-                    fileContent.texture_data[block].textures = "textures/RP/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures)
+                    fileContent.texture_data[block].textures = "textures/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures)
                 }
                 
             }
