@@ -120,6 +120,8 @@ for (const filePath of glob.sync("BP/**/*")) {
 
         
         utils.safeMove(filePath, `BP/functions/${path.dirname(filePath)}`)
+    } else if (parsedPath.ext == ".js" || parsedPath.ext == ".ts") {
+        utils.safeMove(filePath, `BP/scripts/${path.dirname(filePath)}`)
     } else if (parsedPath.ext == ".lang") {
         utils.safeMove(filePath, `BP/texts/`)
     } else if (parsedPath.ext == ".mcstructure") {
