@@ -1,10 +1,10 @@
 const fs = require("fs")
-const prompt = require("prompt-sync")({sigint: true});
+const prompt = require("prompt-sync")({ sigint: true });
 const { v4: uuid } = require("uuid");
 
 const ROOT_DIR = "../../../.."
 
-const { latestVersion, scriptModules } = require("./version_data.js");
+const { latestVersion, scriptModules, entryModule } = require("./version_data.js");
 
 console.log("")
 console.log("Create Manifest File")
@@ -17,7 +17,7 @@ const description = prompt(`Description: (By ${author}) `, `By ${author}`)
 
 let useScriptInput = "";
 while (!(useScriptInput.match(/y|n/) && useScriptInput.length == 1)) {
-    useScriptInput = prompt(`Use Script API? (y/n): `, "n")
+	useScriptInput = prompt(`Use Script API? (y/n): `, "n")
 }
 const useScripts = useScriptInput == "y"
 
@@ -81,6 +81,17 @@ if (useScripts) {
 			})
 		}
 	}
+
+	if (enabledModules.includes(entryModule)) {
+		manifestBP.modules.push({
+			"type": "script",
+			"language": "javascript",
+			"uuid": uuid(),
+			"version": [1, 0, 0],
+			"entry": "scripts/main.js"
+		})
+		fs.writeFileSync(`${ROOT_DIR}/${behaviorPack}/scripts/main.js`, "")
+	}
 	// other dependencies do not work if script API is used.
 } else {
 	manifestRP.dependencies.push({
@@ -94,13 +105,13 @@ if (useScripts) {
 }
 
 const configJSON = JSON.parse(fs.readFileSync(`${ROOT_DIR}/config.json`))
-const {resourcePack, behaviorPack} = configJSON.packs
+const { resourcePack, behaviorPack } = configJSON.packs
 
-fs.writeFileSync(`${ROOT_DIR}/${resourcePack}/manifest.json`, JSON.stringify(manifestRP, null, "	"))
-fs.writeFileSync(`${ROOT_DIR}/${behaviorPack}/manifest.json`, JSON.stringify(manifestBP, null, "	"))
+fs.writeFileSync(`${ROOT_DIR}/${resourcePack}/manifest.json`, JSON.stringify(manifestRP, null, 4))
+fs.writeFileSync(`${ROOT_DIR}/${behaviorPack}/manifest.json`, JSON.stringify(manifestBP, null, 4))
 
 configJSON.author = author
 configJSON.name = projectName
 delete configJSON.regolith.filterDefinitions["init-full"]
 
-fs.writeFileSync(`${ROOT_DIR}config.json`, JSON.stringify(configJSON, null, "  "))
+fs.writeFileSync(`${ROOT_DIR}config.json`, JSON.stringify(configJSON, null, 2))

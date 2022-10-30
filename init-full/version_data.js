@@ -18,7 +18,10 @@ const scriptModules = {
 	},
 }
 
+const entryModule = "@minecraft/server"
+
 module.exports = {
     latestVersion,
 	scriptModules,
+	entryModule,
 }
