@@ -4,6 +4,7 @@ const path = require("path")
 const JSONC = require("jsonc").safe
 
 const utils = require("./utils.js");
+const Lang = require("./lang.js")
 
 const {
     JSON_FEATURES_RP,
@@ -209,8 +210,14 @@ for (const filePath of glob.sync("RP/**/*")) {
             const textures = fileContent["minecraft:client_entity"].description.textures
             
             for (const texture in textures) {
-                if (textures[texture].split("/")[0] == "textures") continue
-                textures[texture] = "textures/" + utils.resolvePath(filePath, textures[texture]) 
+                let vanillaPath = false;
+                if (textures[texture].split("/")[0] == "@vanilla") vanillaPath = true
+
+                textures[texture] = utils.resolvePath(filePath, textures[texture])
+                
+                if (!vanillaPath) {
+                    textures[texture] = "textures/" + textures[texture]
+                }
                 
             }
             fileContent["minecraft:client_entity"].description.textures = textures
@@ -281,10 +288,10 @@ for (const packType of ["RP", "BP"]) {
     for (const language in languages[packType]) {
         // It is fine if the files already in the texts folder are overwritten, as the merged file should contain it.
         fs.writeFileSync(`${packType}/texts/${language}.lang`, 
-            utils.JSONtoTexts(
+            Lang.stringify(
                 utils.deepMerge(
                     languages[packType][language].map((path) => {
-                        const fileContent = utils.textsToJSON(String(fs.readFileSync(path)))
+                        const fileContent = Lang.parse(String(fs.readFileSync(path)))
                         fs.rmSync(path)
                         return fileContent
                     })

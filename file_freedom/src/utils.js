@@ -2,7 +2,17 @@ const fs = require("fs")
 const path = require("path")
 
 const settings = JSON.parse(process.argv[2] ?? "{}")
-const alias = settings.alias ?? {}
+const alias = {
+	...settings.alias,
+	"@vanilla": ""
+}
+
+for (const aliasKey in alias) {
+	if (aliasKey[0] != "@") {
+		console.error(`Alias ${aliasKey} does not start with an @ symbol.`)
+		console.error(`Hint: Change ${aliasKey} to @${aliasKey}`)
+	}
+}
 
 function safeMove(oldPath, newDirectory) {
     const {name, ext, base} = path.parse(oldPath)
@@ -61,71 +71,14 @@ function orderBySpecificity(filePaths) {
 	return Object.entries(specifity).sort(([ ,a], [ ,b]) => a-b).map(([path, ]) => path)
 }
 
-function resolvePath(...paths) {
-	const currentPath = []
-	let splitPaths = []
-	for (const [pathIndex, path] of Object.entries(paths)) {
-		let currentSplitPath = path.split("/")
-		
-		// if path contains file, remove file from the path
-		if (currentSplitPath[currentSplitPath.length-1].includes(".") && (pathIndex != paths.length -1)) {
-			currentSplitPath.pop()
-		}
-
-		if (currentSplitPath[0] == ".." || currentSplitPath[0] == ".") {
-			// if file path is relative
-			splitPaths = [...splitPaths, ...currentSplitPath]
-		} else if (currentSplitPath[0] in alias) {
-			// if file path starts with an alias
-			const aliasReplacement = alias[currentSplitPath[0]].split("/")
-			currentSplitPath.splice(0, 1)
-			splitPaths = [ ...aliasReplacement, ...currentSplitPath]
-		} else {
-			splitPaths = currentSplitPath
-		}
-	}
-		
-	for (const path of splitPaths) {
-		if (path == "" || path == ".") continue
-		
-		if (path == "..") {
-			// get out of current directory
-			currentPath.pop()
-		} else {
-			currentPath.push(path)
-		}
-	}
-
-	return currentPath.join("/")
-}
-
-function textsToJSON(texts) {
-	let jsonTexts = {}
-	for (const translation of texts.split("\n")) {
-		if ([translation[0], translation[1]].includes("#")) continue
-		if (translation == "") continue
-		const [key, value] = translation.split("=")
-		jsonTexts[key] = value
-	}
-	return jsonTexts
-}
-
-function JSONtoTexts(jsonTexts) {
-	let texts = []
-	for (const key in jsonTexts) {
-		texts.push(`${key}=${jsonTexts[key]}`)
-	}
-	return texts.join("\n")
-}
-
 // based off of code by Waveplayz
 // https://gist.github.com/WavePlayz/3ede5f50658b0e30a762d59564eadf75
-function getCommandArgs(content) {
+function commandArgs(content) {
     const spliters = /[\s\b]/
 	
 	const contentLength = content.length
 	
-	let arguments = []
+	let cmdArguments = []
 	let currentArgument = ""
 	
 	const SINGLE_QUOTE = "'"
@@ -189,7 +142,7 @@ function getCommandArgs(content) {
 			&& spliters.test(currentCharacter)
 			|| currentCharacter === undefined
 		) {
-			if (currentArgument) arguments.push(currentArgument)
+			if (currentArgument) cmdArguments.push(currentArgument)
 			currentArgument = ""
 			continue
 		}
@@ -197,15 +150,53 @@ function getCommandArgs(content) {
 		currentArgument += currentCharacter
 	}
 	
-	return arguments
+	return cmdArguments
 }
+
+function resolvePath(...paths) {
+	const currentPath = [];
+	let splitPaths = [];
+	for (const [pathIndex, path] of Object.entries(paths)) {
+		let currentSplitPath = path.split("/");
+
+		// if path contains file, remove file from the path
+		if (currentSplitPath[currentSplitPath.length - 1].includes(".") && (pathIndex != paths.length - 1)) {
+			currentSplitPath.pop();
+		}
+
+		if (currentSplitPath[0] == ".." || currentSplitPath[0] == ".") {
+			// if file path is relative
+			splitPaths = [...splitPaths, ...currentSplitPath];
+		} else if (currentSplitPath[0] in alias) {
+			// if file path starts with an alias
+			const aliasReplacement = alias[currentSplitPath[0]].split("/");
+			currentSplitPath.splice(0, 1);
+			splitPaths = [...aliasReplacement, ...currentSplitPath];
+		} else {
+			splitPaths = currentSplitPath;
+		}
+	}
+
+	for (const path of splitPaths) {
+		if (path == "" || path == ".")
+			continue;
+
+		if (path == "..") {
+			// get out of current directory
+			currentPath.pop();
+		} else {
+			currentPath.push(path);
+		}
+	}
+
+	return currentPath.join("/");
+}
+
 
 module.exports = {
 	safeMove,
 	deepMerge,
 	orderBySpecificity,
 	resolvePath,
-	textsToJSON,
-	JSONtoTexts,
-	getCommandArgs
+	commandArgs
 }
