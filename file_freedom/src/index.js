@@ -4,7 +4,7 @@ const path = require("path")
 const JSONC = require("jsonc").safe
 
 const utils = require("./utils.js");
-const Lang = require("./lang.js")
+const lang = require("./lang.js")
 
 const {
     JSON_FEATURES_RP,
@@ -13,7 +13,7 @@ const {
     SOUND_EXTENTIONS,
     IMAGE_EXTENTIONS,
     IGNORE_FILES,
-} = require("./fileMap.js");
+} = require("./fileData.js");
 
 const allFiles = () => [...glob.sync("RP/**/*"), ...glob.sync("BP/**/*")]
 
@@ -26,7 +26,7 @@ const languages = {
 
 // resolve relative paths in commands
 function processCommand(command, filePath) {
-    const args = utils.getCommandArgs(command)
+    const args = utils.commandArgs(command)
 
     for (const i in args) {
         if (args[i-1] == "function") {
@@ -288,10 +288,10 @@ for (const packType of ["RP", "BP"]) {
     for (const language in languages[packType]) {
         // It is fine if the files already in the texts folder are overwritten, as the merged file should contain it.
         fs.writeFileSync(`${packType}/texts/${language}.lang`, 
-            Lang.stringify(
+            lang.stringify(
                 utils.deepMerge(
                     languages[packType][language].map((path) => {
-                        const fileContent = Lang.parse(String(fs.readFileSync(path)))
+                        const fileContent = lang.parse(String(fs.readFileSync(path)))
                         fs.rmSync(path)
                         return fileContent
                     })
