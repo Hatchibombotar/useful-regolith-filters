@@ -1,8 +1,9 @@
 const fs = require("fs")
 const prompt = require("prompt-sync")({ sigint: true });
 const { v4: uuid } = require("uuid");
+const path = require("path")
 
-const ROOT_DIR = "../../../.."
+const ROOT_DIR = "../../../../"
 
 const { latestVersion, scriptModules, entryModule } = require("./version_data.js");
 
@@ -10,6 +11,9 @@ console.log("")
 console.log("Create Manifest File")
 console.log("--------------------")
 console.log("")
+
+console.log(path.resolve("./test.js"))
+console.log(path.resolve(ROOT_DIR))
 
 const projectName = prompt("Project Name: ")
 const author = prompt("Author: ")
@@ -90,7 +94,7 @@ if (useScripts) {
 			"version": [1, 0, 0],
 			"entry": "scripts/main.js"
 		})
-		fs.writeFileSync(`${ROOT_DIR}/${behaviorPack}/scripts/main.js`, "")
+		fs.writeFileSync(`${ROOT_DIR}${behaviorPack}/scripts/main.js`, "")
 	}
 	// other dependencies do not work if script API is used.
 } else {
@@ -104,11 +108,13 @@ if (useScripts) {
 	})
 }
 
-const configJSON = JSON.parse(fs.readFileSync(`${ROOT_DIR}/config.json`))
+const configJSON = JSON.parse(fs.readFileSync(`${ROOT_DIR}config.json`))
 const { resourcePack, behaviorPack } = configJSON.packs
 
-fs.writeFileSync(`${ROOT_DIR}/${resourcePack}/manifest.json`, JSON.stringify(manifestRP, null, 4))
-fs.writeFileSync(`${ROOT_DIR}/${behaviorPack}/manifest.json`, JSON.stringify(manifestBP, null, 4))
+console.log(path.resolve(`${ROOT_DIR}${resourcePack}/manifest.json`))
+
+fs.writeFileSync(`${ROOT_DIR}${resourcePack}/manifest.json`, JSON.stringify(manifestRP, null, 4))
+fs.writeFileSync(`${ROOT_DIR}${behaviorPack}/manifest.json`, JSON.stringify(manifestBP, null, 4))
 
 configJSON.author = author
 configJSON.name = projectName
