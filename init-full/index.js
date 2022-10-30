@@ -121,3 +121,5 @@ configJSON.name = projectName
 delete configJSON.regolith.filterDefinitions["init-full"]
 
 fs.writeFileSync(`${ROOT_DIR}config.json`, JSON.stringify(configJSON, null, 2))
+
+prompt("Press enter to continue.")
