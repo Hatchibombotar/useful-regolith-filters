@@ -206,8 +206,8 @@ for (const filePath of glob.sync("RP/**/*")) {
         }
 
         // Resolve relative paths to textures in client_entity
-        if (correctParentName == "minecraft:client_entity") {
-            const textures = fileContent["minecraft:client_entity"].description.textures
+        if (["minecraft:client_entity", "minecraft:attachable"].includes(correctParentName)) {
+            const textures = fileContent[correctParentName].description.textures
             
             for (const texture in textures) {
                 let vanillaPath = false;
@@ -220,7 +220,7 @@ for (const filePath of glob.sync("RP/**/*")) {
                 }
                 
             }
-            fileContent["minecraft:client_entity"].description.textures = textures
+            fileContent[correctParentName].description.textures = textures
             fs.writeFileSync(filePath, JSON.stringify(fileContent, null, 4))
         }
 
