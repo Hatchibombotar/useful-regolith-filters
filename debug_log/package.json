@@ -1,0 +1,16 @@
+{
+  "name": "debug_log",
+  "version": "1.0.0",
+  "description": "This filter logs all entity event calls to chat, making debugging easier!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Hatchibombotar",
+  "license": "MIT",
+  "dependencies": {
+    "glob": "^8.0.3",
+    "jsonc": "^2.0.0"
+  }
+}

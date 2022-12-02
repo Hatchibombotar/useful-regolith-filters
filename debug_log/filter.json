@@ -1,0 +1,10 @@
+{
+    "filters": [
+        {
+            "runWith": "nodejs",
+            "script": "./src/index.js",
+            "name": "Debug Log",
+            "description": "This filter logs all entity event calls to chat, making debugging easier!"
+        }
+    ]
+}
