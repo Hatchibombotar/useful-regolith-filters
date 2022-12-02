@@ -11,12 +11,11 @@ regolith install github.com/Hatchibombotar/useful-regolith-filters/debug_log==la
 If you have an entity that calls the `minecraft:entity_spawned`, the debug log will attach a print to the end of the event.
 ```json
 "minecraft:entity_spawned": {
-        "add": {
-            "component_groups": [
-                "minecraft:baby"
-            ]
-        }
-    ]
+    "add": {
+        "component_groups": [
+            "minecraft:baby"
+        ]
+    }
 },
 ```
 
