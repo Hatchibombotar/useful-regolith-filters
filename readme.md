@@ -8,8 +8,7 @@ Filters to be used with [regolith](https://bedrock-oss.github.io/regolith/).
 | [Functioner](./functioner)     | 1.2.2   | `regolith install functioner`   |
 | [File Freedom](./file_freedom) | 1.2.7   | `regolith install file_freedom` |
 | [Full Init](./init-full)       | 1.1.1   | `regolith install init-full`    |
-| [Debug Log](./debug_log)       | 0.0.1   | `regolith install debug_log`    |
-| [Templater](./templater)       | 1.0.2   | `regolith install templater`    |
+| [Debug Log](./debug_log)       | 0.0.2   | `regolith install debug_log`    |
 
 ---
 ### Unstable Filters
@@ -17,6 +16,7 @@ May still work, but not tested well - or maintained, and may lead to unexpected 
 
 | Filter                             | Version | Install                           |
 | ---------------------------------- | ------- | --------------------------------- |
+| [Templater](./templater)           | 1.0.2   | `regolith install templater`      |
 | [Pack Commons](./pack_commons)     | 1.0.1   | `regolith install pack_commons`   |
 | [Link Manifests](./link_manifests) | 0.0.1   | `regolith install link_manifests` |
 | [Molang Insert](./molang_insert)   | 0.0.1   | `regolith install molang_insert`  |
