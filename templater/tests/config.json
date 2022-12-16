@@ -16,7 +16,7 @@
           "readOnly": false
         }
       },
-      "default": {
+      "dev": {
         "filters": [
           { "filter": "templater" }
         ],
@@ -29,13 +29,13 @@
     "filterDefinitions": {
       "templater": {
         "runWith": "nodejs",
-        "script": "../index.js"
+        "script": "../src/index.js"
       },
       "filter_tester": {
         "version": "1.0.0"
       }
 
     },
-    "dataPath": "./packs/data"
+    "dataPath": "../data"
   }
 }

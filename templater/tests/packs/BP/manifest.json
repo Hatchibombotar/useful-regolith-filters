@@ -1,29 +1,29 @@
 {
-    "format_version": 2,
-    "header": {
-      "name": "Functioner - Test",
-      "description": "By Hatchibombotar",
-      "uuid": "e8a23a04-ecff-4f1e-b76a-1f0e7e55dcf7",
+  "format_version": 2,
+  "header": {
+    "name": "Templater Test",
+    "description": "By Hatchi",
+    "uuid": "f3656652-7af7-49bf-97a4-c8bf3438cf02",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      17,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "02f6540e-2b7d-4102-aeb9-8a414be06143",
       "version": [
         1,
         0,
         0
-      ],
-      "min_engine_version": [
-        1,
-        17,
-        0
       ]
-    },
-    "modules": [
-      {
-        "type": "data",
-        "uuid": "0724de13-49d7-4a2f-9857-928a5d9304e5",
-        "version": [
-          1,
-          0,
-          0
-        ]
-      }
-    ]
-  }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+    "format_version": "1.17.0",
+    "use_templates": {
+        "templater:rotate_all": {}
+    },
+    "minecraft:block": {
+        "description": {
+            "identifier": "templater:test_block"
+        },
+        "components": {
+            "minecraft:geometry": "geometry.arrow",
+            "minecraft:material_instances": {
+                "*": {
+                    "render_method": "alpha_test",
+                    "texture": "arrow"
+                }
+            }
+        }
+    }
+}

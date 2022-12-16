@@ -4,11 +4,13 @@
   "description": "templater filter for regolith",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "local": "cd ./tests && regolith run test",
+    "dev": "cd ./tests && regolith run dev"
   },
   "author": "Hatchibombotar",
   "license": "MIT",
   "dependencies": {
-    "glob": "^7.1.7"
+    "glob": "^7.2.3",
+    "jsonc": "^2.0.0"
   }
 }

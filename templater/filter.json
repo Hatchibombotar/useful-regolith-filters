@@ -2,9 +2,10 @@
     "filters": [
         {
             "runWith": "nodejs",
-            "script": "./index.js",
+            "script": "./src/index.js",
             "name": "Templater",
-            "description": "Adds templates to regolith"
+            "description": "Adds templates to regolith",
+            "requirements": "."
         }
     ]
 }

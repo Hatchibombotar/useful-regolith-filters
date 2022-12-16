@@ -1,0 +1,29 @@
+{
+    "format_version": 2,
+    "header": {
+      "name": "Templater Test",
+      "description": "By Hatchi",
+      "uuid": "44647c0b-3842-43b7-88d5-8ee3d3d85c10",
+      "version": [
+        1,
+        0,
+        0
+      ],
+      "min_engine_version": [
+        1,
+        17,
+        0
+      ]
+    },
+    "modules": [
+      {
+        "type": "resources",
+        "uuid": "f488a15f-4be1-4c15-b238-a618f868b4c5",
+        "version": [
+          1,
+          0,
+          0
+        ]
+      }
+    ]
+  }

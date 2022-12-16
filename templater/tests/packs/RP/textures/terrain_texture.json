@@ -1,0 +1,10 @@
+{
+    "num_mip_levels": 4,
+    "padding": 8,
+    "resource_pack_name": "test",
+    "texture_data": {
+        "arrow": {
+            "textures": "textures/arrow"
+        }
+    }
+}
