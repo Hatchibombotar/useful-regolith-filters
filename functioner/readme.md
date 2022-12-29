@@ -18,7 +18,7 @@ Enter your commands between two curly brackets.
 #### Example
 ```
 say hi
-execute @s[tag=target] ~ ~ ~ {
+execute as @s[tag=target] {
   say bye
 }
 ```
