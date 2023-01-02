@@ -161,13 +161,22 @@ for (const filePath of glob.sync("RP/**/*")) {
 
         // resolve relative paths in "terrain_texture.json" and "item_texture.json"
         if (parsedPath.base == "terrain_texture.json" || parsedPath.base == "item_texture.json") {
-            for (const block in fileContent.texture_data) {
-                if (typeof fileContent.texture_data[block].textures == "object") {
-                    for (const texture in (fileContent.texture_data[block].textures)) {
-                        fileContent.texture_data[block].textures[texture] = "textures/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures[texture])
+            for (const blockName in fileContent.texture_data) {
+                let block = fileContent.texture_data[blockName]
+                if (block.textures instanceof Array) {
+                    
+                    for (let texture of block.textures) {
+                        if (texture instanceof Object) {
+                            texture.path = "textures/" + utils.resolvePath(filePath, texture.path)
+                        } else {
+                            texture = "textures/" + utils.resolvePath(filePath, texture)
+                        }
                     }
+                } else if (block.textures instanceof Object) {
+                    block.textures.path = "textures/" + utils.resolvePath(filePath, block.textures.path)
+
                 } else {
-                    fileContent.texture_data[block].textures = "textures/" + utils.resolvePath(filePath, fileContent.texture_data[block].textures)
+                    block.textures = "textures/" + utils.resolvePath(filePath, block.textures)
                 }
                 
             }
