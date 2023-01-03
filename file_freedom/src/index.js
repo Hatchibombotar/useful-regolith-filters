@@ -2,6 +2,7 @@ const fs = require("fs")
 const glob = require("glob")
 const path = require("path")
 const JSONC = require("jsonc").safe
+const { JSONFile } = require("./file")
 
 const utils = require("./utils.js");
 const lang = require("./lang.js")
@@ -14,6 +15,8 @@ const {
     IMAGE_EXTENTIONS,
     IGNORE_FILES,
 } = require("./fileData.js");
+
+const fileProcess = require("./fileProcess/index.js")
 
 const allFiles = () => [...glob.sync("RP/**/*"), ...glob.sync("BP/**/*")]
 
@@ -29,7 +32,7 @@ function processCommand(command, filePath) {
     const args = utils.commandArgs(command)
 
     for (const i in args) {
-        if (args[i-1] == "function") {
+        if (args[i - 1] == "function") {
             args[i] = utils.resolvePath(filePath, args[i])
         }
     }
@@ -43,32 +46,24 @@ for (const filePath of glob.sync("BP/**/*")) {
 
     if (IGNORE_FILES.includes(parsedPath.base)) continue
     if (parsedPath.ext == ".json") {
-        const [parseError, fileContent] = JSONC.parse(String(fs.readFileSync(filePath)))
-        if (parseError) {
-            console.error(`Failed to parse JSON in ${filePath}`)
-            break
+
+        const file = new JSONFile(filePath)
+
+        const specialistFiles = {
+            "tick.json": fileProcess.BP.tick,
+            "manifest.json": fileProcess.BP.manifest,
         }
 
-        if (parsedPath.base == "tick.json") {
-            for (const i in fileContent.values) {
-                fileContent.values[i] = utils.resolvePath(filePath, fileContent.values[i])
-            }
-            fs.writeFileSync(filePath, JSON.stringify(fileContent))
-        }
+        if (parsedPath.base in specialistFiles) {
+            const newFileContent = specialistFiles[parsedPath.base](file.content, file.path)
 
-        if (parsedPath.base == "manifest.json") {
-            for (const i in fileContent.modules) {
-                if (!fileContent.modules[i].entry) continue
-
-                fileContent.modules[i].entry = utils.resolvePath(filePath, fileContent.modules[i].entry)
-            }
-            fs.writeFileSync(filePath, JSON.stringify(fileContent))
+            file.set(newFileContent).save()
         }
 
         // get the type of file if this is a unique json file type.
         let correctParentName;
         for (const parent in JSON_FEATURES_BP) {
-            if (parent in fileContent) {
+            if (parent in file.content) {
                 correctParentName = parent
                 break
             }
@@ -76,36 +71,32 @@ for (const filePath of glob.sync("BP/**/*")) {
 
         // resolve function calls to relative paths in BP animations
         if (correctParentName == "animations") {
-            for (const key in fileContent[correctParentName]) {
-                for (const timestamp in fileContent[correctParentName][key].timeline) {
-                    const commands = fileContent[correctParentName][key].timeline[timestamp]
-                    for (const commandIndex in commands) {
-                        fileContent[correctParentName][key].timeline[timestamp][commandIndex] = "/" + processCommand(commands[commandIndex], filePath)
+            const newFileContent = file.content
+
+            for (const key in newFileContent[correctParentName]) {
+                let anim = newFileContent[correctParentName][key]
+
+                for (const timestamp in anim.timeline) {
+                    let commands = anim.timeline[timestamp]
+                    for (const command of commands) {
+                        command = "/" + processCommand(command, filePath)
                     }
                 }
             }
-            fs.writeFileSync(filePath, JSON.stringify(fileContent, null, 4))
+            file.set(newFileContent).save()
         }
 
         // resolve function calls to relative paths in an entities run_command event
         if (["minecraft:entity", "minecraft:item", "minecraft:block"].includes(correctParentName)) {
-            for (const event in fileContent[correctParentName].events) {
-                const eventContent = fileContent[correctParentName].events[event]
-                for (const eventResult in eventContent) {
-                    if (eventResult == "run_command") {
-                        for (const commandIndex in eventContent[eventResult].command) {
-                            fileContent[correctParentName].events[event][eventResult].command[commandIndex] = processCommand(eventContent[eventResult].command[commandIndex], filePath)
-                        }
-                    }
-                }
-            }
-            fs.writeFileSync(filePath, JSON.stringify(fileContent, null, 4))
+            const newFileContent = fileProcess.BP.componentObject(file.content, file.path, correctParentName)
+
+            file.set(newFileContent).save()
         }
 
         // Move unique JSON files to their target directories.
         if (correctParentName != undefined) {
-            targetDirectory = JSON_FEATURES_BP[correctParentName]
-            utils.safeMove(filePath, targetDirectory)
+            const targetDirectory = JSON_FEATURES_BP[correctParentName]
+            file.move(targetDirectory)
 
         }
 
@@ -128,7 +119,7 @@ for (const filePath of glob.sync("BP/**/*")) {
         }
         fs.writeFileSync(filePath, fileLines.join("\n"))
 
-        
+
         utils.safeMove(filePath, `BP/functions/${path.dirname(filePath)}`)
     } else if (parsedPath.ext == ".js" || parsedPath.ext == ".ts") {
         utils.safeMove(filePath, `BP/scripts/${path.dirname(filePath)}`)
@@ -145,64 +136,20 @@ for (const filePath of glob.sync("RP/**/*")) {
 
     if (IGNORE_FILES.includes(parsedPath.base)) continue
     if (parsedPath.ext == ".json") {
-        const [parseError, fileContent] = JSONC.parse(String(fs.readFileSync(filePath)))
-        if (parseError) {
-            console.error(`Failed to parse JSON in ${filePath}`)
-            break
+        const file = new JSONFile(filePath)
+        const fileContent = file.content
+
+        const specialistFiles = {
+            "flipbook_textures.json": fileProcess.RP.flipbookTextures,
+            "terrain_texture.json": fileProcess.RP.terrainTextures,
+            "item_texture.json": fileProcess.RP.terrainTextures,
+            "sound_definitions.json": fileProcess.RP.soundDefinitions,
+            "_ui_defs.json": fileProcess.RP.uiDefs,
         }
 
-        // resolve relative paths in "flipbook_textures.json"
-        if (parsedPath.base == "flipbook_textures.json") {
-            for (let flipbook of fileContent) {
-                flipbook.flipbook_texture = "textures/" + utils.resolvePath(filePath, flipbook.flipbook_texture)
-            }
-            fs.writeFileSync(filePath, JSON.stringify(fileContent))
-        }
-
-        // resolve relative paths in "terrain_texture.json" and "item_texture.json"
-        if (parsedPath.base == "terrain_texture.json" || parsedPath.base == "item_texture.json") {
-            for (const blockName in fileContent.texture_data) {
-                let block = fileContent.texture_data[blockName]
-                if (block.textures instanceof Array) {
-                    
-                    for (let texture of block.textures) {
-                        if (texture instanceof Object) {
-                            texture.path = "textures/" + utils.resolvePath(filePath, texture.path)
-                        } else {
-                            texture = "textures/" + utils.resolvePath(filePath, texture)
-                        }
-                    }
-                } else if (block.textures instanceof Object) {
-                    block.textures.path = "textures/" + utils.resolvePath(filePath, block.textures.path)
-
-                } else {
-                    block.textures = "textures/" + utils.resolvePath(filePath, block.textures)
-                }
-                
-            }
-            fs.writeFileSync(filePath, JSON.stringify(fileContent))
-        }
-
-        // resolve relative paths in "sound_definitions.json"
-        if (parsedPath.base == "sound_definitions.json") {
-            for (const soundSet in fileContent.sound_definitions) {
-                for (const sound in fileContent.sound_definitions[soundSet].sounds) {
-                    if (typeof fileContent.sound_definitions[soundSet].sounds[sound] == "object") {
-                        fileContent.sound_definitions[soundSet].sounds[sound].name = "sounds/" + utils.resolvePath(filePath, fileContent.sound_definitions[soundSet].sounds[sound].name)
-                    } else {
-                        fileContent.sound_definitions[soundSet].sounds[sound] = "sounds/" + utils.resolvePath(filePath, fileContent.sound_definitions[soundSet].sounds[sound])
-                    }
-                }
-            }
-            fs.writeFileSync(filePath, JSON.stringify(fileContent))
-        }
-
-        // resolve relative paths in "_ui_defs.json"
-        if (parsedPath.base == "_ui_defs.json") {
-            for (const i in fileContent.ui_defs) {
-                fileContent.ui_defs[i] = "ui/" + utils.resolvePath(filePath, fileContent.ui_defs[i])
-            }
-            fs.writeFileSync(filePath, JSON.stringify(fileContent))
+        if (parsedPath.base in specialistFiles) {
+            const newFileContent = specialistFiles[parsedPath.base](file.content, file.path)
+            fs.writeFileSync(filePath, JSON.stringify(newFileContent))
         }
 
         // get the type of file if this is a unique json file type.
@@ -217,17 +164,17 @@ for (const filePath of glob.sync("RP/**/*")) {
         // Resolve relative paths to textures in client_entity
         if (["minecraft:client_entity", "minecraft:attachable"].includes(correctParentName)) {
             const textures = fileContent[correctParentName].description.textures
-            
+
             for (const texture in textures) {
                 let vanillaPath = false;
                 if (textures[texture].split("/")[0] == "@vanilla") vanillaPath = true
 
                 textures[texture] = utils.resolvePath(filePath, textures[texture])
-                
+
                 if (!vanillaPath) {
                     textures[texture] = "textures/" + textures[texture]
                 }
-                
+
             }
             fileContent[correctParentName].description.textures = textures
             fs.writeFileSync(filePath, JSON.stringify(fileContent, null, 4))
@@ -235,7 +182,8 @@ for (const filePath of glob.sync("RP/**/*")) {
 
         // move UI files to their corresponding file inside of the UI folder
         if (correctParentName == "namespace") {
-            utils.safeMove(filePath, `RP/ui/${path.dirname(filePath)}`)
+            file.move(`RP/ui/${path.dirname(filePath)}`)
+
             correctParentName = undefined
         }
 
@@ -253,7 +201,7 @@ for (const filePath of glob.sync("RP/**/*")) {
             } else {
                 toBeMerged[fileName].push(filePath)
             }
-        } 
+        }
     } else if (IMAGE_EXTENTIONS.includes(parsedPath.ext)) {
         utils.safeMove(filePath, `RP/textures/${path.dirname(filePath)}`)
     } else if (SOUND_EXTENTIONS.includes(parsedPath.ext)) {
@@ -293,10 +241,10 @@ for (const fileType in toBeMerged) {
 
 // Merge language files
 for (const packType of ["RP", "BP"]) {
-    fs.mkdirSync(`${packType}/texts/`, {recursive: true})
+    fs.mkdirSync(`${packType}/texts/`, { recursive: true })
     for (const language in languages[packType]) {
         // It is fine if the files already in the texts folder are overwritten, as the merged file should contain it.
-        fs.writeFileSync(`${packType}/texts/${language}.lang`, 
+        fs.writeFileSync(`${packType}/texts/${language}.lang`,
             lang.stringify(
                 utils.deepMerge(
                     languages[packType][language].map((path) => {
@@ -313,6 +261,6 @@ for (const packType of ["RP", "BP"]) {
 // Remove Empty Folders
 for (const filePath of utils.orderBySpecificity(allFiles()).reverse()) {
     if (fs.lstatSync(filePath).isDirectory()) {
-        if (fs.readdirSync(filePath).length == 0)  fs.rmSync(filePath, {"recursive": true}) 
+        if (fs.readdirSync(filePath).length == 0) fs.rmSync(filePath, { "recursive": true })
     }
 }

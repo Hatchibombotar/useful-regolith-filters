@@ -4,7 +4,8 @@
             "runWith": "nodejs",
             "script": "./src/index.js",
             "name": "File Freedom",
-            "description": "This filter allows you to place bedrock addon file *anywhere* within the addon directories."
+            "description": "This filter allows you to place bedrock addon file *anywhere* within the addon directories.",
+            "requirements": "./"
         }
     ]
 }
