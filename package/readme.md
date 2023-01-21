@@ -13,34 +13,34 @@ You use the settings object to customise the output of the filter.
 `config.json`
 ```json
 {
-	"name": "Project name",
-	"packs": {
-		"behaviorPack": "./packs/BP",
-		"resourcePack": "./packs/RP"
-	},
-	"worlds": [
-		"./worlds/hello"
-	],
-	"regolith": {
-        "profiles": {
-            "default": {
-				"export": {
-					"readOnly": false,
-					"target": "local"
-				},
-				"filters": [
-					{
-						"filter": "package",
-						"settings": {
-							"package": {
-								"mcaddon": {}
-							}
-						}
-					}
-				]
-			}
-        }
-	}
+  "name": "Project name",
+  "packs": {
+    "behaviorPack": "./packs/BP",
+    "resourcePack": "./packs/RP"
+  },
+  "worlds": [
+    "./worlds/hello"
+  ],
+  "regolith": {
+    "profiles": {
+      "default": {
+        "export": {
+          "readOnly": false,
+          "target": "local"
+        },
+        "filters": [
+          {
+            "filter": "package",
+            "settings": {
+              "package": {
+                "mcaddon": { }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
 }
 ```
 
@@ -51,9 +51,9 @@ Creates an mcaddon file containing the resource and behaviour packs.
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mcaddon": {}
-    }
+  "package": {
+    "mcaddon": { }
+  }
 }
 ```
 
@@ -64,11 +64,11 @@ Create a resource pack:
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mcpack": {
-            "RP": true
-        }
+  "package": {
+    "mcpack": {
+      "RP": true
     }
+  }
 }
 ```
 
@@ -76,11 +76,11 @@ Create a behaviour pack:
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mcpack": {
-            "BP": true
-        }
+  "package": {
+    "mcpack": {
+      "BP": true
     }
+  }
 }
 ```
 
@@ -88,11 +88,11 @@ Create a skin pack:
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mcpack": {
-            "skins": true
-        }
+  "package": {
+    "mcpack": {
+      "skins": true
     }
+  }
 }
 ```
 
@@ -100,9 +100,9 @@ Create a skin pack:
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mcworld": {}
-    }
+  "package": {
+    "mcworld": { }
+  }
 }
 ```
 
@@ -111,9 +111,9 @@ _Does the same thing at the mcworld property, but changes the extention to `mcte
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mctemplate": {}
-    }
+  "package": {
+    "mctemplate": { }
+  }
 }
 ```
 
@@ -124,27 +124,27 @@ _Does the same thing at the mcworld property, but changes the extention to `mcte
 `config.json`
 ```json
 {
-	"name": "Project name",
-	"packs": {
-		"behaviorPack": "./packs/BP",
-		"resourcePack": "./packs/RP"
-	},
-	"worlds": [
-		"./worlds/hello"
-	],
-	"regolith": {
-        ...
-	}
+  "name": "Project name",
+  "packs": {
+    "behaviorPack": "./packs/BP",
+    "resourcePack": "./packs/RP"
+  },
+  "worlds": [
+    "./worlds/hello"
+  ],
+  "regolith": {
+    ...
+  }
 }
 ```
 
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mcworld": {},
-        "world": "0"
-    }
+  "package": {
+    "mcworld": { },
+    "world": "0"
+  }
 }
 ```
 
@@ -153,25 +153,25 @@ _Does the same thing at the mcworld property, but changes the extention to `mcte
 `config.json`
 ```json
 {
-	"name": "Project name",
-	"packs": {
-		"behaviorPack": "./packs/BP",
-		"resourcePack": "./packs/RP",
-        "worldTemplate": "./packs/myWorld"
-	},
-	"regolith": {
-        ...
-	}
+  "name": "Project name",
+  "packs": {
+    "behaviorPack": "./packs/BP",
+    "resourcePack": "./packs/RP",
+    "worldTemplate": "./packs/myWorld"
+  },
+  "regolith": {
+    ...
+  }
 }
 ```
 
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mcworld": {},
-        "world": "worldTemplate"
-    }
+  "package": {
+    "mcworld": { },
+    "world": "worldTemplate"
+  }
 }
 ```
 
@@ -180,10 +180,10 @@ _Does the same thing at the mcworld property, but changes the extention to `mcte
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "mcworld": {},
-        "world": "./packs/myWorld"
-    }
+  "package": {
+    "mcworld": { },
+    "world": "./packs/myWorld"
+  }
 }
 ```
 
@@ -202,9 +202,9 @@ Reference the packs and include them within the world file
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "package_location": "./build"
-    }
+  "package": {
+    "package_location": "./build"
+  }
 }
 ```
 
@@ -213,8 +213,8 @@ by default, it converts your project name to snake_case, but if you'd like to ha
 `config.json > regolith > profiles > default > filters > 0 > settings`
 ```json
 {
-    "package": {
-        "file_name": "./my_pack"
-    }
+  "package": {
+    "file_name": "./my_pack"
+  }
 }
 ```

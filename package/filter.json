@@ -1,7 +1,7 @@
 {
     "filters": [
         {
-            "runWith": "package",
+            "runWith": "nodejs",
             "script": "./src/main.js",
             "name": "Package",
             "description": "Package your files using this all-in-one filter!",
