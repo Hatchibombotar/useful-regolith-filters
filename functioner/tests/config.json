@@ -20,7 +20,7 @@
     "filterDefinitions": {
       "functioner": {
         "runWith": "nodejs",
-        "script": "../index.js"
+        "script": "../src/main.js"
       },
       "filter_tester": {
         "version": "1.0.0"

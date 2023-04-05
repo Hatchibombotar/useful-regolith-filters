@@ -1,5 +1,5 @@
 # say Main Function
-# execute @s ~~~ {      
+# execute as @s run {      
 #     say Child 1/1
 # }          
 say this is the only line around!

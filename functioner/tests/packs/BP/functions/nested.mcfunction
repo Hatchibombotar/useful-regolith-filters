@@ -1,7 +1,7 @@
 say Main Function
-execute @s ~~~ {
+execute as @s run {
     say Child 1/2
-    execute @s ~~~ {
+    execute as @s run {
         say Child 2/2
     }
 }

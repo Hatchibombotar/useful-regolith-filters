@@ -5,7 +5,7 @@ Filters to be used with [regolith](https://bedrock-oss.github.io/regolith/).
 
 | Filter                         | Version | Install                         |
 | ------------------------------ | ------- | ------------------------------- |
-| [Functioner](./functioner)     | 1.2.2   | `regolith install functioner`   |
+| [Functioner](./functioner)     | 1.3.0   | `regolith install functioner`   |
 | [File Freedom](./file_freedom) | 1.2.7   | `regolith install file_freedom` |
 | [Templater](./templater)       | 2.0.0   | `regolith install templater`    |
 | [Full Init](./init-full)       | 1.1.1   | `regolith install init-full`    |
