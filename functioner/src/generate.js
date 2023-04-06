@@ -16,7 +16,7 @@ function generate(ast, filePath) {
                     const newPaths = paths.filter((path) => path != "")
                     return newPaths.join("/")
                 }
-                const functionPath = joinPaths(path.relative("BP/functions", dir), functionName)
+                const functionPath = joinPaths(path.relative("BP/functions", dir).replace(/\\/g, "/"), functionName)
 
                 const newPath = path.join(dir, functionName + ext)
                 generate(argument, newPath)

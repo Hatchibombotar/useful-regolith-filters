@@ -41,7 +41,7 @@ diagnose.behaviorpack.mcfunction.missing=false
 diagnostic.disable.behaviorpack.mcfunction.syntax.unknown=true
 ```
 
-<!-- #### Configuring Functioner
+#### Configuring Functioner
 With this filter, you can configure how it works using the settings object:
 
 ```json
@@ -66,4 +66,4 @@ These are the settings that can be modified:
 "settings": {
   "searchPattern": "BP/**/*.mcfunction" // a glob pattern for the files to be scanned. by default looks at all .mcfunction files in the BP.
 }
-``` -->
+```
