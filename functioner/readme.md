@@ -21,16 +21,33 @@ execute as @s[tag=target] run {
 }
 ```
 
-<!-- ### Loops
-Loops! Run a command until a condition is true or false
+### Loops
+Loops!
+Functioner adds the `repeat` keyword that runs the current function again.
 
-#### Example
+### Example 1 - Count to 10
+
 ```
-say hi
-execute as @s[tag=target] run {
-  say bye
+scoreboard objectives add count dummy
+scoreboard players set value count 0
+
+execute run {
+  scoreboard players add value count 1
+  tellraw @a { "rawtext": [ { "score": {"name": "value", "objective": "count" } } ] }
+  execute unless score value count matches 10 repeat
 }
-``` -->
+```
+
+### Example 2 - Raycast
+
+```
+execute at @s anchored eyes run {
+  execute unless block ^^^.25 air run {
+    setblock ~~~ diamond_block
+  }
+  execute positioned ^^^.25 if block ~~~ air repeat
+}
+```
 
 ### Settings
 #### Using the Blockception Development Plugin with VSCode

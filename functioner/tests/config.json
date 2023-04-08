@@ -15,6 +15,15 @@
           "target": "local",
           "readOnly": false
         }
+      },
+      "development": {
+        "filters": [
+          { "filter": "functioner" }
+        ],
+        "export": {
+          "target": "development",
+          "readOnly": false
+        }
       }
     },
     "filterDefinitions": {

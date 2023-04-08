@@ -1,7 +1,7 @@
 {
     "format_version": 2,
     "header": {
-      "name": "Functioner - Test",
+      "name": "Functioner - Tests",
       "description": "By Hatchibombotar",
       "uuid": "e8a23a04-ecff-4f1e-b76a-1f0e7e55dcf7",
       "version": [
@@ -11,8 +11,8 @@
       ],
       "min_engine_version": [
         1,
-        17,
-        0
+        19,
+        70
       ]
     },
     "modules": [
