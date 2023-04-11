@@ -1,4 +1,4 @@
-const latestVersion = [1, 19, 50]
+const latestVersion = [1, 19, 70]
 
 const scriptModules = {
 	"@minecraft/server": {
