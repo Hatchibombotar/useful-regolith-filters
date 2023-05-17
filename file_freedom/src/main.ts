@@ -4,7 +4,7 @@ import { resolvePath, commandArgs, deepMerge, orderBySpecificity } from "./utils
 import { Manifest, Tick } from "./MinecraftTypes"
 import * as lang from "./lang"
 
-import { IMAGE_EXTENTIONS, SOUND_EXTENTIONS, JSON_FEATURES_BP, JSON_FEATURES_RP, CUMULATIVE_JSON_FILES, IGNORE_FILES } from "./config"
+import { IMAGE_EXTENTIONS, SOUND_EXTENTIONS, JSON_FEATURES_BP, JSON_FEATURES_RP, CUMULATIVE_JSON_FILES, IGNORE_FILES, IGNORE_FOLDERS } from "./config"
 
 async function main() {
     const toBeMerged = {}
@@ -14,8 +14,8 @@ async function main() {
         "RP": {},
     }
 
-    const BP = FileSystem.glob("BP/**/*")
-    const RP = FileSystem.glob("RP/**/*")
+    const BP = FileSystem.glob("BP/**/*", {ignore: IGNORE_FOLDERS})
+    const RP = FileSystem.glob("RP/**/*", {ignore: IGNORE_FOLDERS})
 
     for (const file of BP) {
         if (IGNORE_FILES.includes(file.metadata.base)) continue

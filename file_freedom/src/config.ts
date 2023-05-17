@@ -53,3 +53,4 @@ export const SOUND_EXTENTIONS = [ ".fsb", ".ogg", ".wav", ".mp3", ...settings.SO
 export const IMAGE_EXTENTIONS = [ ".png", ".tga", ".jpg", ".jpeg", ...settings.IMAGE_EXTENTIONS ?? [] ]
 
 export const IGNORE_FILES = [ "pack_icon.png", ...settings.IGNORE_FILES ?? []]
+export const IGNORE_FOLDERS = [ ...settings.IGNORE_FOLDERS ?? []]

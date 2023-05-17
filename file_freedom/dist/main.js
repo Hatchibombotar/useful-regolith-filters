@@ -309,6 +309,7 @@ var CUMULATIVE_JSON_FILES = {
 var SOUND_EXTENTIONS = [".fsb", ".ogg", ".wav", ".mp3", ...settings2.SOUND_EXTENTIONS ?? []];
 var IMAGE_EXTENTIONS = [".png", ".tga", ".jpg", ".jpeg", ...settings2.IMAGE_EXTENTIONS ?? []];
 var IGNORE_FILES = ["pack_icon.png", ...settings2.IGNORE_FILES ?? []];
+var IGNORE_FOLDERS = [...settings2.IGNORE_FOLDERS ?? []];
 
 // src/main.ts
 async function main() {
@@ -318,8 +319,8 @@ async function main() {
     "BP": {},
     "RP": {}
   };
-  const BP = glob("BP/**/*");
-  const RP = glob("RP/**/*");
+  const BP = glob("BP/**/*", { ignore: IGNORE_FOLDERS });
+  const RP = glob("RP/**/*", { ignore: IGNORE_FOLDERS });
   for (const file of BP) {
     if (IGNORE_FILES.includes(file.metadata.base))
       continue;
