@@ -45,6 +45,11 @@ test('texture path relative to base', () => {
     .toBe("textures/x/y/z");
 });
 
+test('texture path for relative in item texture', () => {
+    expect(resolvePath("textures/", "/RP/powerups/textures/item_texture.json", "./hello"))
+    .toBe("textures/RP/powerups/textures/hello");
+});
+
 test('vanilla alias texture ref', () => {
     expect(resolvePath("a/b/c.x", "@vanilla/textures/entity/test"))
     .toBe("textures/entity/test");

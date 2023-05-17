@@ -122,7 +122,7 @@ async function main() {
             if (file.metadata.base == "flipbook_textures.json") {
                 const content = file.jsonc().map(
                     flipbook => {
-                        flipbook.flipbook_texture = resolvePath("textures", file.path, flipbook.flipbook_texture)
+                        flipbook.flipbook_texture = resolvePath("textures", "/" + file.path, flipbook.flipbook_texture)
                         return flipbook
                     }
                 )
@@ -133,18 +133,19 @@ async function main() {
                 for (const blockName in content.texture_data) {
                     let block = content.texture_data[blockName]
                     if (block.textures instanceof Array) {
-                        for (let texture of block.textures) {
+                        for (let textureI in block.textures) {
+                            const texture = block.textures[textureI]
                             if (texture instanceof Object) {
-                                texture.path = resolvePath("textures", file.path, texture.path)
+                                block.textures[textureI].path = resolvePath("textures", "/" + file.path, texture.path)
                             } else {
-                                texture = resolvePath("textures", file.path, texture)
+                                block.textures[textureI] = resolvePath("textures", "/" + file.path, texture)
                             }
                         }
                     } else if (block.textures instanceof Object) {
-                        block.textures.path = resolvePath("textures", file.path, block.textures.path)
+                        block.textures.path = resolvePath("textures", "/" + file.path, block.textures.path)
 
                     } else {
-                        block.textures = resolvePath("textures", file.path, block.textures)
+                        block.textures = resolvePath("textures", "/" + file.path, block.textures)
                     }
                 }
 
@@ -155,9 +156,9 @@ async function main() {
                 for (const soundSet in content.sound_definitions) {
                     for (const sound in content.sound_definitions[soundSet].sounds) {
                         if (typeof content.sound_definitions[soundSet].sounds[sound] == "object") {
-                            content.sound_definitions[soundSet].sounds[sound].name = resolvePath("sounds", file.path, content.sound_definitions[soundSet].sounds[sound].name)
+                            content.sound_definitions[soundSet].sounds[sound].name = resolvePath("sounds", "/" + file.path, content.sound_definitions[soundSet].sounds[sound].name)
                         } else {
-                            content.sound_definitions[soundSet].sounds[sound] = resolvePath("sounds", file.path, content.sound_definitions[soundSet].sounds[sound])
+                            content.sound_definitions[soundSet].sounds[sound] = resolvePath("sounds", "/" + file.path, content.sound_definitions[soundSet].sounds[sound])
                         }
                     }
                 }
@@ -167,7 +168,7 @@ async function main() {
                 const content = file.jsonc()
 
                 content.ui_defs = content.ui_defs.map(
-                    ui => resolvePath("ui", file.path, ui)
+                    ui => resolvePath("ui", "/" + file.path, ui)
                 )
                 file.save(content)
             } else {
@@ -183,7 +184,7 @@ async function main() {
                         const textures = content[foundParentName].description.textures
 
                         for (const texture in textures) {
-                            textures[texture] = resolvePath("textures", file.path, textures[texture])
+                            textures[texture] = resolvePath("textures", "/" + file.path, textures[texture])
                         }
                         content[foundParentName].description.textures = textures
 

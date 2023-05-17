@@ -147,7 +147,7 @@ export function resolvePath(...paths: string[]) {
 			currentSplitPath.pop();
 		}
 
-		if (currentSplitPath[0] == ".." || currentSplitPath[0] == ".") {
+		if (currentSplitPath[0] == ".." || currentSplitPath[0] == "." || path.at(0) == "/") {
 			// if file path is relative
 			splitPaths = [...splitPaths, ...currentSplitPath];
 		} else if (currentSplitPath[0] in alias) {
@@ -155,8 +155,6 @@ export function resolvePath(...paths: string[]) {
 			const aliasReplacement = alias[currentSplitPath[0]].split("/");
 			currentSplitPath.splice(0, 1);
 			splitPaths = [...aliasReplacement, ...currentSplitPath];
-		} else if (path.at(0) == "/") {
-			splitPaths = [...splitPaths, ...currentSplitPath];
 		} else {
 			splitPaths = currentSplitPath;
 		}
