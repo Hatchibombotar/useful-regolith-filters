@@ -18,6 +18,8 @@ This allows you to reference other files using relative paths. This allows you t
 `function ./otherFunction` - otherFunction in the same folder
 `function ../otherFunction` - otherFunction outside current folder
 
+`textures/entity/pig` - pig texture in RP/textures/entity/pig
+
 #### Supported in:
 - _BP_
 - Functions

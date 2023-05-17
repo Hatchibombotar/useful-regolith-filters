@@ -1,6 +1,6 @@
-const settings = JSON.parse(process.argv[2] ?? "{}")
+export const settings = JSON.parse(process.argv[2] ?? "{}")
 
-const JSON_FEATURES_BP = {
+export const JSON_FEATURES_BP = {
     "minecraft:entity": "BP/entities",
     "minecraft:block": "BP/blocks",
     "minecraft:item": "BP/items",
@@ -17,7 +17,7 @@ const JSON_FEATURES_BP = {
     ...settings.JSON_FEATURES_BP ?? []
 }
 
-const JSON_FEATURES_RP = {
+export const JSON_FEATURES_RP = {
     "minecraft:attachable": "RP/attachables",
     "minecraft:client_entity": "RP/entity",
     "minecraft:fog_settings": "RP/fogs",
@@ -30,7 +30,7 @@ const JSON_FEATURES_RP = {
     ...settings.JSON_FEATURES_RP ?? []
 }
 
-const CUMULATIVE_JSON_FILES = {
+export const CUMULATIVE_JSON_FILES = {
     "biomes_client.json": "RP",
     "blocks.json": "RP",
     "sounds.json": "RP",
@@ -49,16 +49,7 @@ const CUMULATIVE_JSON_FILES = {
     ...settings.CUMULATIVE_JSON_FILES ?? []
 }
 
-const SOUND_EXTENTIONS = [ ".fsb", ".ogg", ".wav", ".mp3", ...settings.SOUND_EXTENTIONS ?? [] ]
-const IMAGE_EXTENTIONS = [ ".png", ".tga", ".jpg", ".jpeg", ...settings.IMAGE_EXTENTIONS ?? [] ]
+export const SOUND_EXTENTIONS = [ ".fsb", ".ogg", ".wav", ".mp3", ...settings.SOUND_EXTENTIONS ?? [] ]
+export const IMAGE_EXTENTIONS = [ ".png", ".tga", ".jpg", ".jpeg", ...settings.IMAGE_EXTENTIONS ?? [] ]
 
-const IGNORE_FILES = [ "pack_icon.png", ...settings.IGNORE_FILES ?? []]
-
-module.exports = {
-    JSON_FEATURES_RP,
-    JSON_FEATURES_BP,
-    CUMULATIVE_JSON_FILES,
-    SOUND_EXTENTIONS,
-    IMAGE_EXTENTIONS,
-    IGNORE_FILES,
-}
+export const IGNORE_FILES = [ "pack_icon.png", ...settings.IGNORE_FILES ?? []]

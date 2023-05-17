@@ -1,4 +1,4 @@
-const { resolvePath } = require('../src/utils');
+import { resolvePath } from '../src/utils';
 
 test('relative files from files using `.`', () => {
     expect(resolvePath("a/b/c.x", "./d.x"))
@@ -33,6 +33,16 @@ test('relative directory from directory using `..`', () => {
 test('new path from file', () => {
     expect(resolvePath("a/b/c.x", "x/y/z"))
     .toBe("x/y/z");
+});
+
+test('vanilla type texture path', () => {
+    expect(resolvePath("textures", "x/y/z"))
+    .toBe("x/y/z");
+});
+
+test('texture path relative to base', () => {
+    expect(resolvePath("textures", "/x/y/z"))
+    .toBe("textures/x/y/z");
 });
 
 test('vanilla alias texture ref', () => {

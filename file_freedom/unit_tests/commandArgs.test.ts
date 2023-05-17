@@ -1,4 +1,4 @@
-const {commandArgs} = require('../src/utils');
+import { commandArgs } from '../src/utils';
 
 test('parse normal command line', () => {
     expect(commandArgs(

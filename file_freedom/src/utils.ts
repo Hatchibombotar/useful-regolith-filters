@@ -1,5 +1,3 @@
-const fs = require("fs")
-const path = require("path")
 
 const settings = JSON.parse(process.argv[2] ?? "{}")
 const alias = {
@@ -14,25 +12,7 @@ for (const aliasKey in alias) {
 	}
 }
 
-function safeMove(oldPath, newDirectory) {
-    const {name, ext, base} = path.parse(oldPath)
-
-	if (oldPath == `${newDirectory}/${base}`) {
-		return
-	}
-	if (!fs.existsSync(newDirectory)) {
-		fs.mkdirSync(newDirectory, {recursive: true})
-	}
-
-	let pathSuffix = 0;
-	const newPath = () => `${newDirectory}/${name}${pathSuffix != 0 ? pathSuffix : ""}${ext}`
-	while (fs.existsSync(newPath())) {
-		pathSuffix += 1
-	}
-	fs.renameSync(oldPath, newPath())
-}
-
-function deepMerge(objects, maxLevel = 2, currentLevel = 0) {
+export function deepMerge(objects, maxLevel = 2, currentLevel = 0) {
 	const isObject = (value) =>  Object.prototype.toString.call(value) === "[object Object]"
     let target = {}
 
@@ -59,9 +39,12 @@ function deepMerge(objects, maxLevel = 2, currentLevel = 0) {
     return target;
 }
 
-function orderBySpecificity(filePaths) {
-	const specifity = {}
-	for (file of filePaths) {
+export function orderBySpecificity(filePaths) {
+	const specifity: {
+		[file: string]: number
+	} = {}
+
+	for (let file of filePaths) {
 		specifity[file] = file.split("/").length
 	}
 	// https://stackoverflow.com/a/1069840
@@ -73,13 +56,13 @@ function orderBySpecificity(filePaths) {
 
 // based off of code by Waveplayz
 // https://gist.github.com/WavePlayz/3ede5f50658b0e30a762d59564eadf75
-function commandArgs(content) {
+export function commandArgs(content) {
     const spliters = /[\s\b]/
 	
 	const contentLength = content.length
 	
-	let cmdArguments = []
-	let currentArgument = ""
+	let cmdArguments: string[] = []
+	let currentArgument: string = ""
 	
 	const SINGLE_QUOTE = "'"
 	const DOUBLE_QUOTE = '"'
@@ -89,12 +72,12 @@ function commandArgs(content) {
 
 	let brackets = {
 		brackets: {
-			[CURLY_BRACKETS]: 0,
-			[ROUND_BRACKETS]: 0,
-			[SQUARE_BRACKETS]: 0,
+			[String(CURLY_BRACKETS)]: 0,
+			[String(ROUND_BRACKETS)]: 0,
+			[String(SQUARE_BRACKETS)]: 0,
 		},
 		get isOpen() {
-			return this.brackets[CURLY_BRACKETS] || this.brackets[ROUND_BRACKETS] || this.brackets[SQUARE_BRACKETS] 
+			return this.brackets[String(CURLY_BRACKETS)] || this.brackets[String(ROUND_BRACKETS)] || this.brackets[String(SQUARE_BRACKETS)] 
 		}
 	}
 	
@@ -131,8 +114,8 @@ function commandArgs(content) {
 		}
 
 		// if character is a bracket
-		for (key of Object.keys(brackets.brackets)) {
-			bracketElements = key.split(",")
+		for (const key of Object.keys(brackets.brackets)) {
+			const bracketElements = key.split(",")
 			if (currentCharacter == bracketElements[0]) brackets.brackets[key] += 1
 			if (currentCharacter == bracketElements[1]) brackets.brackets[key] -= 1
 		}
@@ -153,14 +136,14 @@ function commandArgs(content) {
 	return cmdArguments
 }
 
-function resolvePath(...paths) {
-	const currentPath = [];
-	let splitPaths = [];
+export function resolvePath(...paths: string[]) {
+	const currentPath: string[] = [];
+	let splitPaths: string[] = [];
 	for (const [pathIndex, path] of Object.entries(paths)) {
 		let currentSplitPath = path.split("/");
 
 		// if path contains file, remove file from the path
-		if (currentSplitPath[currentSplitPath.length - 1].includes(".") && (pathIndex != paths.length - 1)) {
+		if (currentSplitPath[currentSplitPath.length - 1].includes(".") && (Number(pathIndex) != paths.length - 1)) {
 			currentSplitPath.pop();
 		}
 
@@ -172,6 +155,8 @@ function resolvePath(...paths) {
 			const aliasReplacement = alias[currentSplitPath[0]].split("/");
 			currentSplitPath.splice(0, 1);
 			splitPaths = [...aliasReplacement, ...currentSplitPath];
+		} else if (path.at(0) == "/") {
+			splitPaths = [...splitPaths, ...currentSplitPath];
 		} else {
 			splitPaths = currentSplitPath;
 		}
@@ -190,13 +175,4 @@ function resolvePath(...paths) {
 	}
 
 	return currentPath.join("/");
-}
-
-
-module.exports = {
-	safeMove,
-	deepMerge,
-	orderBySpecificity,
-	resolvePath,
-	commandArgs
 }

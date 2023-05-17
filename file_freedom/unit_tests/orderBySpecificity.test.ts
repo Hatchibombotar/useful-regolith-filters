@@ -1,4 +1,4 @@
-const { orderBySpecificity } = require('../src/utils');
+import { orderBySpecificity } from '../src/utils';
 
 test('order file paths by specificity', () => {
     expect(orderBySpecificity([

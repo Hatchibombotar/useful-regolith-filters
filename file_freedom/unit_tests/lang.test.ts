@@ -1,7 +1,7 @@
-const lang = require('../src/lang');
+import { parse, stringify } from '../src/lang';
 
 test('parse lang file', () => {
-    expect(lang.parse(
+    expect(parse(
         "this.thing=Test String       #",
     ))
     .toEqual({
@@ -10,7 +10,7 @@ test('parse lang file', () => {
 });
 
 test('stringify lang file', () => {
-    expect(lang.stringify({
+    expect(stringify({
         "this.thing": "Test String       #"
     }))
     .toBe(

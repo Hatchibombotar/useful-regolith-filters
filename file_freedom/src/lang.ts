@@ -1,4 +1,4 @@
-function parse(texts) {
+export function parse(texts) {
     let jsonTexts = {}
 	for (const translation of texts.split("\n")) {
 		if ([translation[0], translation[1]].includes("#")) continue
@@ -9,15 +9,10 @@ function parse(texts) {
 	return jsonTexts
 }
 
-function stringify(jsonTexts) {
-	let texts = []
+export function stringify(jsonTexts) {
+	let texts: string[] = []
 	for (const key in jsonTexts) {
 		texts.push(`${key}=${jsonTexts[key]}`)
 	}
 	return texts.join("\n")
-}
-
-module.exports = {
-    parse,
-    stringify
 }

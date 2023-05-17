@@ -1,4 +1,4 @@
-const { deepMerge } = require('../src/utils');
+import { deepMerge } from '../src/utils';
 
 test('simple merge object properties', () => {
     const obj1 = {
