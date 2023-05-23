@@ -4,11 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsup src/main.ts --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "glob": "^7.2.3"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0",
+    "@types/glob": "^8.1.0",
+    "@types/node": "^20.2.3"
   }
 }

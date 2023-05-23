@@ -1,8 +1,8 @@
-const fs = require("fs")
-const glob = require("glob")
+import fs from "fs"
+import glob from "glob"
 
-const {parse} = require("./parse")
-const {generate} = require("./generate")
+import { parse } from "./parse"
+import { generate } from "./generate"
 
 const settings = JSON.parse(process.argv[2] ?? "{}")
 const searchPattern = settings.searchPattern ?? "BP/**/*.mcfunction"
@@ -16,5 +16,3 @@ function main() {
     }
 }
 main()
-
-

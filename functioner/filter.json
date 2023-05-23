@@ -2,7 +2,7 @@
     "filters": [
         {
             "runWith": "nodejs",
-            "script": "./src/main.js",
+            "script": "./dist/main.js",
             "name": "Functioner",
             "description": "A filter that adds extra syntax to minecraft functions.",
             "requirements": "./"

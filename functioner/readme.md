@@ -1,12 +1,9 @@
 # Functioner
-A filter for regolith that adds more syntax to function files.
+A filter for regolith that extendes the .mcfunction syntax.
 
-### Install Latest
-```
-regolith install functioner
-```
+---
 
-## Instructions
+## Features
 
 ### Subfunctions
 These are functions inside of functions. These allow for multiple commands to be ran at once.
@@ -15,7 +12,7 @@ Enter your commands between two curly brackets.
 
 #### Example
 ```
-say hi
+say hello!
 execute as @s[tag=target] run {
   say bye
 }
@@ -25,7 +22,8 @@ execute as @s[tag=target] run {
 Loops!
 Functioner adds the `repeat` keyword that runs the current function again.
 
-### Example 1 - Count to 10
+#### Example 1 - Count to 10
+Logs the numbers 1 to 10 into chat
 
 ```
 scoreboard objectives add count dummy
@@ -33,12 +31,12 @@ scoreboard players set value count 0
 
 execute run {
   scoreboard players add value count 1
-  tellraw @a { "rawtext": [ { "score": {"name": "value", "objective": "count" } } ] }
+  tellraw @a `count[value]`
   execute unless score value count matches 10 repeat
 }
 ```
 
-### Example 2 - Raycast
+#### Example 2 - Raycast
 
 ```
 execute at @s anchored eyes run {
@@ -49,10 +47,47 @@ execute at @s anchored eyes run {
 }
 ```
 
-### Settings
+### Relative Paths
+Reference files using relative paths.
+
+**BP/functions/path/to/file.mcfunction**
+```
+function ./nested
+```
+In the above example, `./nested` with be evaluated to be `path/to/nested`
+
+
+### Template Strings
+Write rawtext using a more consise syntax between backticks ( \` ). Include data between curly brackets (\{ \})
+
+**text**
+```
+tellraw @a `hello`
+```
+**selector**
+```
+tellraw @a `hello {@p}`
+```
+**score**
+```
+tellraw @s `my score is {scoreboard[@s]}`
+```
+**translations**
+```
+tellraw @s `{example.langcode.1}`
+```
+
+---
+
+## Installation
+```
+regolith install functioner==latest
+```
+
+## Settings
 #### Using the Blockception Development Plugin with VSCode
 
-It is reccomended to create an .mcattributes file in the root of your project containing the following lines:
+It is recomended to create an .mcattributes file in the root of your project containing the following lines:
 ```
 diagnose.behaviorpack.mcfunction.missing=false
 diagnostic.disable.behaviorpack.mcfunction.syntax.unknown=true
@@ -84,3 +119,5 @@ These are the settings that can be modified:
   "searchPattern": "BP/**/*.mcfunction" // a glob pattern for the files to be scanned. by default looks at all .mcfunction files in the BP.
 }
 ```
+
+
