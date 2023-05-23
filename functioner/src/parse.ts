@@ -10,7 +10,9 @@ export function parse(code) {
 		const newArgs: any[] = []
 
 		let argScope = newArgs
-		for (const argument of rawArgs) {
+		for (const argumentIndex in rawArgs) {
+			const argument = rawArgs[argumentIndex]
+
 			// include the following line if you want default rawtext objects to be parsed.
 			// const isObject = argument.at(0) == "{" && argument.at(argument.length - 1) == "}"
 			// const isObject = false
@@ -22,9 +24,10 @@ export function parse(code) {
 						"type": "rawtext",
 						...parseRawTextTemplate(argument.slice(1, -1))
 					}
-					)
-				console.log(argScope.at(-1))
-			} else if (argScope.at(0) == "execute" && argument == "run") {
+				)
+			} else if (argScope.at(0) == "execute" && argument == "run" && rawArgs.at(Number(argumentIndex) + 1) != "{") {
+				argScope.push(argument)
+
 				const i = argScope.push({
 					type: "subfunction",
 					children: [

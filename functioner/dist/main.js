@@ -37,7 +37,8 @@ function parse(code) {
     const rawArgs = commandArgs(line.trim());
     const newArgs = [];
     let argScope = newArgs;
-    for (const argument of rawArgs) {
+    for (const argumentIndex in rawArgs) {
+      const argument = rawArgs[argumentIndex];
       if (argument.at(0) == "`" && argument.at(-1) == "`") {
         argScope.push(
           {
@@ -45,8 +46,8 @@ function parse(code) {
             ...parseRawTextTemplate(argument.slice(1, -1))
           }
         );
-        console.log(argScope.at(-1));
-      } else if (argScope.at(0) == "execute" && argument == "run") {
+      } else if (argScope.at(0) == "execute" && argument == "run" && rawArgs.at(Number(argumentIndex) + 1) != "{") {
+        argScope.push(argument);
         const i = argScope.push({
           type: "subfunction",
           children: [
