@@ -1,5 +1,5 @@
 # Functioner
-A filter for regolith that extendes the .mcfunction syntax.
+A filter for regolith that extends the .mcfunction syntax.
 
 ---
 
