@@ -18,6 +18,49 @@ const scriptModules = {
 	},
 }
 
+const scriptModules2 = {
+	"@minecraft/server": {
+		"release": {
+			"beta": "1.1.0-beta",
+		},
+		"preview": {
+			"beta": "1.2.0-beta",
+		}
+	},
+	"@minecraft/server-gametest": {
+		"release": {
+			"beta": "1.1.0-beta",
+		},
+		"preview": {
+			"beta": "1.0.0-beta",
+		}
+	},
+	"@minecraft/server-admin": {
+		"release": {
+			"beta": "1.1.0-beta",
+		},
+		"preview": {
+			"beta": "1.0.0-beta",
+		}
+	},
+	"@minecraft/server-ui": {
+		"release": {
+			"beta": "1.1.0-beta",
+		},
+		"preview": {
+			"beta": "1.0.0-beta",
+		}
+	},
+	"@minecraft/server-net": {
+		"release": {
+			"beta": "1.1.0-beta",
+		},
+		"preview": {
+			"beta": "1.0.0-beta",
+		}
+	},
+}
+
 const entryModule = "@minecraft/server"
 
 module.exports = {

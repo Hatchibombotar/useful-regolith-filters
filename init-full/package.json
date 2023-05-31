@@ -4,12 +4,14 @@
   "description": "Creates manifest.json files for bedrock addons",
   "main": "index.js",
   "scripts": {
-    "postinstall": "start cmd /C node index.js"
+    "postinstall": "start cmd /C node index.js",
+    "test": "node index.js test"
   },
   "author": "Hatchibombotar",
   "license": "MIT",
   "dependencies": {
     "prompt-sync": "^4.2.0",
+    "terminal-kit": "^3.0.0",
     "uuid": "^8.3.2"
   }
 }
