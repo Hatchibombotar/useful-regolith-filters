@@ -179,11 +179,13 @@ async function main() {
 	configJSON.name = projectName
 	delete configJSON.regolith.filterDefinitions["init-full"]
 
-	if (isTest) {
+	if (!isTest) {
 		fs.writeFileSync(`${ROOT_DIR}${resourcePack}/manifest.json`, JSON.stringify(manifestRP, null, 4))
 		fs.writeFileSync(`${ROOT_DIR}${behaviorPack}/manifest.json`, JSON.stringify(manifestBP, null, 4))
 		fs.writeFileSync(`${ROOT_DIR}config.json`, JSON.stringify(configJSON, null, 2))
 	}
+
+	terminal.processExit(0)
 }
 
 main()
