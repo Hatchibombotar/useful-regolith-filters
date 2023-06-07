@@ -104,6 +104,7 @@ function commandArgs(inputContent) {
   let currentArgument = "";
   const SINGLE_QUOTE = "'";
   const DOUBLE_QUOTE = '"';
+  const BACKTICK = "`";
   const CURLY_BRACKETS = ["{", "}"];
   const ROUND_BRACKETS = ["(", ")"];
   const SQUARE_BRACKETS = ["[", "]"];
@@ -122,8 +123,9 @@ function commandArgs(inputContent) {
   let quotes = {
     [SINGLE_QUOTE]: false,
     [DOUBLE_QUOTE]: false,
+    [BACKTICK]: false,
     get isOpen() {
-      return this[SINGLE_QUOTE] || this[DOUBLE_QUOTE];
+      return this[SINGLE_QUOTE] || this[DOUBLE_QUOTE] || this[BACKTICK];
     }
   };
   let escapeNextCharacter = false;
