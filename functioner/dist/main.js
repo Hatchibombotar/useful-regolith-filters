@@ -26,16 +26,34 @@ var import_fs2 = __toESM(require("fs"));
 var import_glob = __toESM(require("glob"));
 
 // src/parse.ts
+var settings = JSON.parse(process.argv[2] ?? "{}");
 function parse(code) {
   var _a;
   const ast = {
     children: []
   };
-  const lines = code.split("\n");
+  let lines = code.split("\n");
+  if (lines[0].trim()[0] == "@") {
+    if ((settings.flags ?? []).includes(lines[0].trim())) {
+      lines = lines.slice(1);
+    } else {
+      return void 0;
+    }
+  }
   let currentScope = ast;
   for (const [lineNumber, line] of Object.entries(lines)) {
-    const rawArgs = commandArgs(line.trim());
+    let rawArgs = commandArgs(line.trim());
     const newArgs = [];
+    if (rawArgs.length == 0)
+      continue;
+    if (rawArgs[0][0] == "@") {
+      if ((settings.flags ?? []).includes(rawArgs[0])) {
+        console.log(rawArgs[0]);
+        rawArgs = rawArgs.slice(1);
+      } else {
+        continue;
+      }
+    }
     let argScope = newArgs;
     for (const argumentIndex in rawArgs) {
       const argument = rawArgs[argumentIndex];
@@ -205,7 +223,7 @@ function parseRawTextTemplate(str) {
       templatesOpened -= 1;
       const IS_SELECTOR = currentText.trim().at(0) == "@";
       const IS_RAWTEXT = currentText.trim().at(0) == "{" && currentText.trim().at(-1) == "}";
-      const IS_SCORE = currentText.trim().match(/^([a-z]*)\[(.*)\]$/m);
+      const IS_SCORE = currentText.trim().match(/^([a-zA-Z_-]*)\[(.*)\]$/m);
       const IS_LANG = currentText.trim().match(/^[a-zA-Z0-9\.]*$/m);
       if (IS_SELECTOR) {
         rawtext.push(
@@ -324,12 +342,16 @@ function filePathToFunctionPath(filePath) {
 }
 
 // src/main.ts
-var settings = JSON.parse(process.argv[2] ?? "{}");
-var searchPattern = settings.searchPattern ?? "BP/**/*.mcfunction";
+var settings2 = JSON.parse(process.argv[2] ?? "{}");
+var searchPattern = settings2.searchPattern ?? "BP/**/*.mcfunction";
 function main() {
   for (const filePath of import_glob.default.sync(searchPattern)) {
     const func = String(import_fs2.default.readFileSync(filePath));
     const ast = parse(func);
+    if (ast == void 0) {
+      import_fs2.default.rmSync(filePath);
+      continue;
+    }
     generate(ast, filePath);
   }
 }

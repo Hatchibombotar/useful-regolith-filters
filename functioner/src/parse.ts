@@ -1,13 +1,33 @@
+const settings = JSON.parse(process.argv[2] ?? "{}")
+
 export function parse(code) {
 	const ast: any = {
 		children: []
 	}
-	const lines = code.split("\n")
+	let lines = code.split("\n")
+	if (lines[0].trim()[0] == "@") {
+		if ((settings.flags ?? []).includes(lines[0].trim())) {
+			lines = lines.slice(1)
+		}  else {
+			return undefined
+		}
+	}
 
 	let currentScope = ast
 	for (const [lineNumber, line] of Object.entries<string>(lines)) {
-		const rawArgs: string[] = commandArgs(line.trim())
+		let rawArgs: string[] = commandArgs(line.trim())
 		const newArgs: any[] = []
+
+		if (rawArgs.length == 0) continue
+
+		if (rawArgs[0][0] == "@") {
+			if ((settings.flags ?? []).includes(rawArgs[0])) {
+				console.log(rawArgs[0])
+				rawArgs = rawArgs.slice(1)
+			} else {
+				continue
+			}
+		}
 
 		let argScope = newArgs
 		for (const argumentIndex in rawArgs) {
@@ -43,8 +63,8 @@ export function parse(code) {
 				argScope.push(argument)
 			}
 		}
-
 		if (newArgs.length == 0) continue
+
 
 		const isComment = rawArgs?.at(0)?.at(0) == "#"
 
@@ -216,7 +236,7 @@ function parseRawTextTemplate(str) {
 			templatesOpened -= 1
 			const IS_SELECTOR = currentText.trim().at(0) == "@"
 			const IS_RAWTEXT = currentText.trim().at(0) == "{" && currentText.trim().at(-1) == "}"
-			const IS_SCORE = currentText.trim().match(/^([a-z]*)\[(.*)\]$/m)
+			const IS_SCORE = currentText.trim().match(/^([a-zA-Z_-]*)\[(.*)\]$/m)
 			const IS_LANG = currentText.trim().match(/^[a-zA-Z0-9\.]*$/m)
 			if (IS_SELECTOR) {
 				rawtext.push(

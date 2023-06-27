@@ -9,7 +9,12 @@
     "profiles": {
       "default": {
         "filters": [
-          { "filter": "functioner" }
+          {
+            "filter": "functioner",
+            "settings": {
+              "flags": [ "@development", "@example" ]
+            }
+          }
         ],
         "export": {
           "target": "local",
@@ -18,7 +23,7 @@
       },
       "development": {
         "filters": [
-          { "filter": "functioner" }
+          { "filter": "functioner", "settings": { "flags": [ "@bedrock" ] } }
         ],
         "export": {
           "target": "development",

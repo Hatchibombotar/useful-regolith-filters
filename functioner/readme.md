@@ -77,6 +77,41 @@ tellraw @s `my score is {scoreboard[@s]}`
 tellraw @s `{example.langcode.1}`
 ```
 
+### Feature Flags
+Allows you to add/remove functions or commands from files based off of what flags are enabled.
+
+This function will say dev if the `@development` feature flag is present, and `@production` if the production flag is present.
+```
+@development say dev!
+@production say prod!
+```
+
+This function will only be compiled if the `@development` feature flag is present.
+```
+@development
+say Hello
+```
+
+Enable feature flags using the flags property in settings
+```json
+    "profiles": {
+      "default": {
+        "filters": [
+          {
+            "filter": "functioner",
+            "settings": {
+              "flags": [ "@development", "@example" ]
+            }
+          }
+        ],
+        "export": {
+          "target": "local",
+          "readOnly": false
+        }
+      },
+    }
+```
+
 ---
 
 ## Installation
@@ -116,7 +151,8 @@ With this filter, you can configure how it works using the settings object:
 These are the settings that can be modified:
 ```jsonc
 "settings": {
-  "searchPattern": "BP/**/*.mcfunction" // a glob pattern for the files to be scanned. by default looks at all .mcfunction files in the BP.
+  "searchPattern": "BP/**/*.mcfunction", // a glob pattern for the files to be scanned. by default looks at all .mcfunction files in the BP.
+  "flags": [] // a list of feature flags that causes some functions to be optionally compiled.
 }
 ```
 

@@ -12,6 +12,10 @@ function main() {
     for (const filePath of glob.sync(searchPattern)) {
         const func = String(fs.readFileSync(filePath))
         const ast = parse(func)
+        if (ast == undefined) {
+            fs.rmSync(filePath)
+            continue
+        }
         generate(ast, filePath)
     }
 }
