@@ -4,6 +4,7 @@ export function parse(texts) {
 		if ([translation[0], translation[1]].includes("#")) continue
 		if (translation == "") continue
 		const [key, value] = translation.split("=")
+		if (value == undefined) continue
 		jsonTexts[key] = value
 	}
 	return jsonTexts

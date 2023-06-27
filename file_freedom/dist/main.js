@@ -247,6 +247,8 @@ function parse(texts) {
     if (translation == "")
       continue;
     const [key, value] = translation.split("=");
+    if (value == void 0)
+      continue;
     jsonTexts[key] = value;
   }
   return jsonTexts;
