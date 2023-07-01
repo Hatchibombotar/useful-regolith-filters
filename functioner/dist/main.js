@@ -33,7 +33,7 @@ function parse(code) {
     children: []
   };
   let lines = code.split("\n");
-  if (lines[0].trim()[0] == "@") {
+  if (lines[0].trim()[0] == "@" && lines.length == 1) {
     if ((settings.flags ?? []).includes(lines[0].trim())) {
       lines = lines.slice(1);
     } else {
