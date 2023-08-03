@@ -22,7 +22,6 @@ export function parse(code) {
 
 		if (rawArgs[0][0] == "@") {
 			if ((settings.flags ?? []).includes(rawArgs[0])) {
-				console.log(rawArgs[0])
 				rawArgs = rawArgs.slice(1)
 			} else {
 				continue

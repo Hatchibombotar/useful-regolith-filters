@@ -77,6 +77,20 @@ tellraw @s `my score is {scoreboard[@s]}`
 tellraw @s `{example.langcode.1}`
 ```
 
+### Function Arguments
+Functioner adds a new `with` execute subcommand, that allows you to pass values into functions.
+
+Example:
+```mcfunction
+# example.mcfunction:
+execute with x 2 run function ./other_function
+
+# other_function.mcfunction:
+tellraw @a `Argument x = {arguments[x]}`
+```
+You can then access arguments through the `arguments` scoreboard.
+
+
 ### Feature Flags
 Allows you to add/remove functions or commands from files based off of what flags are enabled.
 

@@ -48,7 +48,6 @@ function parse(code) {
       continue;
     if (rawArgs[0][0] == "@") {
       if ((settings.flags ?? []).includes(rawArgs[0])) {
-        console.log(rawArgs[0]);
         rawArgs = rawArgs.slice(1);
       } else {
         continue;
@@ -277,15 +276,37 @@ function generate(ast, filePath) {
     let command = [];
     const loopTriggered = commandAst.args.at(0) == "execute" && commandAst.args.at(-1) == "repeat";
     const functionCalled = commandAst.args.at(0) == "function";
+    const is_execute = commandAst.args.at(0) == "execute";
     if (functionCalled) {
       const resolvedPath = resolvePath(filePathToFunctionPath(import_path.default.parse(filePath).dir), commandAst.args.at(1));
       command.push(
         `function ${resolvedPath}`
       );
     } else {
-      for (const argument of commandAst.args) {
+      for (let index = 0; index < commandAst.args.length; index++) {
+        const argument = commandAst.args[index];
         if (loopTriggered && argument == "repeat") {
           command.push(`run function ${filePathToFunctionPath(filePath)}`);
+        } else if (argument == "with") {
+          let value_type;
+          if (commandAst.args[index + 2] == "score") {
+            value_type = "score";
+          } else {
+            value_type = "literal";
+          }
+          let param_name = commandAst.args[index + 1];
+          newLines.push("scoreboard objectives add arguments dummy");
+          if (value_type == "literal") {
+            let value = commandAst.args[index + 2];
+            newLines.push(`scoreboard players set ${param_name} arguments ${value}`);
+            index += 2;
+          } else {
+            let target = commandAst.args[index + 3];
+            let objective = commandAst.args[index + 4];
+            newLines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`);
+            index += 4;
+          }
+          continue;
         } else if (typeof argument == "string") {
           command.push(argument);
         } else if (argument.type == "subfunction") {
