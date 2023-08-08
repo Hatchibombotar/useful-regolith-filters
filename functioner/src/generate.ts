@@ -43,8 +43,6 @@ export function generate(ast, filePath) {
                 const argument = command_ast.args[index]
                 if (loop_triggered && argument == "repeat") {
                     command.push(`run function ${filePathToFunctionPath(filePath)}`)
-                } else if (argument == "with") {                    
-                    continue
                 } else if (typeof argument == "string") {
                     command.push(argument)
                 } else if (argument.type == "subfunction") {
