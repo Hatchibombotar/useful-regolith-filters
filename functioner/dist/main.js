@@ -278,33 +278,38 @@ function generate(ast, filePath) {
     const is_execute = command_ast.args.at(0) == "execute";
     if (function_called) {
       const resolvedPath = resolvePath(filePathToFunctionPath(import_path.default.parse(filePath).dir), command_ast.args.at(1));
-      const with_subcommand = command_ast.args.at(2);
       command.push(
         `function ${resolvedPath}`
       );
-      let value_type;
-      if (command_ast.args.at(4) == "score") {
-        value_type = "score";
-      } else {
-        value_type = "literal";
-      }
-      let param_name = command_ast.args.at(3);
-      new_lines.push("scoreboard objectives add arguments dummy");
-      if (value_type == "literal") {
-        let value = command_ast.args[4];
-        new_lines.push(`scoreboard players set ${param_name} arguments ${value}`);
-      } else {
-        let target = command_ast.args.at(5);
-        let objective = command_ast.args.at(6);
-        new_lines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`);
+      for (let index = 2; index < command_ast.args.length; index++) {
+        const with_subcommand = command_ast.args.at(index);
+        if (with_subcommand == void 0)
+          break;
+        let value_type;
+        if (command_ast.args.at(index + 2) == "score") {
+          value_type = "score";
+        } else {
+          value_type = "literal";
+        }
+        let param_name = command_ast.args.at(index + 1);
+        new_lines.push("scoreboard objectives add arguments dummy");
+        if (value_type == "literal") {
+          let value = command_ast.args.at(index + 2);
+          new_lines.push(`scoreboard players set ${param_name} arguments ${value}`);
+          index += 2;
+        } else {
+          let target = command_ast.args.at(index + 3);
+          let objective = command_ast.args.at(index + 4);
+          console.log(target, objective, command_ast.args, index + 3);
+          new_lines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`);
+          index += 4;
+        }
       }
     } else {
       for (let index = 0; index < command_ast.args.length; index++) {
         const argument = command_ast.args[index];
         if (loop_triggered && argument == "repeat") {
           command.push(`run function ${filePathToFunctionPath(filePath)}`);
-        } else if (argument == "with") {
-          continue;
         } else if (typeof argument == "string") {
           command.push(argument);
         } else if (argument.type == "subfunction") {
@@ -328,19 +333,19 @@ function generate(ast, filePath) {
 }
 function resolvePath(...paths) {
   const current_path = [];
-  let splitPaths = [];
-  for (const [pathIndex, path2] of Object.entries(paths)) {
-    let currentSplitPath = path2.split("/");
-    if (currentSplitPath[currentSplitPath.length - 1].includes(".") && Number(pathIndex) != paths.length - 1) {
-      currentSplitPath.pop();
+  let split_paths = [];
+  for (const [path_index, path2] of Object.entries(paths)) {
+    let current_split_path = path2.split("/");
+    if (current_split_path[current_split_path.length - 1].includes(".") && Number(path_index) != paths.length - 1) {
+      current_split_path.pop();
     }
-    if (currentSplitPath[0] == ".." || currentSplitPath[0] == "." || path2.at(0) == "/") {
-      splitPaths = [...splitPaths, ...currentSplitPath];
+    if (current_split_path[0] == ".." || current_split_path[0] == "." || path2.at(0) == "/") {
+      split_paths = [...split_paths, ...current_split_path];
     } else {
-      splitPaths = currentSplitPath;
+      split_paths = current_split_path;
     }
   }
-  for (const path2 of splitPaths) {
+  for (const path2 of split_paths) {
     if (path2 == "" || path2 == ".")
       continue;
     if (path2 == "..") {
@@ -352,8 +357,8 @@ function resolvePath(...paths) {
   return current_path.join("/");
 }
 var joinPaths = (...paths) => {
-  const newPaths = paths.filter((path2) => path2 != "");
-  return newPaths.join("/");
+  const new_paths = paths.filter((path2) => path2 != "");
+  return new_paths.join("/");
 };
 function filePathToFunctionPath(filePath) {
   const { dir, name, ext } = import_path.default.parse(filePath);
