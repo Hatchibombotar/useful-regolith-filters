@@ -13,38 +13,37 @@ export function generate(ast, filePath) {
 
         if (functionCalled) {
             const resolvedPath = resolvePath(filePathToFunctionPath(path.parse(filePath).dir,), commandAst.args.at(1))
+
+            const with_subcommand = commandAst.args.at(2)
             command.push(
                 `function ${resolvedPath}`
             )
+            // 2    3       4     5      6
+            // with <PARAM> <VALUE>
+            // with <PARAM> score <TARGET> <OBJECTIVE>
+            let value_type: "literal" | "score";
+            if (commandAst.args.at(4) == "score") {
+                value_type = "score"
+            } else {
+                value_type = "literal"
+            }
+            let param_name = commandAst.args.at(3)
+            
+            newLines.push("scoreboard objectives add arguments dummy")
+            if (value_type == "literal") {
+                let value = commandAst.args[4]
+                newLines.push(`scoreboard players set ${param_name} arguments ${value}`)
+            } else {
+                let target = commandAst.args.at(5)
+                let objective = commandAst.args.at(6)
+                newLines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`)
+            }
         } else {
             for (let index = 0; index < commandAst.args.length; index++) {
                 const argument = commandAst.args[index]
                 if (loopTriggered && argument == "repeat") {
                     command.push(`run function ${filePathToFunctionPath(filePath)}`)
-                } else if (argument == "with") {
-                    // 0    1       2     3       4
-                    // with <PARAM> <VALUE>
-                    // with <PARAM> score <TARGET> <OBJECTIVE>
-                    let value_type: "literal" | "score";
-                    if (commandAst.args[index + 2] == "score") {
-                        value_type = "score"
-                    } else {
-                        value_type = "literal"
-                    }
-                    let param_name = commandAst.args[index + 1]
-                    
-                    newLines.push("scoreboard objectives add arguments dummy")
-                    if (value_type == "literal") {
-                        let value = commandAst.args[index + 2]
-                        newLines.push(`scoreboard players set ${param_name} arguments ${value}`)
-                        index += 2 // skip next 2 arguments
-                    } else {
-                        let target = commandAst.args[index + 3]
-                        let objective = commandAst.args[index + 4]
-                        newLines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`)
-                        index += 4 // skip next 4 arguments
-                    }
-                    
+                } else if (argument == "with") {                    
                     continue
                 } else if (typeof argument == "string") {
                     command.push(argument)

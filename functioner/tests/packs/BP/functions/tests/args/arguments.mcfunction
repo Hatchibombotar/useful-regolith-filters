@@ -1,4 +1,4 @@
-execute with x 2 run function ./other_function
+function ./other_function with x 2
 
 # execute with x score value player_count run function ./other_function
 
