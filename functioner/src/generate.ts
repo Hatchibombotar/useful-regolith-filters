@@ -2,19 +2,19 @@ import fs from "fs"
 import path from "path"
 
 export function generate(ast, filePath) {
-    const newLines: string[] = []
-    for (const commandAst of ast.children) {
-        if (commandAst.type == "comment") continue
+    const new_lines: string[] = []
+    for (const command_ast of ast.children) {
+        if (command_ast.type == "comment") continue
         let command: string[] = []
 
-        const loopTriggered = commandAst.args.at(0) == "execute" && commandAst.args.at(-1) == "repeat"
-        const functionCalled = commandAst.args.at(0) == "function"
-        const is_execute = commandAst.args.at(0) == "execute"
+        const loop_triggered = command_ast.args.at(0) == "execute" && command_ast.args.at(-1) == "repeat"
+        const function_called = command_ast.args.at(0) == "function"
+        const is_execute = command_ast.args.at(0) == "execute"
 
-        if (functionCalled) {
-            const resolvedPath = resolvePath(filePathToFunctionPath(path.parse(filePath).dir,), commandAst.args.at(1))
+        if (function_called) {
+            const resolvedPath = resolvePath(filePathToFunctionPath(path.parse(filePath).dir,), command_ast.args.at(1))
 
-            const with_subcommand = commandAst.args.at(2)
+            const with_subcommand = command_ast.args.at(2)
             command.push(
                 `function ${resolvedPath}`
             )
@@ -22,26 +22,26 @@ export function generate(ast, filePath) {
             // with <PARAM> <VALUE>
             // with <PARAM> score <TARGET> <OBJECTIVE>
             let value_type: "literal" | "score";
-            if (commandAst.args.at(4) == "score") {
+            if (command_ast.args.at(4) == "score") {
                 value_type = "score"
             } else {
                 value_type = "literal"
             }
-            let param_name = commandAst.args.at(3)
+            let param_name = command_ast.args.at(3)
             
-            newLines.push("scoreboard objectives add arguments dummy")
+            new_lines.push("scoreboard objectives add arguments dummy")
             if (value_type == "literal") {
-                let value = commandAst.args[4]
-                newLines.push(`scoreboard players set ${param_name} arguments ${value}`)
+                let value = command_ast.args[4]
+                new_lines.push(`scoreboard players set ${param_name} arguments ${value}`)
             } else {
-                let target = commandAst.args.at(5)
-                let objective = commandAst.args.at(6)
-                newLines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`)
+                let target = command_ast.args.at(5)
+                let objective = command_ast.args.at(6)
+                new_lines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`)
             }
         } else {
-            for (let index = 0; index < commandAst.args.length; index++) {
-                const argument = commandAst.args[index]
-                if (loopTriggered && argument == "repeat") {
+            for (let index = 0; index < command_ast.args.length; index++) {
+                const argument = command_ast.args[index]
+                if (loop_triggered && argument == "repeat") {
                     command.push(`run function ${filePathToFunctionPath(filePath)}`)
                 } else if (argument == "with") {                    
                     continue
@@ -49,7 +49,7 @@ export function generate(ast, filePath) {
                     command.push(argument)
                 } else if (argument.type == "subfunction") {
                     const { dir, name, ext } = path.parse(filePath)
-                    const functionName = name + "-" + commandAst.line
+                    const functionName = name + "-" + command_ast.line
                     const newPath = path.join(dir, functionName + ext)
                     const functionPath = filePathToFunctionPath(newPath)
     
@@ -64,52 +64,52 @@ export function generate(ast, filePath) {
             }
         }
 
-        newLines.push(command.join(" "))
+        new_lines.push(command.join(" "))
     }
-    const fileContent = newLines.join("\n")
-    fs.writeFileSync(filePath, fileContent)
+    const file_content = new_lines.join("\n")
+    fs.writeFileSync(filePath, file_content)
 }
 
 function resolvePath(...paths: string[]) {
-	const currentPath: string[] = [];
-	let splitPaths: string[] = [];
-	for (const [pathIndex, path] of Object.entries(paths)) {
-		let currentSplitPath = path.split("/");
+	const current_path: string[] = [];
+	let split_paths: string[] = [];
+	for (const [path_index, path] of Object.entries(paths)) {
+		let current_split_path = path.split("/");
 
 		// if path contains file, remove file from the path
-		if (currentSplitPath[currentSplitPath.length - 1].includes(".") && (Number(pathIndex) != paths.length - 1)) {
-			currentSplitPath.pop();
+		if (current_split_path[current_split_path.length - 1].includes(".") && (Number(path_index) != paths.length - 1)) {
+			current_split_path.pop();
 		}
 
-		if (currentSplitPath[0] == ".." || currentSplitPath[0] == "." || path.at(0) == "/") {
+		if (current_split_path[0] == ".." || current_split_path[0] == "." || path.at(0) == "/") {
 			// if file path is relative
-			splitPaths = [...splitPaths, ...currentSplitPath];
+			split_paths = [...split_paths, ...current_split_path];
 		} else {
-			splitPaths = currentSplitPath;
+			split_paths = current_split_path;
 		}
 	}
 
-	for (const path of splitPaths) {
+	for (const path of split_paths) {
 		if (path == "" || path == ".")
 			continue;
 
 		if (path == "..") {
 			// get out of current directory
-			currentPath.pop();
+			current_path.pop();
 		} else {
-			currentPath.push(path);
+			current_path.push(path);
 		}
 	}
 
-	return currentPath.join("/");
+	return current_path.join("/");
 }
 
 const joinPaths = (...paths) => {
-    const newPaths = paths.filter((path) => path != "")
-    return newPaths.join("/")
+    const new_paths = paths.filter((path) => path != "")
+    return new_paths.join("/")
 }
 
-export function filePathToFunctionPath(filePath) {
+export function filePathToFunctionPath(filePath: string) {
     const { dir, name, ext } = path.parse(filePath)
 
     return joinPaths(path.relative("BP/functions", dir).replace(/\\/g, "/"), name)

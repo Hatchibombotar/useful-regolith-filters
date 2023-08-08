@@ -5,18 +5,18 @@ import { parse } from "./parse"
 import { generate } from "./generate"
 
 const settings = JSON.parse(process.argv[2] ?? "{}")
-const searchPattern = settings.searchPattern ?? "BP/**/*.mcfunction"
+const search_pattern = settings.searchPattern ?? "BP/**/*.mcfunction"
 
 function main() {
     // Extract Functions
-    for (const filePath of glob.sync(searchPattern)) {
-        const func = String(fs.readFileSync(filePath))
+    for (const file_path of glob.sync(search_pattern)) {
+        const func = String(fs.readFileSync(file_path))
         const ast = parse(func)
         if (ast == undefined) {
-            fs.rmSync(filePath)
+            fs.rmSync(file_path)
             continue
         }
-        generate(ast, filePath)
+        generate(ast, file_path)
     }
 }
 main()

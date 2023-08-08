@@ -13,24 +13,24 @@ export function parse(code) {
 		}
 	}
 
-	let currentScope = ast
-	for (const [lineNumber, line] of Object.entries<string>(lines)) {
-		let rawArgs: string[] = commandArgs(line.trim())
-		const newArgs: any[] = []
+	let current_scope = ast
+	for (const [line_number, line_content] of Object.entries<string>(lines)) {
+		let raw_args: string[] = commandArgs(line_content.trim())
+		const new_args: any[] = []
 
-		if (rawArgs.length == 0) continue
+		if (raw_args.length == 0) continue
 
-		if (rawArgs[0][0] == "@") {
-			if ((settings.flags ?? []).includes(rawArgs[0])) {
-				rawArgs = rawArgs.slice(1)
+		if (raw_args[0][0] == "@") {
+			if ((settings.flags ?? []).includes(raw_args[0])) {
+				raw_args = raw_args.slice(1)
 			} else {
 				continue
 			}
 		}
 
-		let argScope = newArgs
-		for (const argumentIndex in rawArgs) {
-			const argument = rawArgs[argumentIndex]
+		let arg_scope = new_args
+		for (const argument_index in raw_args) {
+			const argument = raw_args[argument_index]
 
 			// include the following line if you want default rawtext objects to be parsed.
 			// const isObject = argument.at(0) == "{" && argument.at(argument.length - 1) == "}"
@@ -38,16 +38,16 @@ export function parse(code) {
 			// argScope.push(isObject ? { type: "rawtext", ...JSON.parse(argument)} : argument)
 
 			if (argument.at(0) == "`" && argument.at(-1) == "`") {
-				argScope.push(
+				arg_scope.push(
 					{
 						"type": "rawtext",
 						...parseRawTextTemplate(argument.slice(1, -1))
 					}
 				)
-			} else if (argScope.at(0) == "execute" && argument == "run" && rawArgs.at(Number(argumentIndex) + 1) != "{") {
-				argScope.push(argument)
+			} else if (arg_scope.at(0) == "execute" && argument == "run" && raw_args.at(Number(argument_index) + 1) != "{") {
+				arg_scope.push(argument)
 
-				const i = argScope.push({
+				const i = arg_scope.push({
 					type: "subfunction",
 					children: [
 						{
@@ -57,61 +57,59 @@ export function parse(code) {
 					]
 				}) - 1
 		
-				argScope = argScope[i].children[0].args
+				arg_scope = arg_scope[i].children[0].args
 			} else {
-				argScope.push(argument)
+				arg_scope.push(argument)
 			}
 		}
-		if (newArgs.length == 0) continue
+		if (new_args.length == 0) continue
 
 
-		const isComment = rawArgs?.at(0)?.at(0) == "#"
+		const is_comment = raw_args?.at(0)?.at(0) == "#"
 
-		if (isComment && typeof newArgs[0] == "string") {
-			currentScope.children.push({
+		if (is_comment && typeof new_args[0] == "string") {
+			current_scope.children.push({
 				type: "comment",
-				content: newArgs[0],
-				line: Number(lineNumber)
+				content: new_args[0],
+				line: Number(line_number)
 			})
 			continue
 		}
 
-		const commandObject = {
+		const command_object = {
 			type: "command",
-			args: newArgs,
-			line: Number(lineNumber)
+			args: new_args,
+			line: Number(line_number)
 		}
 
-		const commandIndex = currentScope.children.push(commandObject) - 1
+		const command_index = current_scope.children.push(command_object) - 1
 
 
-		if (rawArgs.at(rawArgs.length - 1) == "{") {
-			newArgs[rawArgs.length - 1] = {
+		if (raw_args.at(raw_args.length - 1) == "{") {
+			new_args[raw_args.length - 1] = {
 				type: "subfunction",
 				children: [],
-				parent: currentScope
+				parent: current_scope
 			}
 
-			currentScope = currentScope.children[commandIndex].args[newArgs.length - 1]
-		} else if (rawArgs[0] == "}") {
-			let previousScope = currentScope
+			current_scope = current_scope.children[command_index].args[new_args.length - 1]
+		} else if (raw_args[0] == "}") {
+			let previous_scope = current_scope
 
-			if (currentScope.parent) currentScope = currentScope.parent
-			previousScope.parent = undefined
-			previousScope.children.splice(commandIndex, 1)
+			if (current_scope.parent) current_scope = current_scope.parent
+			previous_scope.parent = undefined
+			previous_scope.children.splice(command_index, 1)
 		}
 	}
 	return ast
 }
 
-function commandArgs(inputContent) {
+function commandArgs(input_content: string) {
 	const spliters = /[\s\b]/
-	const content = inputContent.trim()
+	const content = input_content.trim()
 
-	const contentLength = content.length
-
-	let cmdArguments: string[] = []
-	let currentArgument = ""
+	let command_arguments: string[] = []
+	let current_argument = ""
 
 	const SINGLE_QUOTE = "'"
 	const DOUBLE_QUOTE = '"'
@@ -121,7 +119,7 @@ function commandArgs(inputContent) {
 	const SQUARE_BRACKETS = ["[", "]"]
 	const COMMENT = "#"
 
-	let inComment = false
+	let in_comment = false
 
 	let brackets = {
 		brackets: {
@@ -129,7 +127,7 @@ function commandArgs(inputContent) {
 			[String(ROUND_BRACKETS)]: 0,
 			[String(SQUARE_BRACKETS)]: 0,
 		},
-		get isOpen() {
+		get is_open() {
 			return this.brackets[String(CURLY_BRACKETS)] || this.brackets[String(ROUND_BRACKETS)] || this.brackets[String(SQUARE_BRACKETS)]
 		}
 	}
@@ -138,111 +136,111 @@ function commandArgs(inputContent) {
 		[SINGLE_QUOTE]: false,
 		[DOUBLE_QUOTE]: false,
 		[BACKTICK]: false,
-		get isOpen() {
+		get is_open() {
 			return this[SINGLE_QUOTE] || this[DOUBLE_QUOTE] || this[BACKTICK]
 		}
 	}
 
-	let escapeNextCharacter = false
-	for (let i = 0; i <= contentLength; i++) {
-		const currentCharacter = content[i]
+	let escape_next_character = false
+	for (let i = 0; i <= content.length; i++) {
+		const current_character = content[i]
 
-		if (currentCharacter == "/" && i == 0) {
+		if (current_character == "/" && i == 0) {
 			continue
 		}
 
-		if (currentCharacter == "\\") {
-			escapeNextCharacter = true
+		if (current_character == "\\") {
+			escape_next_character = true
 			continue
 		}
 
-		if (escapeNextCharacter) {
-			currentArgument += currentCharacter
-			escapeNextCharacter = false
+		if (escape_next_character) {
+			current_argument += current_character
+			escape_next_character = false
 			continue
 		}
 
-		if (inComment) {
-			if (currentCharacter === undefined) {
-				if (currentArgument) cmdArguments.push(currentArgument)
-				currentArgument = ""
+		if (in_comment) {
+			if (current_character === undefined) {
+				if (current_argument) command_arguments.push(current_argument)
+				current_argument = ""
 			} else {
-				currentArgument += currentCharacter
+				current_argument += current_character
 			}
 			continue
 		}
 
 		// if character is a quote
-		if (currentCharacter in quotes) {
-			quotes[currentCharacter] = !quotes[currentCharacter]
+		if (current_character in quotes) {
+			quotes[current_character] = !quotes[current_character]
 		}
 
 		// if character is a bracket
 		for (const key of Object.keys(brackets.brackets)) {
-			const bracketElements = key.split(",")
-			if (currentCharacter == bracketElements[0]) brackets.brackets[key] += 1
-			if (currentCharacter == bracketElements[1]) brackets.brackets[key] -= 1
+			const [open_bracket, close_bracket] = key.split(",")
+			if (current_character == open_bracket) brackets.brackets[key] += 1
+			if (current_character == close_bracket) brackets.brackets[key] -= 1
 		}
 
 		if ( // quotes and brackets closed and there is a space
-			!quotes.isOpen && !brackets.isOpen
-			&& spliters.test(currentCharacter)
-			|| currentCharacter === undefined
+			!quotes.is_open && !brackets.is_open
+			&& spliters.test(current_character)
+			|| current_character === undefined
 		) {
-			if (currentArgument) cmdArguments.push(currentArgument)
-			currentArgument = ""
+			if (current_argument) command_arguments.push(current_argument)
+			current_argument = ""
 			continue
 		}
 
 		// if character is a comment
-		if (currentCharacter == COMMENT) inComment = true
+		if (current_character == COMMENT) in_comment = true
 
-		currentArgument += currentCharacter
+		current_argument += current_character
 	}
 
 	// if (currentArgument) {
 	// 	cmdArguments.push(currentArgument)
 	// }
 
-	return cmdArguments
+	return command_arguments
 }
 
-function parseRawTextTemplate(str) {
+function parseRawTextTemplate(str: string) {
 	const rawtext: any[] = []
-	let escapeNextCharacter = false
-	let templatesOpened = 0
-	let currentText = ""
+	let escape_next_character = false
+	let templates_opened = 0
+	let current_text = ""
 
 	for (const i of str) {
 		if (i == "\\") {
-			escapeNextCharacter = true
-		} else if (escapeNextCharacter) {
-			escapeNextCharacter = false
-			currentText += i
-		} else if (i == "{" && templatesOpened != 0) {
-			currentText += i
-			templatesOpened += 1
-		} else if (i == "{" && templatesOpened == 0) {
-			templatesOpened += 1
+			escape_next_character = true
+		} else if (escape_next_character) {
+			escape_next_character = false
+			current_text += i
+		} else if (i == "{" && templates_opened != 0) {
+			current_text += i
+			templates_opened += 1
+		} else if (i == "{" && templates_opened == 0) {
+			templates_opened += 1
 			rawtext.push(
-				{ "text": currentText }
+				{ "text": current_text }
 			)
-			currentText = ""
-		} else if (i == "}" && templatesOpened > 1) {
-			templatesOpened -= 1
-			currentText += i
-		} else if (i == "}" && templatesOpened == 1) {
-			templatesOpened -= 1
-			const IS_SELECTOR = currentText.trim().at(0) == "@"
-			const IS_RAWTEXT = currentText.trim().at(0) == "{" && currentText.trim().at(-1) == "}"
-			const IS_SCORE = currentText.trim().match(/^([a-zA-Z_-]*)\[(.*)\]$/m)
-			const IS_LANG = currentText.trim().match(/^[a-zA-Z0-9\.]*$/m)
+			current_text = ""
+		} else if (i == "}" && templates_opened > 1) {
+			templates_opened -= 1
+			current_text += i
+		} else if (i == "}" && templates_opened == 1) {
+			templates_opened -= 1
+			const IS_SELECTOR = current_text.trim().at(0) == "@"
+			const IS_RAWTEXT = current_text.trim().at(0) == "{" && current_text.trim().at(-1) == "}"
+			const IS_SCORE = current_text.trim().match(/^([a-zA-Z_-]*)\[(.*)\]$/m)
+			const IS_LANG = current_text.trim().match(/^[a-zA-Z0-9\.]*$/m)
 			if (IS_SELECTOR) {
 				rawtext.push(
-					{ "selector": currentText }
+					{ "selector": current_text }
 				)
 			} else if (IS_SCORE) {
-				const [,objective, name ] = IS_SCORE
+				const [, objective, name ] = IS_SCORE
 				rawtext.push(
 					{ 
 						"score": {
@@ -252,25 +250,25 @@ function parseRawTextTemplate(str) {
 				)
 			} else if (IS_LANG) {
 				rawtext.push(
-					{ "translate": currentText }
+					{ "translate": current_text }
 				)
 			} else if (IS_RAWTEXT) {
 				rawtext.push(
-					JSON.parse(currentText)
+					JSON.parse(current_text)
 				)
 			} else {
-				console.error("Unexpected rawtext input:", currentText)
+				console.error("Unexpected rawtext input:", current_text)
 			}
-			currentText = ""
+			current_text = ""
 		} else {
-			currentText += i
+			current_text += i
 		}
 	}
-	if (currentText.length > 1) {
+	if (current_text.length > 1) {
 		rawtext.push(
-			{ "text": currentText }
+			{ "text": current_text }
 		)
-		currentText = ""
+		current_text = ""
 	}
 	return {
 		rawtext

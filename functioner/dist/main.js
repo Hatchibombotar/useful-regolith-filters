@@ -40,32 +40,32 @@ function parse(code) {
       return void 0;
     }
   }
-  let currentScope = ast;
-  for (const [lineNumber, line] of Object.entries(lines)) {
-    let rawArgs = commandArgs(line.trim());
-    const newArgs = [];
-    if (rawArgs.length == 0)
+  let current_scope = ast;
+  for (const [line_number, line_content] of Object.entries(lines)) {
+    let raw_args = commandArgs(line_content.trim());
+    const new_args = [];
+    if (raw_args.length == 0)
       continue;
-    if (rawArgs[0][0] == "@") {
-      if ((settings.flags ?? []).includes(rawArgs[0])) {
-        rawArgs = rawArgs.slice(1);
+    if (raw_args[0][0] == "@") {
+      if ((settings.flags ?? []).includes(raw_args[0])) {
+        raw_args = raw_args.slice(1);
       } else {
         continue;
       }
     }
-    let argScope = newArgs;
-    for (const argumentIndex in rawArgs) {
-      const argument = rawArgs[argumentIndex];
+    let arg_scope = new_args;
+    for (const argument_index in raw_args) {
+      const argument = raw_args[argument_index];
       if (argument.at(0) == "`" && argument.at(-1) == "`") {
-        argScope.push(
+        arg_scope.push(
           {
             "type": "rawtext",
             ...parseRawTextTemplate(argument.slice(1, -1))
           }
         );
-      } else if (argScope.at(0) == "execute" && argument == "run" && rawArgs.at(Number(argumentIndex) + 1) != "{") {
-        argScope.push(argument);
-        const i = argScope.push({
+      } else if (arg_scope.at(0) == "execute" && argument == "run" && raw_args.at(Number(argument_index) + 1) != "{") {
+        arg_scope.push(argument);
+        const i = arg_scope.push({
           type: "subfunction",
           children: [
             {
@@ -74,51 +74,50 @@ function parse(code) {
             }
           ]
         }) - 1;
-        argScope = argScope[i].children[0].args;
+        arg_scope = arg_scope[i].children[0].args;
       } else {
-        argScope.push(argument);
+        arg_scope.push(argument);
       }
     }
-    if (newArgs.length == 0)
+    if (new_args.length == 0)
       continue;
-    const isComment = ((_a = rawArgs == null ? void 0 : rawArgs.at(0)) == null ? void 0 : _a.at(0)) == "#";
-    if (isComment && typeof newArgs[0] == "string") {
-      currentScope.children.push({
+    const is_comment = ((_a = raw_args == null ? void 0 : raw_args.at(0)) == null ? void 0 : _a.at(0)) == "#";
+    if (is_comment && typeof new_args[0] == "string") {
+      current_scope.children.push({
         type: "comment",
-        content: newArgs[0],
-        line: Number(lineNumber)
+        content: new_args[0],
+        line: Number(line_number)
       });
       continue;
     }
-    const commandObject = {
+    const command_object = {
       type: "command",
-      args: newArgs,
-      line: Number(lineNumber)
+      args: new_args,
+      line: Number(line_number)
     };
-    const commandIndex = currentScope.children.push(commandObject) - 1;
-    if (rawArgs.at(rawArgs.length - 1) == "{") {
-      newArgs[rawArgs.length - 1] = {
+    const command_index = current_scope.children.push(command_object) - 1;
+    if (raw_args.at(raw_args.length - 1) == "{") {
+      new_args[raw_args.length - 1] = {
         type: "subfunction",
         children: [],
-        parent: currentScope
+        parent: current_scope
       };
-      currentScope = currentScope.children[commandIndex].args[newArgs.length - 1];
-    } else if (rawArgs[0] == "}") {
-      let previousScope = currentScope;
-      if (currentScope.parent)
-        currentScope = currentScope.parent;
-      previousScope.parent = void 0;
-      previousScope.children.splice(commandIndex, 1);
+      current_scope = current_scope.children[command_index].args[new_args.length - 1];
+    } else if (raw_args[0] == "}") {
+      let previous_scope = current_scope;
+      if (current_scope.parent)
+        current_scope = current_scope.parent;
+      previous_scope.parent = void 0;
+      previous_scope.children.splice(command_index, 1);
     }
   }
   return ast;
 }
-function commandArgs(inputContent) {
+function commandArgs(input_content) {
   const spliters = /[\s\b]/;
-  const content = inputContent.trim();
-  const contentLength = content.length;
-  let cmdArguments = [];
-  let currentArgument = "";
+  const content = input_content.trim();
+  let command_arguments = [];
+  let current_argument = "";
   const SINGLE_QUOTE = "'";
   const DOUBLE_QUOTE = '"';
   const BACKTICK = "`";
@@ -126,14 +125,14 @@ function commandArgs(inputContent) {
   const ROUND_BRACKETS = ["(", ")"];
   const SQUARE_BRACKETS = ["[", "]"];
   const COMMENT = "#";
-  let inComment = false;
+  let in_comment = false;
   let brackets = {
     brackets: {
       [String(CURLY_BRACKETS)]: 0,
       [String(ROUND_BRACKETS)]: 0,
       [String(SQUARE_BRACKETS)]: 0
     },
-    get isOpen() {
+    get is_open() {
       return this.brackets[String(CURLY_BRACKETS)] || this.brackets[String(ROUND_BRACKETS)] || this.brackets[String(SQUARE_BRACKETS)];
     }
   };
@@ -141,92 +140,92 @@ function commandArgs(inputContent) {
     [SINGLE_QUOTE]: false,
     [DOUBLE_QUOTE]: false,
     [BACKTICK]: false,
-    get isOpen() {
+    get is_open() {
       return this[SINGLE_QUOTE] || this[DOUBLE_QUOTE] || this[BACKTICK];
     }
   };
-  let escapeNextCharacter = false;
-  for (let i = 0; i <= contentLength; i++) {
-    const currentCharacter = content[i];
-    if (currentCharacter == "/" && i == 0) {
+  let escape_next_character = false;
+  for (let i = 0; i <= content.length; i++) {
+    const current_character = content[i];
+    if (current_character == "/" && i == 0) {
       continue;
     }
-    if (currentCharacter == "\\") {
-      escapeNextCharacter = true;
+    if (current_character == "\\") {
+      escape_next_character = true;
       continue;
     }
-    if (escapeNextCharacter) {
-      currentArgument += currentCharacter;
-      escapeNextCharacter = false;
+    if (escape_next_character) {
+      current_argument += current_character;
+      escape_next_character = false;
       continue;
     }
-    if (inComment) {
-      if (currentCharacter === void 0) {
-        if (currentArgument)
-          cmdArguments.push(currentArgument);
-        currentArgument = "";
+    if (in_comment) {
+      if (current_character === void 0) {
+        if (current_argument)
+          command_arguments.push(current_argument);
+        current_argument = "";
       } else {
-        currentArgument += currentCharacter;
+        current_argument += current_character;
       }
       continue;
     }
-    if (currentCharacter in quotes) {
-      quotes[currentCharacter] = !quotes[currentCharacter];
+    if (current_character in quotes) {
+      quotes[current_character] = !quotes[current_character];
     }
     for (const key of Object.keys(brackets.brackets)) {
-      const bracketElements = key.split(",");
-      if (currentCharacter == bracketElements[0])
+      const [open_bracket, close_bracket] = key.split(",");
+      if (current_character == open_bracket)
         brackets.brackets[key] += 1;
-      if (currentCharacter == bracketElements[1])
+      if (current_character == close_bracket)
         brackets.brackets[key] -= 1;
     }
     if (
       // quotes and brackets closed and there is a space
-      !quotes.isOpen && !brackets.isOpen && spliters.test(currentCharacter) || currentCharacter === void 0
+      !quotes.is_open && !brackets.is_open && spliters.test(current_character) || current_character === void 0
     ) {
-      if (currentArgument)
-        cmdArguments.push(currentArgument);
-      currentArgument = "";
+      if (current_argument)
+        command_arguments.push(current_argument);
+      current_argument = "";
       continue;
     }
-    if (currentCharacter == COMMENT)
-      inComment = true;
-    currentArgument += currentCharacter;
+    if (current_character == COMMENT)
+      in_comment = true;
+    current_argument += current_character;
   }
-  return cmdArguments;
+  return command_arguments;
 }
 function parseRawTextTemplate(str) {
   const rawtext = [];
-  let escapeNextCharacter = false;
-  let templatesOpened = 0;
-  let currentText = "";
+  let escape_next_character = false;
+  let templates_opened = 0;
+  let current_text = "";
   for (const i of str) {
     if (i == "\\") {
-      escapeNextCharacter = true;
-    } else if (escapeNextCharacter) {
-      escapeNextCharacter = false;
-      currentText += i;
-    } else if (i == "{" && templatesOpened != 0) {
-      currentText += i;
-      templatesOpened += 1;
-    } else if (i == "{" && templatesOpened == 0) {
-      templatesOpened += 1;
+      escape_next_character = true;
+    } else if (escape_next_character) {
+      escape_next_character = false;
+      current_text += i;
+    } else if (i == "{" && templates_opened != 0) {
+      current_text += i;
+      templates_opened += 1;
+    } else if (i == "{" && templates_opened == 0) {
+      templates_opened += 1;
       rawtext.push(
-        { "text": currentText }
+        { "text": current_text }
       );
-      currentText = "";
-    } else if (i == "}" && templatesOpened > 1) {
-      templatesOpened -= 1;
-      currentText += i;
-    } else if (i == "}" && templatesOpened == 1) {
-      templatesOpened -= 1;
-      const IS_SELECTOR = currentText.trim().at(0) == "@";
-      const IS_RAWTEXT = currentText.trim().at(0) == "{" && currentText.trim().at(-1) == "}";
-      const IS_SCORE = currentText.trim().match(/^([a-zA-Z_-]*)\[(.*)\]$/m);
-      const IS_LANG = currentText.trim().match(/^[a-zA-Z0-9\.]*$/m);
+      current_text = "";
+    } else if (i == "}" && templates_opened > 1) {
+      templates_opened -= 1;
+      current_text += i;
+    } else if (i == "}" && templates_opened == 1) {
+      templates_opened -= 1;
+      const IS_SELECTOR = current_text.trim().at(0) == "@";
+      const IS_RAWTEXT = current_text.trim().at(0) == "{" && current_text.trim().at(-1) == "}";
+      const IS_SCORE = current_text.trim().match(/^([a-zA-Z_-]*)\[(.*)\]$/m);
+      const IS_LANG = current_text.trim().match(/^[a-zA-Z0-9\.]*$/m);
       if (IS_SELECTOR) {
         rawtext.push(
-          { "selector": currentText }
+          { "selector": current_text }
         );
       } else if (IS_SCORE) {
         const [, objective, name] = IS_SCORE;
@@ -240,25 +239,25 @@ function parseRawTextTemplate(str) {
         );
       } else if (IS_LANG) {
         rawtext.push(
-          { "translate": currentText }
+          { "translate": current_text }
         );
       } else if (IS_RAWTEXT) {
         rawtext.push(
-          JSON.parse(currentText)
+          JSON.parse(current_text)
         );
       } else {
-        console.error("Unexpected rawtext input:", currentText);
+        console.error("Unexpected rawtext input:", current_text);
       }
-      currentText = "";
+      current_text = "";
     } else {
-      currentText += i;
+      current_text += i;
     }
   }
-  if (currentText.length > 1) {
+  if (current_text.length > 1) {
     rawtext.push(
-      { "text": currentText }
+      { "text": current_text }
     );
-    currentText = "";
+    current_text = "";
   }
   return {
     rawtext
@@ -269,40 +268,40 @@ function parseRawTextTemplate(str) {
 var import_fs = __toESM(require("fs"));
 var import_path = __toESM(require("path"));
 function generate(ast, filePath) {
-  const newLines = [];
-  for (const commandAst of ast.children) {
-    if (commandAst.type == "comment")
+  const new_lines = [];
+  for (const command_ast of ast.children) {
+    if (command_ast.type == "comment")
       continue;
     let command = [];
-    const loopTriggered = commandAst.args.at(0) == "execute" && commandAst.args.at(-1) == "repeat";
-    const functionCalled = commandAst.args.at(0) == "function";
-    const is_execute = commandAst.args.at(0) == "execute";
-    if (functionCalled) {
-      const resolvedPath = resolvePath(filePathToFunctionPath(import_path.default.parse(filePath).dir), commandAst.args.at(1));
-      const with_subcommand = commandAst.args.at(2);
+    const loop_triggered = command_ast.args.at(0) == "execute" && command_ast.args.at(-1) == "repeat";
+    const function_called = command_ast.args.at(0) == "function";
+    const is_execute = command_ast.args.at(0) == "execute";
+    if (function_called) {
+      const resolvedPath = resolvePath(filePathToFunctionPath(import_path.default.parse(filePath).dir), command_ast.args.at(1));
+      const with_subcommand = command_ast.args.at(2);
       command.push(
         `function ${resolvedPath}`
       );
       let value_type;
-      if (commandAst.args.at(4) == "score") {
+      if (command_ast.args.at(4) == "score") {
         value_type = "score";
       } else {
         value_type = "literal";
       }
-      let param_name = commandAst.args.at(3);
-      newLines.push("scoreboard objectives add arguments dummy");
+      let param_name = command_ast.args.at(3);
+      new_lines.push("scoreboard objectives add arguments dummy");
       if (value_type == "literal") {
-        let value = commandAst.args[4];
-        newLines.push(`scoreboard players set ${param_name} arguments ${value}`);
+        let value = command_ast.args[4];
+        new_lines.push(`scoreboard players set ${param_name} arguments ${value}`);
       } else {
-        let target = commandAst.args.at(5);
-        let objective = commandAst.args.at(6);
-        newLines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`);
+        let target = command_ast.args.at(5);
+        let objective = command_ast.args.at(6);
+        new_lines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`);
       }
     } else {
-      for (let index = 0; index < commandAst.args.length; index++) {
-        const argument = commandAst.args[index];
-        if (loopTriggered && argument == "repeat") {
+      for (let index = 0; index < command_ast.args.length; index++) {
+        const argument = command_ast.args[index];
+        if (loop_triggered && argument == "repeat") {
           command.push(`run function ${filePathToFunctionPath(filePath)}`);
         } else if (argument == "with") {
           continue;
@@ -310,7 +309,7 @@ function generate(ast, filePath) {
           command.push(argument);
         } else if (argument.type == "subfunction") {
           const { dir, name, ext } = import_path.default.parse(filePath);
-          const functionName = name + "-" + commandAst.line;
+          const functionName = name + "-" + command_ast.line;
           const newPath = import_path.default.join(dir, functionName + ext);
           const functionPath = filePathToFunctionPath(newPath);
           generate(argument, newPath);
@@ -322,13 +321,13 @@ function generate(ast, filePath) {
         }
       }
     }
-    newLines.push(command.join(" "));
+    new_lines.push(command.join(" "));
   }
-  const fileContent = newLines.join("\n");
-  import_fs.default.writeFileSync(filePath, fileContent);
+  const file_content = new_lines.join("\n");
+  import_fs.default.writeFileSync(filePath, file_content);
 }
 function resolvePath(...paths) {
-  const currentPath = [];
+  const current_path = [];
   let splitPaths = [];
   for (const [pathIndex, path2] of Object.entries(paths)) {
     let currentSplitPath = path2.split("/");
@@ -345,12 +344,12 @@ function resolvePath(...paths) {
     if (path2 == "" || path2 == ".")
       continue;
     if (path2 == "..") {
-      currentPath.pop();
+      current_path.pop();
     } else {
-      currentPath.push(path2);
+      current_path.push(path2);
     }
   }
-  return currentPath.join("/");
+  return current_path.join("/");
 }
 var joinPaths = (...paths) => {
   const newPaths = paths.filter((path2) => path2 != "");
@@ -363,16 +362,16 @@ function filePathToFunctionPath(filePath) {
 
 // src/main.ts
 var settings2 = JSON.parse(process.argv[2] ?? "{}");
-var searchPattern = settings2.searchPattern ?? "BP/**/*.mcfunction";
+var search_pattern = settings2.searchPattern ?? "BP/**/*.mcfunction";
 function main() {
-  for (const filePath of import_glob.default.sync(searchPattern)) {
-    const func = String(import_fs2.default.readFileSync(filePath));
+  for (const file_path of import_glob.default.sync(search_pattern)) {
+    const func = String(import_fs2.default.readFileSync(file_path));
     const ast = parse(func);
     if (ast == void 0) {
-      import_fs2.default.rmSync(filePath);
+      import_fs2.default.rmSync(file_path);
       continue;
     }
-    generate(ast, filePath);
+    generate(ast, file_path);
   }
 }
 main();
