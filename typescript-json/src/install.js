@@ -1,6 +1,7 @@
 const fs = require("fs")
 const ts_config_path = "../../../../tsconfig.json"
 const ts_config_exists = fs.existsSync(ts_config_path)
+const { execSync } = require("child_process");
 
 const filter_tsconfig = {
     "compilerOptions": {
@@ -18,6 +19,7 @@ const filter_tsconfig = {
     }
 }
 
+execSync("npm i @types/node")
 
 if (ts_config_exists) {
     const existing_content = JSON.parse(String(fs.readFileSync(ts_config_path)))
@@ -27,6 +29,8 @@ if (ts_config_exists) {
 } else {
     fs.writeFileSync(ts_config_path, JSON.stringify(filter_tsconfig, null, 4))
 }
+
+
 
 function deepMerge(objects, maxLevel = -1, currentLevel = 0) {
     const isObject = (value) => Object.prototype.toString.call(value) === "[object Object]"
