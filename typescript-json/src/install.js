@@ -13,7 +13,7 @@ const filter_tsconfig = {
     },
     "ts-node": {
         "require": [
-            "tsconfig-paths/register"
+            "./.regolith/cache/filters/typescript-json/node_modules/tsconfig-paths/register"
         ]
     }
 }
