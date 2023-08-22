@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "glob": "^7.2.3"
+    "glob": "^7.2.3",
+    "ts-node": "^10.9.1"
   }
 }

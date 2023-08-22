@@ -6,11 +6,15 @@ const filter_tsconfig = {
     "compilerOptions": {
         "baseUrl": "./",
         "paths": {
-            "typescript-json": ["./typescript-json/library.ts"]
-        },
+            "typescript-json": [
+                "./.regolith/cache/filters/typescript-json/src/library.ts"
+            ]
+        }
     },
     "ts-node": {
-        "require": ["tsconfig-paths/register"]
+        "require": [
+            "tsconfig-paths/register"
+        ]
     }
 }
 
