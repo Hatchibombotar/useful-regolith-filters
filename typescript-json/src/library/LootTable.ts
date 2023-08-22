@@ -15,7 +15,6 @@ type BaseLootTable = {
             weight?: number,
             functions?: any
         }[]
-
     }[]
 }
 
@@ -38,6 +37,6 @@ export default class LootTable {
             file_path,
             JSON.stringify(this.data, null, 4)
         )
-        return "path/to/file"
+        return table_path
     }
 }
