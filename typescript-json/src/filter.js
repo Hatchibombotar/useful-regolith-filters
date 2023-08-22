@@ -1,25 +1,19 @@
 const { spawn } = require('child_process')
 const glob = require("glob").sync
 const fs = require("fs")
+const path = require("path")
 
 const files = glob(
     "BP/entities/**/*.json.ts"
 )
 
-const compilerOptions = {
-    "compilerOptions": {
-        "baseUrl": process.env.ROOT_DIR,
-        "paths": {
-            "typescript-json": ["./typescript-json/library.ts"]
-        },
-    },
-    "ts-node": {
-        "require": ["tsconfig-paths/register"]
-    }
-}
-
 for (const file_path of files) {
-    const script_process = spawn('node', [process.env.ROOT_DIR + '/node_modules/ts-node/dist/bin.js', file_path, "-T", "-O", compilerOptions])
+    const script_process = spawn('node', ['./node_modules/ts-node/dist/bin.js', path.resolve(file_path), "-T"], {
+        cwd: process.env.FILTER_DIR,
+        env: {
+            TMP_DIR: process.cwd()
+        }
+    })
 
     script_process.stdout.on('data', (data) => {
         console.log(String(data))

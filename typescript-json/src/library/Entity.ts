@@ -1,6 +1,7 @@
 import { ComponentList } from "./components"
 import { writeFileSync } from "node:fs"
 import { deepMerge } from "./utils"
+import * as path from "node:path"
 
 type SupportedFormatVersion = "1.20.20"
 
@@ -72,7 +73,10 @@ export default class Entity {
     public save(): string {
         this.checkForErrors()
         const entity_name = this.data["minecraft:entity"].description.identifier.split(":")[1]
-        writeFileSync(`BP/entities/${entity_name}.json`, JSON.stringify(this.data, null, 4))
+        writeFileSync(
+            path.join(process.env.TMP_DIR, `BP/entities/${entity_name}.json`),
+            JSON.stringify(this.data, null, 4)
+        )
 
         return "path/to/file"
     }

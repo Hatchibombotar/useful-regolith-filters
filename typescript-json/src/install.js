@@ -38,9 +38,6 @@ function deepMerge(objects, maxLevel = -1, currentLevel = 0) {
             if (isObject(obj[prop]) && (currentLevel != maxLevel)) {
                 // if the property is a nested object
                 target[prop] = deepMerge([target[prop], obj[prop]], maxLevel, currentLevel + 1)
-            } else if (Array.isArray(obj[prop])) {
-                target[prop] = target[prop] ?? []
-                target[prop] = [...target[prop], ...obj[prop]]
             } else {
                 // for regular property or when the max level has been reached
                 target[prop] = obj[prop]

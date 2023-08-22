@@ -32,7 +32,7 @@ export default class LootTable {
         if (table_path == undefined) {
             table_path = `loot_tables/generated/${randomUUID()}.json`
         }
-        const file_path = path.join("BP/", table_path)
+        const file_path = path.join(process.env.TMP_DIR, "BP/", table_path)
         mkdirSync(path.parse(file_path).dir, { recursive: true })
         writeFileSync(
             file_path,
