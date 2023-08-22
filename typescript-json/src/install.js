@@ -19,7 +19,7 @@ const filter_tsconfig = {
     }
 }
 
-execSync("cd ../../../../ && npm i @types/node")
+execSync("cd ../../../../ && npm init -y && npm i @types/node")
 
 if (ts_config_exists) {
     const existing_content = JSON.parse(String(fs.readFileSync(ts_config_path)))
