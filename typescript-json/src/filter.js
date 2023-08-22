@@ -7,9 +7,6 @@ const files = glob(
     "BP/entities/**/*.json.ts"
 )
 
-if (fs.existsSync("node_modules")) fs.rmSync("node_modules")
-fs.cpSync(process.env.FILTER_DIR + "/node_modules", "./node_modules", {recursive: true})
-
 for (const file_path of files) {
     const script_process = spawn('node', ['./node_modules/ts-node/dist/bin.js', path.resolve(file_path), "-T"], {
         cwd: process.env.FILTER_DIR,
