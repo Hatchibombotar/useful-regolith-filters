@@ -1,5 +1,5 @@
 const fs = require("fs")
-const ts_config_path = "./tsconfig.json"
+const ts_config_path = "../../../../tsconfig.json"
 const ts_config_exists = fs.existsSync(ts_config_path)
 
 const filter_tsconfig = {
