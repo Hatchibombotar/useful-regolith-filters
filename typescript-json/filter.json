@@ -1,0 +1,11 @@
+{
+    "filters": [
+        {
+            "runWith": "nodejs",
+            "script": "./src/filter.js",
+            "name": "Typescript JSON",
+            "description": "Write minecraft json files using Typescript.",
+            "requirements": "./"
+        }
+    ]
+}

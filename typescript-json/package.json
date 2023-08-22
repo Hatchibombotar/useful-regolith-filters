@@ -1,0 +1,14 @@
+{
+  "name": "regolith-typescript-json",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node src/install.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^7.2.3"
+  }
+}
