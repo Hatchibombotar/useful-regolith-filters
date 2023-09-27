@@ -12,7 +12,8 @@ export function generate(ast, filePath) {
         const is_execute = command_ast.args.at(0) == "execute"
 
         if (function_called) {
-            const resolvedPath = resolvePath(filePathToFunctionPath(path.parse(filePath).dir,), command_ast.args.at(1))
+            // broken for normal paths >(
+            const resolvedPath = filePathToFunctionPath(path.resolve(path.dirname(filePath), command_ast.args.at(1)))
 
             command.push(
                 `function ${resolvedPath}`

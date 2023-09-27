@@ -277,7 +277,7 @@ function generate(ast, filePath) {
     const function_called = command_ast.args.at(0) == "function";
     const is_execute = command_ast.args.at(0) == "execute";
     if (function_called) {
-      const resolvedPath = resolvePath(filePathToFunctionPath(import_path.default.parse(filePath).dir), command_ast.args.at(1));
+      const resolvedPath = filePathToFunctionPath(import_path.default.resolve(import_path.default.dirname(filePath), command_ast.args.at(1)));
       command.push(
         `function ${resolvedPath}`
       );
@@ -330,31 +330,6 @@ function generate(ast, filePath) {
   }
   const file_content = new_lines.join("\n");
   import_fs.default.writeFileSync(filePath, file_content);
-}
-function resolvePath(...paths) {
-  const current_path = [];
-  let split_paths = [];
-  for (const [path_index, path2] of Object.entries(paths)) {
-    let current_split_path = path2.split("/");
-    if (current_split_path[current_split_path.length - 1].includes(".") && Number(path_index) != paths.length - 1) {
-      current_split_path.pop();
-    }
-    if (current_split_path[0] == ".." || current_split_path[0] == "." || path2.at(0) == "/") {
-      split_paths = [...split_paths, ...current_split_path];
-    } else {
-      split_paths = current_split_path;
-    }
-  }
-  for (const path2 of split_paths) {
-    if (path2 == "" || path2 == ".")
-      continue;
-    if (path2 == "..") {
-      current_path.pop();
-    } else {
-      current_path.push(path2);
-    }
-  }
-  return current_path.join("/");
 }
 var joinPaths = (...paths) => {
   const new_paths = paths.filter((path2) => path2 != "");
