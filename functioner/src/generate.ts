@@ -12,8 +12,7 @@ export function generate(ast, filePath) {
         const is_execute = command_ast.args.at(0) == "execute"
 
         if (function_called) {
-            // broken for normal paths >(
-            const resolvedPath = filePathToFunctionPath(path.resolve(path.dirname(filePath), command_ast.args.at(1)))
+            const resolvedPath = resolveRelativePaths(filePath, command_ast.args.at(1))
 
             command.push(
                 `function ${resolvedPath}`
@@ -120,4 +119,12 @@ export function filePathToFunctionPath(filePath: string) {
     const { dir, name, ext } = path.parse(filePath)
 
     return joinPaths(path.relative("BP/functions", dir).replace(/\\/g, "/"), name)
+}
+
+function resolveRelativePaths(file_path: string, relative_path: string) {
+    if (relative_path.at(0) == ".") {
+        return filePathToFunctionPath(path.resolve(path.dirname(file_path), relative_path))
+    } else {
+        return relative_path
+    }
 }

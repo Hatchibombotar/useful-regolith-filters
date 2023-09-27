@@ -277,7 +277,7 @@ function generate(ast, filePath) {
     const function_called = command_ast.args.at(0) == "function";
     const is_execute = command_ast.args.at(0) == "execute";
     if (function_called) {
-      const resolvedPath = filePathToFunctionPath(import_path.default.resolve(import_path.default.dirname(filePath), command_ast.args.at(1)));
+      const resolvedPath = resolveRelativePaths(filePath, command_ast.args.at(1));
       command.push(
         `function ${resolvedPath}`
       );
@@ -338,6 +338,13 @@ var joinPaths = (...paths) => {
 function filePathToFunctionPath(filePath) {
   const { dir, name, ext } = import_path.default.parse(filePath);
   return joinPaths(import_path.default.relative("BP/functions", dir).replace(/\\/g, "/"), name);
+}
+function resolveRelativePaths(file_path, relative_path) {
+  if (relative_path.at(0) == ".") {
+    return filePathToFunctionPath(import_path.default.resolve(import_path.default.dirname(file_path), relative_path));
+  } else {
+    return relative_path;
+  }
 }
 
 // src/main.ts
