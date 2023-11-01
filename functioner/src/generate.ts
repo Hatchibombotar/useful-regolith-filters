@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path"
 
 export function generate(ast, filePath) {
+    const is_single_command_subfunction = ast.type == "subfunction" && ast.children.length == 1
     const new_lines: string[] = []
     for (const command_ast of ast.children) {
         if (command_ast.type == "comment") continue
@@ -40,7 +41,6 @@ export function generate(ast, filePath) {
                 } else {
                     let target = command_ast.args.at(index + 3)
                     let objective = command_ast.args.at(index + 4)
-                    console.log(target, objective, command_ast.args, index + 3)
                     new_lines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`)
                     index += 4
                 }
@@ -59,9 +59,16 @@ export function generate(ast, filePath) {
                     const newPath = path.join(dir, functionName + ext)
                     const functionPath = filePathToFunctionPath(newPath)
 
-                    generate(argument, newPath)
+                    
+                    if (argument.children.length == 1) {
+                        // only 1 command ran from inside subcommand
+                        const subcommand = generate(argument, newPath) as string
+                        command.push(subcommand)
+                    } else {
+                        generate(argument, newPath)
+                        command.push("function " + functionPath)
+                    }
 
-                    command.push("function " + functionPath)
                 } else if (argument.type == "rawtext") {
                     command.push(JSON.stringify({
                         "rawtext": argument.rawtext
@@ -69,7 +76,8 @@ export function generate(ast, filePath) {
                 }
             }
         }
-
+        // if command is ran from inside an execute command, return it back to the command.
+        if (is_single_command_subfunction) return command.join(" ")
         new_lines.push(command.join(" "))
     }
     const file_content = new_lines.join("\n")

@@ -268,6 +268,7 @@ function parseRawTextTemplate(str) {
 var import_fs = __toESM(require("fs"));
 var import_path = __toESM(require("path"));
 function generate(ast, filePath) {
+  const is_single_command_subfunction = ast.type == "subfunction" && ast.children.length == 1;
   const new_lines = [];
   for (const command_ast of ast.children) {
     if (command_ast.type == "comment")
@@ -300,7 +301,6 @@ function generate(ast, filePath) {
         } else {
           let target = command_ast.args.at(index + 3);
           let objective = command_ast.args.at(index + 4);
-          console.log(target, objective, command_ast.args, index + 3);
           new_lines.push(`scoreboard players operation ${param_name} argument = ${target} ${objective}`);
           index += 4;
         }
@@ -317,8 +317,13 @@ function generate(ast, filePath) {
           const functionName = name + "-" + command_ast.line;
           const newPath = import_path.default.join(dir, functionName + ext);
           const functionPath = filePathToFunctionPath(newPath);
-          generate(argument, newPath);
-          command.push("function " + functionPath);
+          if (argument.children.length == 1) {
+            const subcommand = generate(argument, newPath);
+            command.push(subcommand);
+          } else {
+            generate(argument, newPath);
+            command.push("function " + functionPath);
+          }
         } else if (argument.type == "rawtext") {
           command.push(JSON.stringify({
             "rawtext": argument.rawtext
@@ -326,6 +331,8 @@ function generate(ast, filePath) {
         }
       }
     }
+    if (is_single_command_subfunction)
+      return command.join(" ");
     new_lines.push(command.join(" "));
   }
   const file_content = new_lines.join("\n");

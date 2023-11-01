@@ -80,6 +80,9 @@ tellraw @s `{example.langcode.1}`
 ### Function Arguments
 Functioner adds a new `with` subcommand to the function command, that allows you to pass values into functions.
 
+> **Note:**
+> Not recommended for marketplace projects - the arguments scoreboard may conflict with other add-ons.
+
 Example:
 ```mcfunction
 # example.mcfunction:
