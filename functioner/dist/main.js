@@ -314,7 +314,7 @@ function generate(ast, filePath) {
           command.push(argument);
         } else if (argument.type == "subfunction") {
           const { dir, name, ext } = import_path.default.parse(filePath);
-          const functionName = name + "-" + command_ast.line;
+          const functionName = name + "_" + command_ast.line;
           const newPath = import_path.default.join(dir, functionName + ext);
           const functionPath = filePathToFunctionPath(newPath);
           if (argument.children.length == 1) {

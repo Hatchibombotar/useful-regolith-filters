@@ -55,7 +55,7 @@ export function generate(ast, filePath) {
                     command.push(argument)
                 } else if (argument.type == "subfunction") {
                     const { dir, name, ext } = path.parse(filePath)
-                    const functionName = name + "-" + command_ast.line
+                    const functionName = name + "_" + command_ast.line
                     const newPath = path.join(dir, functionName + ext)
                     const functionPath = filePathToFunctionPath(newPath)
 
