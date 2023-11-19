@@ -62,8 +62,10 @@ export function generate(ast, filePath) {
                     
                     if (argument.children.length == 1) {
                         // only 1 command ran from inside subcommand
-                        const subcommand = generate(argument, newPath) as string
-                        command.push(subcommand)
+                        const generated_lines = generate(argument, newPath) as string[]
+                        const generated_command = generated_lines.splice(generated_lines.length - 1, 1)[0]
+                        new_lines.push(...generated_lines)
+                        command.push(generated_command)
                     } else {
                         generate(argument, newPath)
                         command.push("function " + functionPath)
@@ -77,8 +79,8 @@ export function generate(ast, filePath) {
             }
         }
         // if command is ran from inside an execute command, return it back to the command.
-        if (is_single_command_subfunction) return command.join(" ")
         new_lines.push(command.join(" "))
+        if (is_single_command_subfunction) return new_lines
     }
     const file_content = new_lines.join("\n")
     fs.writeFileSync(filePath, file_content)
