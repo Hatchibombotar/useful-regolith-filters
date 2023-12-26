@@ -233,7 +233,7 @@ function parseRawTextTemplate(str: string) {
 			templates_opened -= 1
 			const IS_SELECTOR = current_text.trim().at(0) == "@"
 			const IS_RAWTEXT = current_text.trim().at(0) == "{" && current_text.trim().at(-1) == "}"
-			const IS_SCORE = current_text.trim().match(/^([a-zA-Z_-]*)\[(.*)\]$/m)
+			const IS_SCORE = current_text.trim().match(/^([a-zA-Z0-9_-]*)\[(.*)\]$/m)
 			const IS_LANG = current_text.trim().match(/^[a-zA-Z0-9\.]*$/m)
 			if (IS_SELECTOR) {
 				rawtext.push(
