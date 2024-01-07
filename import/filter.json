@@ -1,0 +1,11 @@
+{
+    "filters": [
+        {
+            "runWith": "nodejs",
+            "script": "./src/main.js",
+            "name": "Import",
+            "description": "Import files into your packs from other locations.",
+            "requirements": "./"
+        }
+    ]
+}
