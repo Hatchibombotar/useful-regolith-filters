@@ -34,7 +34,7 @@ function main() {
     }
 
     for (const [filter, {version}] of Object.entries(config.regolith.filterDefinitions)) {
-        metadata.generated_with[filter] = version
+        metadata.generated_with[filter] = [version]
     }
 
     metadata.license = settings.license ?? getLicenseName()
