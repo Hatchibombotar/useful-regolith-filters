@@ -15,7 +15,12 @@ function getLicenseName() {
         "licence.txt",
         "LICENCE.md",
         "licence.md",
-
+        "LICENSE",
+        "license",
+        "LICENSE.txt",
+        "license.txt",
+        "LICENSE.md",
+        "license.md",
     ]
     let path;
     for (const potential_path of potential_paths) {
