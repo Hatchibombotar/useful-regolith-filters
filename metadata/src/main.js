@@ -23,7 +23,7 @@ function main() {
     }
 
     metadata.generated_with = {
-        "regolith": getRegolithVersion()
+        "regolith": [getRegolithVersion()]
     }
 
     if (settings.generated_with) {
