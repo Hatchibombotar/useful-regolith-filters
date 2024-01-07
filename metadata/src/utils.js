@@ -3,7 +3,7 @@ const fs = require("fs")
 
 function getRegolithVersion() {
     const output = String(execSync("regolith -v"))
-    const version = output.split(" ").pop()
+    const version = output.split(" ").pop().trim()
     return version
 }
 

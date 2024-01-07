@@ -9,7 +9,7 @@ function main() {
 
     const metadata = {}
     metadata.authors = []
-    if (settings.authors) {
+    if (settings.authors != null) {
         if (typeof settings.authors == "string") {
             metadata.authors.push(settings.authors)
         } else {
@@ -17,9 +17,9 @@ function main() {
         }
     }
     if (typeof config.author == "string") {
-        metadata.authors.push(config.authors)
+        metadata.authors.push(config.author)
     } else {
-        metadata.authors.push(...config.authors)
+        metadata.authors.push(...config.author)
     }
 
     metadata.generated_with = {
@@ -44,6 +44,7 @@ function main() {
     if (settings.product_type != "") {
         metadata.product_type = settings.product_type ?? "addon"
     }
+
 
     if (fs.existsSync("RP/manifest.json")) {
         const manifest_RP = JSON.parse(fs.readFileSync("RP/manifest.json"))
