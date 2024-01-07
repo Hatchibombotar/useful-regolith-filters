@@ -8,8 +8,8 @@ const settings = require("./settings")
 
 const projectConfig = JSONCFindAndParse(ROOT_DIR + "/config.json")
 
-const packageLocation = ROOT_DIR + (settings.package["package_location"] ?? "")
-const packName = settings.package["file_name"] ?? toSnakeCase(projectConfig.name)
+const packageLocation = ROOT_DIR + (settings["package_location"] ?? "")
+const packName = settings["file_name"] ?? toSnakeCase(projectConfig.name)
 
 for (const packageMode in settings.package) {
     if (!["mcpack", "mcaddon", "mcworld", "mctemplate"].includes(packageMode)) continue

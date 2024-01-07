@@ -48,11 +48,13 @@ You use the settings object to customise the output of the filter.
 
 Creates an mcaddon file containing the resource and behaviour packs.
 
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mcaddon": { }
+  "settings": {
+    "package": {
+      "mcaddon": { }
+    }
   }
 }
 ```
@@ -61,58 +63,68 @@ Creates an mcaddon file containing the resource and behaviour packs.
 Creates mcpack files with seperate resource and behaviour packs.
 
 Create a resource pack:
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mcpack": {
-      "RP": true
+  "settings": {
+    "package": {
+      "mcpack": {
+        "RP": true
+      }
     }
   }
 }
 ```
 
 Create a behaviour pack:
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mcpack": {
-      "BP": true
+  "settings": {
+    "package": {
+      "mcpack": {
+        "BP": true
+      }
     }
   }
 }
 ```
 
 Create a skin pack:
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mcpack": {
-      "skins": true
+  "settings": {
+    "package": {
+      "mcpack": {
+        "skins": true
+      }
     }
   }
 }
 ```
 
 ## mcworld
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mcworld": { }
+  "settings": {
+    "package": {
+      "mcworld": { }
+    }
   }
 }
 ```
 
 ## mctemplate
 _Does the same thing at the mcworld property, but changes the extention to `mctemplate`. You must include the world manifest within the world file if you want minecraft to interpret it correctly._
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mctemplate": { }
+  "settings": {
+    "package": {
+      "mctemplate": { }
+    }
   }
 }
 ```
@@ -138,12 +150,14 @@ _Does the same thing at the mcworld property, but changes the extention to `mcte
 }
 ```
 
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mcworld": { },
-    "world": "0"
+  "settings": {
+    "package": {
+      "mcworld": { },
+      "world": "0"
+    }
   }
 }
 ```
@@ -165,24 +179,28 @@ _Does the same thing at the mcworld property, but changes the extention to `mcte
 }
 ```
 
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mcworld": { },
-    "world": "worldTemplate"
+  "settings": {
+    "package": {
+      "mcworld": { },
+      "world": "worldTemplate"
+    }
   }
 }
 ```
 
 #### 3. exact path
 
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
-    "mcworld": { },
-    "world": "./packs/myWorld"
+  "settings": {
+    "package": {
+      "mcworld": { },
+      "world": "./packs/myWorld"
+    }
   }
 }
 ```
@@ -199,10 +217,10 @@ Reference the packs but don't include them within the world download.
 Reference the packs and include them within the world file
 
 ### package_location
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
+  "settings": {
     "package_location": "./build"
   }
 }
@@ -210,10 +228,10 @@ Reference the packs and include them within the world file
 
 ### file_name
 by default, it converts your project name to snake_case, but if you'd like to have a custom name, you can use the file_name settings property.
-`config.json > regolith > profiles > default > filters > 0 > settings`
+`config.json > regolith > profiles > default > filters > 0`
 ```json
 {
-  "package": {
+  "settings": {
     "file_name": "./my_pack"
   }
 }
