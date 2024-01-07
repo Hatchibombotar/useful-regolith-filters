@@ -5,11 +5,12 @@ Filters to be used with [regolith](https://bedrock-oss.github.io/regolith/).
 
 | Filter                         | Version | Install                         |
 | ------------------------------ | ------- | ------------------------------- |
-| [Functioner](./functioner)     | 1.8.5   | `regolith install functioner`   |
-| [Full Init](./init-full)       | 1.1.1   | `regolith install init-full`    |
-| [Package](./package)           | 1.1.0   | `regolith install package`      |
+| [functioner](./functioner)     | 1.8.5   | `regolith install functioner`   |
+| [full init](./init-full)       | 1.1.1   | `regolith install init-full`    |
+| [package](./package)           | 1.1.0   | `regolith install package`      |
 | [import](./import)             | 1.0.0   | `regolith install import`       |
-| [Debug Log](./debug_log)       | 0.0.2   | `regolith install debug_log`    |
+| [metadata](./metadata)         | 1.0.0   | `regolith install metadata`       |
+| [debug log](./debug_log)       | 0.0.2   | `regolith install debug_log`    |
 
 ---
 ### Unstable Filters
