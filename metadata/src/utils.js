@@ -19,8 +19,9 @@ function getLicenseName() {
     ]
     let path;
     for (const potential_path of potential_paths) {
-        if (fs.existsSync(process.env.ROOT_DIR + potential_path)) {
-            path = potential_path
+        const full_path = process.env.ROOT_DIR + "/" + potential_path
+        if (fs.existsSync(full_path)) {
+            path = full_path
         }
     }
     if (path == null) return
@@ -28,7 +29,8 @@ function getLicenseName() {
     const licence = String(fs.readFileSync(path))
     const first_line = licence.split("\n").shift()
     if (first_line.match(/(.+) License/)) {
-        return first_line.match(/(.+) License/)[0]
+        const licence = first_line.matchAll(/(.+) License/g)?.next()?.value[1]
+        return licence ?? first_line.trim()
     } else {
         return first_line
     }
