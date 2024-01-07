@@ -7,7 +7,8 @@ Filters to be used with [regolith](https://bedrock-oss.github.io/regolith/).
 | ------------------------------ | ------- | ------------------------------- |
 | [Functioner](./functioner)     | 1.8.5   | `regolith install functioner`   |
 | [Full Init](./init-full)       | 1.1.1   | `regolith install init-full`    |
-| [Debug Log](./package)         | 1.1.0   | `regolith install package`      |
+| [Package](./package)           | 1.1.0   | `regolith install package`      |
+| [import](./import)             | 1.0.0   | `regolith install import`       |
 | [Debug Log](./debug_log)       | 0.0.2   | `regolith install debug_log`    |
 
 ---

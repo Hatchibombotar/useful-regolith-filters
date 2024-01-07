@@ -1,7 +1,7 @@
 const fs = require("fs")
 const settings = require("./settings")
 
-const TEMP_DIR = "/"
+const TEMP_DIR = ""
 const ROOT_DIR = process.env.ROOT_DIR + "/"
 
 
