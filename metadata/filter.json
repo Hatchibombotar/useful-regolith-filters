@@ -1,0 +1,11 @@
+{
+    "filters": [
+        {
+            "runWith": "nodejs",
+            "script": "./src/main.js",
+            "name": "Metadata",
+            "description": "Inserts auto-generated metadata into the manifest.json files.",
+            "requirements": "./"
+        }
+    ]
+}
