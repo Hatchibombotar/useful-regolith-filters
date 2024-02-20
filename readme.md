@@ -9,7 +9,7 @@ Filters to be used with [regolith](https://bedrock-oss.github.io/regolith/).
 | [full init](./init-full)       | 1.1.1   | `regolith install init-full`    |
 | [package](./package)           | 1.1.0   | `regolith install package`      |
 | [import](./import)             | 1.0.0   | `regolith install import`       |
-| [metadata](./metadata)         | 1.0.0   | `regolith install metadata`       |
+| [metadata](./metadata)         | 1.0.1   | `regolith install metadata`       |
 | [debug log](./debug_log)       | 0.0.2   | `regolith install debug_log`    |
 
 ---

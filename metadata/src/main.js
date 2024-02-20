@@ -22,20 +22,24 @@ function main() {
         metadata.authors.push(...config.author)
     }
 
-    metadata.generated_with = {
-        "regolith": [getRegolithVersion()]
-    }
-
     if (settings.generated_with) {
         metadata.generated_with = {
-            ...settings.generated_with,
-            ...metadata.generated_with,
+            "regolith": [getRegolithVersion()]
         }
+
+        if (typeof settings.generated_with != "boolean") {
+            metadata.generated_with = {
+                ...settings.generated_with,
+                ...metadata.generated_with,
+            }
+        }
+
+        for (const [filter, { version }] of Object.entries(config.regolith.filterDefinitions)) {
+            metadata.generated_with[filter] = [version]
+        }
+
     }
 
-    for (const [filter, {version}] of Object.entries(config.regolith.filterDefinitions)) {
-        metadata.generated_with[filter] = [version]
-    }
 
     metadata.license = settings.license ?? getLicenseName()
 

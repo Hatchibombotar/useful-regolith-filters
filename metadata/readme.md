@@ -28,7 +28,7 @@ regolith install github.com/Hatchibombotar/useful-regolith-filters/metadata==lat
 
 The following fields are auto generated:
 - `authors` - Taken from the `config.json` author field
-- `generated_with` - Taken from the `config.json` filters
+- `generated_with` - Taken from the `config.json` filters (off by default!) set to true or {} in settings to generate!
 - `license` - Taken files called licence.md or similar where the first line is `<Name of Licence> License` e.g. `MIT License`
 - `product_type` - Set to `"addon"` by default, to change this, set it to something else in the settings object or leave it as "" to remove it.
 
