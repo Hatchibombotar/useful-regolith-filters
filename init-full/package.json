@@ -1,17 +1,17 @@
 {
   "name": "init-full",
+  "type": "module",
   "version": "1.0.0",
   "description": "Creates manifest.json files for bedrock addons",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "postinstall": "start cmd /C node index.js",
-    "test": "node index.js test"
+    "postinstall": "start cmd /C node src/main.js"
   },
   "author": "Hatchibombotar",
   "license": "MIT",
   "dependencies": {
-    "prompt-sync": "^4.2.0",
-    "terminal-kit": "^3.0.0",
-    "uuid": "^8.3.2"
+    "@inquirer/checkbox": "^2.2.0",
+    "inquirer": "^9.2.16",
+    "semver": "^7.6.0"
   }
 }
