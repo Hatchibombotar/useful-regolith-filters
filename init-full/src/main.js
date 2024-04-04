@@ -293,7 +293,9 @@ async function main() {
                 error("Already found gametests filter in config.json, skipping install step")
             } else {
                 log("running 'regolith install gametests'...")
-                const [_, err] = syncCatch(() => execSync("regolith install gametests"))
+                const [_, err] = syncCatch(() => execSync("regolith install gametests", {
+                    cwd: root
+                }))
 
                 if (err) {
                     error("Failed to install gametests filter:")
@@ -416,7 +418,6 @@ async function main() {
     log("removing init-full from config...")
     config.regolith.filterDefinitions["init-full"] = undefined
     await saveConfig()
-    execSync("echo regolith uninstall init-full")
 
 }
 
