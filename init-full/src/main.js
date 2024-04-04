@@ -7,6 +7,7 @@ import { mkdir, readFile, rm, rmdir, writeFile } from "fs/promises";
 import { asyncCatch, syncCatch } from "./utils.js";
 import { execSync } from 'child_process'
 import { existsSync } from "fs";
+import { resolve } from "path"
 
 const modules = [
     "@minecraft/server",
@@ -20,14 +21,14 @@ const modules = [
 async function main() {
     log("Create Regolith Project")
     log("---")
-    const cwd = process.cwd()
-    const config_path = cwd + "/config.json"
+    const root = resolve(process.cwd(), "../../../../")
+    const config_path = root + "/config.json"
     let config;
 
     async function reloadConfig() {
         const [config_file, read_config_error] = await asyncCatch(readFile(config_path))
         if (read_config_error) {
-            throw Error("Could not read config file at path:\n" + cwd + config_path)
+            throw Error("Could not read config file at path:\n" + root + config_path)
         }
 
         const [parsed_config, parse_config_error] = syncCatch(() => JSON.parse(config_file))
@@ -262,7 +263,7 @@ async function main() {
             }
         ])
 
-        let node_modules_path = cwd
+        let node_modules_path = root
 
         if (include_modules_type == "gametests-filter") {
             const { use_typescript } = await inquirer.prompt([
@@ -326,12 +327,12 @@ async function main() {
 
                 await saveConfig()
 
-                const GAMETESTS_DATA_DIR = cwd + "/packs/data/gametests/"
+                const GAMETESTS_DATA_DIR = root + "/packs/data/gametests/"
                 if (source_location == "data") {
                     node_modules_path = GAMETESTS_DATA_DIR
                 } else {
                     if (existsSync(GAMETESTS_DATA_DIR)) {
-                        await rm(GAMETESTS_DATA_DIR, { recursive: true, force: true})
+                        await rm(GAMETESTS_DATA_DIR, { recursive: true, force: true })
                     }
 
                     await mkdir(GAMETESTS_DATA_DIR)
@@ -339,11 +340,11 @@ async function main() {
 
                     log(`creating ${source_file_name} file...`)
 
-                    if (!existsSync(cwd + "/packs/BP/scripts")) {
-                        await mkdir(cwd + "/packs/BP/scripts")
+                    if (!existsSync(root + "/packs/BP/scripts")) {
+                        await mkdir(root + "/packs/BP/scripts")
                     }
 
-                    const source_file_path = cwd + "/packs/BP/scripts/" + source_file_name
+                    const source_file_path = root + "/packs/BP/scripts/" + source_file_name
                     if (!existsSync(source_file_path)) {
                         const [_, err] = await asyncCatch(writeFile(source_file_path, `console.error("Hello, World.")`))
                         if (err) {
@@ -374,11 +375,11 @@ async function main() {
             }
 
             log("creating main.js file...")
-            if (!existsSync(cwd + "/packs/BP/scripts")) {
-                await mkdir(cwd + "/packs/BP/scripts")
+            if (!existsSync(root + "/packs/BP/scripts")) {
+                await mkdir(root + "/packs/BP/scripts")
             }
-    
-            const source_file_path = cwd + "/packs/BP/scripts/main.js"
+
+            const source_file_path = root + "/packs/BP/scripts/main.js"
             if (!existsSync(source_file_path)) {
                 await writeFile(source_file_path, `console.error("Hello, World.")`)
             } else {
@@ -409,8 +410,8 @@ async function main() {
     }
 
     log("saving manifest files...")
-    await writeFile(cwd + "/packs/RP/manifest.json", JSON.stringify(manifest_RP, null, 4))
-    await writeFile(cwd + "/packs/BP/manifest.json", JSON.stringify(manifest_BP, null, 4))
+    await writeFile(root + "/packs/RP/manifest.json", JSON.stringify(manifest_RP, null, 4))
+    await writeFile(root + "/packs/BP/manifest.json", JSON.stringify(manifest_BP, null, 4))
 
     log("removing init-full from config...")
     config.regolith.filterDefinitions["init-full"] = undefined
