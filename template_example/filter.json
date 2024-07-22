@@ -1,0 +1,11 @@
+{
+    "filters": [
+        {
+            "runWith": "nodejs",
+            "script": "./template.js",
+            "name": "Example Template",
+            "description": "Example template.",
+            "requirements": "./"
+        }
+    ]
+}

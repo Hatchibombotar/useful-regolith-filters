@@ -1,0 +1,13 @@
+{
+  "name": "regolith_template_example",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Import files into your packs from other locations.",
+  "main": "template.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hatchibombotar",
+  "license": "MIT",
+  "dependencies": {}
+}
